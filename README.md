@@ -4,7 +4,7 @@
 **Tools for processing and analyzing neurophysiological signals recorded *in-vivo*.**
 
 
-**ivneuro** provides tools for analyzing neural signals dinamycs recorded *in-vivo* during behavior. It focus on the performance of high-level timeseries analysis of continuous variables such as Local Field Potentials. It is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneusly (as in the example below). 
+**ivneuro** provides tools for analyzing neural signals dynamics recorded *in-vivo* during behavior. It focus on the performance of high-level time series analysis of continuous variables such as Local Field Potentials. It is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneously (as in the example below). 
 
 Installation
 -----------
@@ -86,7 +86,7 @@ Quick examples
 
 >>> # Calculate change in power spectral
 >>> power_burst, power_baseline, delta_power = ivneuro.spectral.delta_power_spectral(signals, burst_intervals, baseline_intervals, lowest_freq = 0, highest_freq = 100)
->>> delta_power.plot(xlabel = 'Frequency (Hz)', ylabel = 'Normalized change in power')
+>>> delta_power.plot(xlabel = 'Frequency (Hz)', ylabel = 'Normalized power difference (burst - baseline)')
 ```
 ![image](https://github.com/casey-e/ivneuro/assets/92745842/dd60e27f-ca53-401e-99a3-c99399632f9d)
 
