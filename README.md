@@ -16,7 +16,7 @@ pip install ivneuro
 
 Documentation
 -------------
-Documentation can be found [here]()
+Documentation can be found [here](https://github.com/casey-e/ivneuro/blob/master/docs/User_guide.md)
 
 Contributing
 ------------
