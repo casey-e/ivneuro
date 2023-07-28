@@ -1,7 +1,7 @@
 # ivneuro
 
 
-**Tools for processing and analyzing neurophysiologycal signals recorded *in-vivo*.**
+**Tools for processing and analyzing neurophysiological signals recorded *in-vivo*.**
 
 
 **ivneuro** provides tools for analyzing neural signals dinamycs recorded *in-vivo* during behavior. It focus on the performance of high-level timeseries analysis of continuous variables such as Local Field Potentials. It is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneusly (as in the example below). 
