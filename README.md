@@ -42,7 +42,8 @@ Quick examples
 
 >>> hist.plot()
 ```
-![Alt text](image.png)
+![image](https://github.com/casey-e/ivneuro/assets/92745842/70292df9-70ea-4b3c-99e2-694584bc668d)
+
 
 <br>
 
@@ -63,7 +64,8 @@ Quick examples
 >>> pes = ivneuro.spectral.peri_event_spectogram(signals, events, -10, 10, higher_freq=100)
 >>> pes.normalize().plot()
 ```
-![Alt text](image-1.png)
+![image](https://github.com/casey-e/ivneuro/assets/92745842/288a7174-2ebf-4fe8-8d05-71566edcda9c)
+
 
 <br>
 
@@ -86,7 +88,8 @@ Quick examples
 >>> power_burst, power_baseline, delta_power = ivneuro.spectral.delta_power_spectral(signals, burst_intervals, baseline_intervals, lowest_freq = 0, highest_freq = 100)
 >>> delta_power.plot(xlabel = 'Frequency (Hz)', ylabel = 'Normalized change in power')
 ```
-![Alt text](image-2.png)
+![image](https://github.com/casey-e/ivneuro/assets/92745842/dd60e27f-ca53-401e-99a3-c99399632f9d)
+
 
 
 Licence
