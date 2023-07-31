@@ -22,4 +22,5 @@ setup(
     install_requires = ['numpy >= 1.24.1','pandas >= 2.0.1', 'matplotlib >= 3.6.2','scipy >= 1.10'],
     python_requires = '>=3.11.3',
     project_urls = {'Homepage':'https://github.com/casey-e/ivneuro'},
+    url = 'https://github.com/casey-e/ivneuro',
 )
