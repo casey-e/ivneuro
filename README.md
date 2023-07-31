@@ -107,7 +107,7 @@ Quick examples
 
 <br>
 
-**Positions in which an event occurrs**
+**Positions in which an event occurs**
 ```
 >>> import numpy as np
 >>> import ivneuro as ivn
@@ -125,6 +125,7 @@ Quick examples
 >>> pos = ivn.EventPosition(x, y, timestamps, event)
 >>> pos.plot()
 ```
+![image](https://github.com/casey-e/ivneuro/assets/92745842/e76b65fa-c361-4897-bc85-bfab1cc7620e)
 
 <br>
 
