@@ -129,7 +129,7 @@ Quick examples
 
 <br>
 
-Licence
+License
 -------
 The codes are released under [MIT License](https://mit-license.org/)
 
