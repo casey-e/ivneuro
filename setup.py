@@ -1,11 +1,11 @@
 
-
+# Import required functions
 from setuptools import setup, find_packages
 
-# Add install requirements
+# Call setup function
 setup(
     author="Eric Casey",
-    description="A package for processing and analyzing neurophysiological signals recorded in-vivo.",
+    description="Tools for processing and analyzing neurophysiological signals recorded in-vivo.",
     name="ivneuro",
     packages=find_packages(include=["ivneuro", "ivneuro.*"]),
     version="0.1.0",

@@ -311,7 +311,7 @@ class EventPosition():
         plt.plot(self.x_values,self.y_values,color='gray',alpha=0.5, label='Trajectory')
         plt.scatter(all_evt_pos[0],all_evt_pos[1], color='black',s=10, label='Event positions')
         plt.scatter(self.estimated_position[0],self.estimated_position[1], color='red', marker='D',s=50, label='Event estimated position')
-        plt.legend(framealpha=0.5)
+        plt.legend(frameon=False, loc='upper left', bbox_to_anchor=(1, 1))
         plt.axis("equal")
         ax = plt.gca()
         ax.set_aspect('equal', adjustable='box')

@@ -7,6 +7,8 @@
 **ivneuro** provides tools for analyzing neural signals dynamics recorded *in-vivo* during behavior. It focus on time series analyses of continuous variables such as Local Field Potentials and is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneously. 
 It also provides a subpackage for extracting data from Nex files.
 
+<br>
+
 Installation
 -----------
 To install use:
@@ -14,10 +16,13 @@ To install use:
 pip install ivneuro
 ```
 
+<br>
 
 Documentation
 -------------
 Documentation can be found [here](https://github.com/casey-e/ivneuro/blob/master/docs/User_guide.md)
+
+<br>
 
 Contributing
 ------------
@@ -100,9 +105,28 @@ Quick examples
 ```
 ![image](https://github.com/casey-e/ivneuro/assets/92745842/8037bc6c-f8e2-41c8-8b30-c381f381bb00)
 
+<br>
 
+**Positions in which an event occurrs**
+```
+>>> import numpy as np
+>>> import ivneuro as ivn
 
+>>> # Create coordinates and timestamps for an oval trajectory
+>>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+>>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20 
+>>> timestamps = np.linspace(0,20,100).round(1)
 
+>>> # Create event
+>>> np.random.seed(24)
+>>> event = np.random.choice(timestamps[(timestamps>10) & (timestamps<15)], size=5, replace = False)
+
+>>> # Make EventPosition object and plot
+>>> pos = ivn.EventPosition(x, y, timestamps, event)
+>>> pos.plot()
+```
+
+<br>
 
 Licence
 -------
