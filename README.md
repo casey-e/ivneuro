@@ -4,7 +4,7 @@
 **Tools for processing and analyzing neurophysiological signals recorded *in-vivo*.**
 
 
-**ivneuro** provides tools for analyzing neural signals dynamics recorded *in-vivo* during behavior. It focus on time series analyses of continuous variables such as Local Field Potentials and is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneously. 
+**ivneuro** provides tools for analyzing neural signals recorded *in-vivo* during behavior. It focus on time series analyses of continuous variables such as Local Field Potentials and is optimized to process either single signals in a single condition as well as multiple signals in multiple conditions simultaneously. 
 It also provides a subpackage for extracting data from Nex files.
 
 <br>
