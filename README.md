@@ -98,7 +98,8 @@ Quick examples
 >>> power_burst, power_baseline, delta_power = ivn.delta_power_spectral(signals, burst_intervals, baseline_intervals, lowest_freq = 0, highest_freq = 100)
 >>> delta_power.plot(xlabel = 'Frequency (Hz)', ylabel = 'Normalized power difference', title = 'Normalized difference in power spectral (burst - baseline)')
 ```
-![image](https://github.com/casey-e/ivneuro/assets/92745842/2b949553-f478-4418-ad58-256bc215f337)
+![image](https://github.com/casey-e/ivneuro/assets/92745842/8037bc6c-f8e2-41c8-8b30-c381f381bb00)
+
 
 
 
