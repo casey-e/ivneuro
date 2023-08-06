@@ -1,5 +1,5 @@
 
-ivneuro/__pycache__/
+__pycache__/
 
 # Distribution / packaging
 build/
