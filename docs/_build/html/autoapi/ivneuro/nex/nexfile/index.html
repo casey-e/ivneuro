@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.nex.nexfile &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ivneuro.nex.pull_nex_data" href="../pull_nex_data/index.html" />
+    <link rel="prev" title="ivneuro.nex.NexData" href="../NexData/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.nexfile</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ivneuro/nex/nexfile/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.nex.nexfile">
+<span id="ivneuro-nex-nexfile"></span><h1><a class="reference internal" href="#module-ivneuro.nex.nexfile" title="ivneuro.nex.nexfile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.nexfile</span></code></a><a class="headerlink" href="#module-ivneuro.nex.nexfile" title="Permalink to this heading"></a></h1>
+<dl class="simple">
+<dt>To read .nex or .nex5 files, use the following code:</dt><dd><p>import nexfile
+reader = nexfile.Reader()
+fileData = reader.ReadNexFile(‘C:Datafile.nex’)
+fileData1 = reader.ReadNexFile(‘C:Datafile.nex5’)
+print(fileData[‘Variables’][0])</p>
+</dd>
+<dt>If your files are larger than a few MB, use numpy version of the reader:</dt><dd><p>import nexfile
+reader = nexfile.Reader(useNumpy=True)
+fileData = reader.ReadNexFile(‘C:DataLargeFile.nex’)</p>
+</dd>
+</dl>
+<p>See comments below for description of the content of fileData.</p>
+<dl class="simple">
+<dt>To write .nex file, use this code:</dt><dd><p>timestampFrequency = 50000
+writer = nexfile.NexWriter(timestampFrequency)</p>
+</dd>
+</dl>
+<p>then, add variable data using Add… methods in NexWriter class
+(see method doc strings below for more info):</p>
+<blockquote>
+<div><p>writer.AddContVarWithSingleFragment(‘cont1’, 0, 10000, [5, 6, 7, 8])
+writer.AddContVarWithSingleFragment(‘cont2’, 0, 10000, [9, 10, 11, 12])</p>
+</div></blockquote>
+<dl>
+<dt>then, use WriteNexFile method:</dt><dd><p>writer.WriteNexFile(‘C:Datapython.nex’)</p>
+</dd>
+<dt>If your files are larger than a few MB, use numpy version of the NexWriter:</dt><dd><p>import nexfile
+import numpy as np
+timestampFrequency = 50000
+writer = nexfile.NexWriter(timestampFrequency, useNumpy=True)
+writer.AddNeuron(‘neuron1’, np.array([1, 2, 3, 4]))
+writer.AddContVarWithSingleFragment(‘cont1’, 2, 10000, np.array([5, 6, 7, 8]))
+writer.WriteNex5File(‘C:DatapythonWithFloatContValues.nex5’, saveContValuesAsFloats=1)</p>
+</dd>
+<dt>fileData:</dt><dd><dl>
+<dt>fileData[“FileHeader”] – file header:</dt><dd><p>fileData[“FileHeader”][“Comment”] – comment
+fileData[“FileHeader”][“Beg”] – file data start in ticks
+fileData[“FileHeader”][“End”] – file data end in ticks
+fileData[“FileHeader”][“NexFileVersion”] – file version
+fileData[“FileHeader”][“MagicNumber”] – magic number
+fileData[“FileHeader”][“Frequency”] – timestamp frequency
+fileData[“FileHeader”][“MetaOffset”] – location of metadata (position in file)
+fileData[“FileHeader”][“NumVars”] – number of variables</p>
+</dd>
+<dt>fileData[“MetaData”] – file metadata: various extra information fields that do not fit</dt><dd><p>into file or variable headers</p>
+</dd>
+<dt>fileData[“Variables”] – a list of data variables</dt><dd><dl>
+<dt>For each variable var in fileData[“Variables”]:</dt><dd><p>var[“Timestamps”] – array of timestamps in seconds (neurons, events, waveforms)
+var[“Intervals”] – array of intervals in seconds (interval variables)
+var[“WaveformValues”] – array of waveform values in milliVolts (waveform variables)
+for continuous variables:</p>
+<blockquote>
+<div><p>var[“FragmentCounts”] – array of fragment counts (how many samples in each fragment)
+var[“FragmentIndexes”] – array of fragment indexes (index of the first data point in each fragment)
+var[“ContinuousValues”] – array of continuous values in milliVolts
+var[“FragmentTimestamps”] – array of fragment timestamps (timestamp of the first data point in each fragment)</p>
+</div></blockquote>
+<dl>
+<dt>var[“Header”] – variable header:</dt><dd><p>var[“Header”][“Type”] – variable type: 0 - neuron, 1 - event, 2- interval, 3 - waveform, 4 - pop. vector, 5 - continuously recorded, 6 - marker
+var[“Header”][“Name”] – variable name
+var[“Header”][“Version”] – variable version in file
+var[“Header”][“DataOffset”] – where the data array for this variable is located in the file
+var[“Header”][“Count”] –  neuron variable: number of timestamps</p>
+<blockquote>
+<div><p>event variable: number of timestamps
+interval variable: number of intervals
+waveform variable: number of waveforms
+continuous variable: number of fragments
+population vector: number of weights</p>
+</div></blockquote>
+<dl class="simple">
+<dt>var[“Header”][“TsDataType”] – if 0, timestamps are stored as 32-bit integers;</dt><dd><p>if 1, timestamps are stored as 64-bit integers;  supported by NeuroExplorer version 5.100 or greater</p>
+</dd>
+<dt>var[“Header”][“ContDataType”] – waveforms and continuous variables only,</dt><dd><p>if 0, waveform and continuous values are stored as 16-bit integers;
+if 1, waveform and continuous values are stored as 32-bit floating point values in units specified in Units field</p>
+</dd>
+</dl>
+<p>var[“Header”][“SamplingRate”] – waveforms and continuous variables only, waveform or continuous variable sampling frequency in Hertz
+var[“Header”][“ADtoMV”] – waveforms and continuous variables only, coefficient</p>
+<blockquote>
+<div><p>to convert from A/D values stored in file to units.
+A/D values in fileData are already scaled to units
+see formula below UnitsOffset below; ignored if ContinuousDataType == 1</p>
+</div></blockquote>
+<dl>
+<dt>var[“Header”][“MVOffset”] – waveforms and continuous variables only,</dt><dd><p>this offset is used to convert A/D values stored in file to units:
+value_in_units = raw * ADtoUnitsCoefficient + UnitsOffset; ignored if ContinuousDataType == 1</p>
+<blockquote>
+<div><p>A/D values in fileData are already scaled to units.</p>
+</div></blockquote>
+</dd>
+<dt>var[“Header”][“NPointsWave”] – waveform variable: number of data points in each wave</dt><dd><p>continuous variable: overall number of data points in the variable</p>
+</dd>
+<dt>var[“Header”][“PreThrTime”] – waveform variables only, pre-threshold time in seconds</dt><dd><p>if waveform timestamp in seconds is t,
+then the timestamp of the first point of waveform is t - PrethresholdTimeInSeconds</p>
+</dd>
+<dt>var[“Header”][“MarkerDataType”] – marker events only,</dt><dd><p>if 0, marker values are stored as strings;
+if 1, marker values are stored as 32-bit unsigned integers</p>
+</dd>
+</dl>
+<p>var[“Header”][“MarkerLength”] – marker events only, how many characters are in each marker value; ignored if MarkerDataType is 1
+var[“Header”][“ContFragIndexType”] – continuous variables only,</p>
+<blockquote>
+<div><p>if 0, indexes of first data point in fragments are stored as unsigned 32-bit integers;
+if 1, indexes of first data point in fragments are stored as unsigned 64-bit integers; not supported in NeuroExplorer as of October 2017 (version 5.107)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>var[“Header”][“Units”] – waveforms and continuous variables only, units that should be used for the variable values</dt><dd><p>not supported as of October 2017 (version 5.107)</p>
+</dd>
+</dl>
+<p>var[“Header”][“NMarkers”] – marker events only, how many values are associated with each marker</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.nexfile.NexFileVarType" title="ivneuro.nex.nexfile.NexFileVarType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NexFileVarType</span></code></a></p></td>
+<td><p>Constants for .nex and .nex5 variable types</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.nex.nexfile.DataFormat" title="ivneuro.nex.nexfile.DataFormat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFormat</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.nexfile.Reader" title="ivneuro.nex.nexfile.Reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reader</span></code></a></p></td>
+<td><p>Nex file reader class</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.nex.nexfile.NexWriter" title="ivneuro.nex.nexfile.NexWriter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NexWriter</span></code></a></p></td>
+<td><p>Nex file writer class.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.nex.nexfile.</span></span><span class="sig-name descname"><span class="pre">NexFileVarType</span></span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexFileVarType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType" title="Permalink to this definition"></a></dt>
+<dd><p>Constants for .nex and .nex5 variable types</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.NEURON">
+<span class="sig-name descname"><span class="pre">NEURON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.NEURON" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.EVENT">
+<span class="sig-name descname"><span class="pre">EVENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.EVENT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.INTERVAL">
+<span class="sig-name descname"><span class="pre">INTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.INTERVAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.WAVEFORM">
+<span class="sig-name descname"><span class="pre">WAVEFORM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.WAVEFORM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.POPULATION_VECTOR">
+<span class="sig-name descname"><span class="pre">POPULATION_VECTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.POPULATION_VECTOR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.CONTINUOUS">
+<span class="sig-name descname"><span class="pre">CONTINUOUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.CONTINUOUS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexFileVarType.MARKER">
+<span class="sig-name descname"><span class="pre">MARKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.NexFileVarType.MARKER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.nex.nexfile.</span></span><span class="sig-name descname"><span class="pre">DataFormat</span></span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#DataFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.INT16">
+<span class="sig-name descname"><span class="pre">INT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.INT16" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.UINT16">
+<span class="sig-name descname"><span class="pre">UINT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.UINT16" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.INT32">
+<span class="sig-name descname"><span class="pre">INT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.INT32" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.UINT32">
+<span class="sig-name descname"><span class="pre">UINT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.UINT32" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.INT64">
+<span class="sig-name descname"><span class="pre">INT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.INT64" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.UINT64">
+<span class="sig-name descname"><span class="pre">UINT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.UINT64" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.FLOAT32">
+<span class="sig-name descname"><span class="pre">FLOAT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.FLOAT32" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.FLOAT64">
+<span class="sig-name descname"><span class="pre">FLOAT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.FLOAT64" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.NumBytesPerItem">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NumBytesPerItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#DataFormat.NumBytesPerItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.NumBytesPerItem" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.DataFormat.StructTypeFromDataType">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StructTypeFromDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#DataFormat.StructTypeFromDataType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.DataFormat.StructTypeFromDataType" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.nex.nexfile.</span></span><span class="sig-name descname"><span class="pre">Reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">useNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Nex file reader class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader.ReadNex5File">
+<span class="sig-name descname"><span class="pre">ReadNex5File</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader.ReadNex5File"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader.ReadNex5File" title="Permalink to this definition"></a></dt>
+<dd><p>Reads data from .nex5 file.
+:param filePath: full path of file
+:return: file data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader.ReadNexFile">
+<span class="sig-name descname"><span class="pre">ReadNexFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader.ReadNexFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader.ReadNexFile" title="Permalink to this definition"></a></dt>
+<dd><p>Reads data from .nex file.
+:param filePath:
+:return: file data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadData">
+<span class="sig-name descname"><span class="pre">_ReadData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadNex5FileHeader">
+<span class="sig-name descname"><span class="pre">_ReadNex5FileHeader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadNex5FileHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadNex5FileHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadFileHeader">
+<span class="sig-name descname"><span class="pre">_ReadFileHeader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadFileHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadFileHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadVarHeader">
+<span class="sig-name descname"><span class="pre">_ReadVarHeader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadVarHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadVarHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadNex5VarHeader">
+<span class="sig-name descname"><span class="pre">_ReadNex5VarHeader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadNex5VarHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadNex5VarHeader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadTimestamps">
+<span class="sig-name descname"><span class="pre">_ReadTimestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadTimestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadTimestamps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadAndScaleValuesUsingNumpy">
+<span class="sig-name descname"><span class="pre">_ReadAndScaleValuesUsingNumpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valueType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadAndScaleValuesUsingNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadAndScaleValuesUsingNumpy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadAndScaleValues">
+<span class="sig-name descname"><span class="pre">_ReadAndScaleValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valueType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadAndScaleValues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadAndScaleValues" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadIntervals">
+<span class="sig-name descname"><span class="pre">_ReadIntervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadIntervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadIntervals" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadWaveforms">
+<span class="sig-name descname"><span class="pre">_ReadWaveforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadWaveforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadWaveforms" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._Chunks">
+<span class="sig-name descname"><span class="pre">_Chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._Chunks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._Chunks" title="Permalink to this definition"></a></dt>
+<dd><p>Yield successive n-sized chunks from l.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadPopVectors">
+<span class="sig-name descname"><span class="pre">_ReadPopVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadPopVectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadPopVectors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadContinuous">
+<span class="sig-name descname"><span class="pre">_ReadContinuous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadContinuous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadContinuous" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.Reader._ReadMarker">
+<span class="sig-name descname"><span class="pre">_ReadMarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#Reader._ReadMarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.Reader._ReadMarker" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.nex.nexfile.</span></span><span class="sig-name descname"><span class="pre">NexWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestampFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Nex file writer class.
+Sample code:</p>
+<p>import nexfile
+w = nexfile.NexWriter(100000)
+w.fileData[‘FileHeader’][‘Comment’] = ‘this is a comment’
+w.AddNeuron(‘neuron1’, [1, 2, 3, 4])
+w.AddContVarWithSingleFragment(‘cont1’, 2, 10000, [5, 6, 7, 8])
+w.WriteNexFile(‘C:DatatestFileWrittenInPython.nex’)
+w.WriteNex5File(‘C:DatatestFileWrittenInPython.nex5’, 1)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddNeuron">
+<span class="sig-name descname"><span class="pre">AddNeuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ypos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddNeuron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddNeuron" title="Permalink to this definition"></a></dt>
+<dd><p>Adds neuron file variable
+:param name: neuron name
+:param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+:param wire: wire (electrode) number
+:param unit: unit number
+:param xpos: x position in [0, 100] range (used in 3d displays)
+:param ypos: y position in [0, 100] range (used in 3d displays)
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddEvent">
+<span class="sig-name descname"><span class="pre">AddEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Adds event file variable
+:param name: event name
+:param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddIntervalVariable">
+<span class="sig-name descname"><span class="pre">AddIntervalVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intStarts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intEnds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddIntervalVariable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddIntervalVariable" title="Permalink to this definition"></a></dt>
+<dd><p>Adds interval variable to file data
+:param name: variable name
+:param intStarts: list interval starts in seconds or numpy array if numpy option is specified in constructor
+:param intEnds: list interval ends in seconds or numpy array if numpy option is specified in constructor
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddContVarWithSingleFragment">
+<span class="sig-name descname"><span class="pre">AddContVarWithSingleFragment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestampOfFirstDataPoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SamplingRate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddContVarWithSingleFragment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddContVarWithSingleFragment" title="Permalink to this definition"></a></dt>
+<dd><p>Adds continuous variable with a single fragment
+:param name: variable name
+:param timestampOfFirstDataPoint: time of first data point in seconds
+:param SamplingRate: sampling rate in Hz
+:param values: list of variable values in mV or numpy array of values if numpy option is specified in constructor
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddContVarWithMultipleFragments">
+<span class="sig-name descname"><span class="pre">AddContVarWithMultipleFragments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SamplingRate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragmentValues</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddContVarWithMultipleFragments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddContVarWithMultipleFragments" title="Permalink to this definition"></a></dt>
+<dd><p>Adds continuous variable with multiple fragments
+:param name: variable name
+:param timestamps: list fragment start times in seconds or numpy array of fragment start times</p>
+<blockquote>
+<div><p>if numpy option is specified in constructor</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SamplingRate</strong> – sampling rate in Hz</p></li>
+<li><p><strong>fragmentValues</strong> – list of lists, each sublist is array data values in mV (or list of numpy arrays)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddMarker">
+<span class="sig-name descname"><span class="pre">AddMarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markerFields</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddMarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddMarker" title="Permalink to this definition"></a></dt>
+<dd><p>Adds marker variable.
+:param name: variable name
+:param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+:param fieldNames: list of field names
+:param markerFields: a list of lists (one list of numbers or strings per marker field)
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.AddWave">
+<span class="sig-name descname"><span class="pre">AddWave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SamplingRate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WaveformValues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NPointsWave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PrethresholdTimeInSeconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wire</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.AddWave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.AddWave" title="Permalink to this definition"></a></dt>
+<dd><p>Adds waveform variable.
+:param name: variable name
+:param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+:param SamplingRate: sampling rate of w/f values in Hz
+:param WaveformValues: a list of lists, each sublist contains values of a single waveform in mV;</p>
+<blockquote>
+<div><p>if numpy option is specified in constructor, numpy matrix</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NPointsWave</strong> – number of data points in each wave</p></li>
+<li><p><strong>PrethresholdTimeInSeconds</strong> – pre-threshold time in seconds</p></li>
+<li><p><strong>wire</strong> – wire (electrode) number</p></li>
+<li><p><strong>unit</strong> – unit number</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.WriteNexFile">
+<span class="sig-name descname"><span class="pre">WriteNexFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.WriteNexFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.WriteNexFile" title="Permalink to this definition"></a></dt>
+<dd><p>Writes file data as .nex file.
+:param filePath: full path of file
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter.WriteNex5File">
+<span class="sig-name descname"><span class="pre">WriteNex5File</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saveContValuesAsFloats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter.WriteNex5File"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter.WriteNex5File" title="Permalink to this definition"></a></dt>
+<dd><p>Writes file data as .nex5 file.
+:param filePath: full path of file
+:param saveContValuesAsFloats: if zero, continuous values are saved as 16-bit integers; if 1, saved as floats
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VerifyIsNumpyArray">
+<span class="sig-name descname"><span class="pre">_VerifyIsNumpyArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VerifyIsNumpyArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VerifyIsNumpyArray" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._ConvertStringToBytesIfNeeded">
+<span class="sig-name descname"><span class="pre">_ConvertStringToBytesIfNeeded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stringOrBytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._ConvertStringToBytesIfNeeded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._ConvertStringToBytesIfNeeded" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._WriteField">
+<span class="sig-name descname"><span class="pre">_WriteField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theFormat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theField</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._WriteField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._WriteField" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._WriteList">
+<span class="sig-name descname"><span class="pre">_WriteList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valueType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._WriteList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._WriteList" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._AddNex5VarHeaderFields">
+<span class="sig-name descname"><span class="pre">_AddNex5VarHeaderFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._AddNex5VarHeaderFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._AddNex5VarHeaderFields" title="Permalink to this definition"></a></dt>
+<dd><p>Adds .nex5 variable header fields.
+:param var: file data variable
+:return: none</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._BytesInTimestamp">
+<span class="sig-name descname"><span class="pre">_BytesInTimestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._BytesInTimestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._BytesInTimestamp" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates number of bytes in timestamp.
+:param var: file data variable
+:return: number of bytes in timestamp</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._BytesInContValue">
+<span class="sig-name descname"><span class="pre">_BytesInContValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._BytesInContValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._BytesInContValue" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> – file data variable</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>number of bytes in continuous value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarNumDataBytes">
+<span class="sig-name descname"><span class="pre">_VarNumDataBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarNumDataBytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarNumDataBytes" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> – file data variable</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>number of bytes in variable data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarCount">
+<span class="sig-name descname"><span class="pre">_VarCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarCount" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates count field for file variables
+:param var:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._MaxOfNumpyArrayOrZero">
+<span class="sig-name descname"><span class="pre">_MaxOfNumpyArrayOrZero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._MaxOfNumpyArrayOrZero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._MaxOfNumpyArrayOrZero" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarMaxTimestampNumpy">
+<span class="sig-name descname"><span class="pre">_VarMaxTimestampNumpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarMaxTimestampNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarMaxTimestampNumpy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._MaxValueOrZero">
+<span class="sig-name descname"><span class="pre">_MaxValueOrZero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theList</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._MaxValueOrZero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._MaxValueOrZero" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarMaxTimestamp">
+<span class="sig-name descname"><span class="pre">_VarMaxTimestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarMaxTimestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarMaxTimestamp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarWriteTimestampsNumpy">
+<span class="sig-name descname"><span class="pre">_VarWriteTimestampsNumpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarWriteTimestampsNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarWriteTimestampsNumpy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarWriteTimestamps">
+<span class="sig-name descname"><span class="pre">_VarWriteTimestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarWriteTimestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarWriteTimestamps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarWriteWaveformsNumpy">
+<span class="sig-name descname"><span class="pre">_VarWriteWaveformsNumpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarWriteWaveformsNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarWriteWaveformsNumpy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarWriteContinuousValuesNumpy">
+<span class="sig-name descname"><span class="pre">_VarWriteContinuousValuesNumpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarWriteContinuousValuesNumpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarWriteContinuousValuesNumpy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._WriteWaveformVarData">
+<span class="sig-name descname"><span class="pre">_WriteWaveformVarData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._WriteWaveformVarData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._WriteWaveformVarData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._WriteContinuousVarData">
+<span class="sig-name descname"><span class="pre">_WriteContinuousVarData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._WriteContinuousVarData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._WriteContinuousVarData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._VarWriteData">
+<span class="sig-name descname"><span class="pre">_VarWriteData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._VarWriteData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._VarWriteData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._CalcMarkerLength">
+<span class="sig-name descname"><span class="pre">_CalcMarkerLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._CalcMarkerLength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._CalcMarkerLength" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._MaximumTimestamp">
+<span class="sig-name descname"><span class="pre">_MaximumTimestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._MaximumTimestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._MaximumTimestamp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._SignalAbsMaxNumPy">
+<span class="sig-name descname"><span class="pre">_SignalAbsMaxNumPy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._SignalAbsMaxNumPy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._SignalAbsMaxNumPy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.nexfile.NexWriter._CalculateScaling">
+<span class="sig-name descname"><span class="pre">_CalculateScaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/nexfile.html#NexWriter._CalculateScaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.nexfile.NexWriter._CalculateScaling" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../NexData/index.html" class="btn btn-neutral float-left" title="ivneuro.nex.NexData" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pull_nex_data/index.html" class="btn btn-neutral float-right" title="ivneuro.nex.pull_nex_data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

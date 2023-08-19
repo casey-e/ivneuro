@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
   
 def scale_centroids(centroids, x_dim,y_dim):
     """
-    Scale centroids to match the real values in appropiate scale. It assumes position at lower and higher limits of each dimension have been recorded.
+    Scale centroids to match the real values in appropiate scale.
+    
+    This function assumes that positions at lower and higher limits of each dimension have been recorded.
 
     Parameters
     ----------
@@ -24,6 +26,31 @@ def scale_centroids(centroids, x_dim,y_dim):
     Returns
     -------
     numpy.ndarray with scaled values.
+    
+    Examples
+    --------
+    
+    Use scale_centroids function.
+    
+    >>> # Create and array with x and y coordinates: centroids
+    >>> import ivneuro as ivn 
+    >>> import numpy as np
+    >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+    >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20 
+    >>> centroids = np.concatenate((x.reshape(100,1), y.reshape(100,1)), axis=1).T # Coordinates for an oval trajectory
+    >>> # Scale using scale_centroids function
+    >>> scaled_centroids = ivn.scale_centroids(centroids, 15, 30)
+    Difference between observed and provided x/y ratios: -0.012587232612482069 %
+    >>> print(scaled_centroids[:,:5]) # Print first 5 values of x and y
+    array([[15.        , 14.98489627, 14.9396459 , 14.8644311 , 14.75955473],
+           [15.        , 15.95147856, 16.89912585, 17.83912603, 18.76769406]])
+    
+    If ratios between observed and provided x and y values are too different, scale_centroids will through a warning message.
+
+    >>> # Scale with inverted x and y measures
+    >>> scaled_centroids = ivn.scale_centroids(centroids, 30, 15)
+    Warning: the observed and provided x/y ratios have a difference of above 10%, consider switching the order of X and Y dimensions or cleaning centroids data and scale again
+    Difference between observed and provided x/y ratios: -75.00314680815312 %
 
     """
     x_min, x_max=centroids[0].min(),centroids[0].max()
@@ -46,12 +73,14 @@ def scale_centroids(centroids, x_dim,y_dim):
 
 def calculate_speed(X_values, Y_values, timestamps, smooth=0):
     '''
-    Calculate scalar speed through the following steps:
-    1. Calculate dtime, dX=PosX[T-deltaT]-posX[T] and dY=PosY[T-deltaT]-posY[T]
+    Calculate scalar speed.
+    
+    Speed is calculated through the following steps:
+    1. Calculate dtime, dX=PosX[T-deltaT]-posX[T] and dY=PosY[T-deltaT]-posY[T].
     2. Smooth dX and dY using a Gaussian filter. Note: by applying the Gaussian filter to dX and dY instead of the speed
     avoids short movements or random noie of the camera  to propagate to the speed calculus, leaving only changes in position caused 
-    by displacement
-    3. Calculate scalar speed: sqrt(dX**2+dY**2) / dT
+    by displacement.
+    3. Calculate scalar speed: sqrt(dX**2+dY**2) / dT.
 
     Parameters
     ----------
@@ -69,6 +98,21 @@ def calculate_speed(X_values, Y_values, timestamps, smooth=0):
     -------
     speed: numpy.ndarray
         Values of scalar speed
+    
+    Examples
+    --------
+    
+    Create x coordinates, y coordinates and  timestamps. Calculate speed and print it.
+    
+    >>> import ivneuro as ivn 
+    >>> import numpy as np
+    >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+    >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20 
+    >>> ts = np.linspace(0,20,100).round(1)
+    # Calculate speed with calculate_speed function and print the first 5 values
+    >>> speed=ivn.calculate_speed(x, y, ts)
+    >>> print(speed[:5])
+    [6.3431908  6.32404896 6.28590074 6.22901826 6.15381269]
 
     '''
     #Evaluate if X_values, Y_values and timestamps ahve the same lenght, raise error if not
@@ -113,7 +157,7 @@ def calculate_speed(X_values, Y_values, timestamps, smooth=0):
 
 def position_of_event(x_values, y_values, timestamps, events, estimator=np.median):
     """
-    Estimate the most likelly position at with an event occurs, or get all the positions where that event occurs.
+    Estimate the most likely position at with an event occurs, or get all the positions where that event occurs.
 
     Parameters
     ----------
@@ -140,6 +184,35 @@ def position_of_event(x_values, y_values, timestamps, events, estimator=np.media
     -------
     Tuple 
         Most likely position (x, y) if estimator is not None, or all the positions of the event (np.array([x])), np.array([y]) if estimator is None.
+    
+    Examples
+    --------
+    
+    Estimate the position of an event with the median.
+    
+    >>> # Create x coordinates, y coordinates, centroids timestamps and event.
+    >>> import ivneuro as ivn 
+    >>> import numpy as np
+    >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+    >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20 
+    >>> ts = np.linspace(0,20,100).round(1)
+    >>> np.random.seed(24)
+    >>> event = np.random.choice(ts[(ts>10) & (ts<15)], size=5, replace = False) # Create an event by making a random choice from timestamps  
+    >>> # Estimate the position with position_of_event, return the median
+    >>> ivn.position_of_event(x, y, ts, event)
+    (1.7632341857016716, 8.658802722744587)
+    
+    Return the mean of the positions
+    
+    >>> ivn.position_of_event(x, y, ts, event, estimator = np.mean)
+    (3.356415004157808, 7.336570446958302)
+    
+    Return all the positions for x and y
+    
+    >>> ivn.position_of_event(x, y, ts, event, estimator = None)
+    (array([5.        , 0.83891543, 8.57685162, 0.60307379, 1.76323419]),
+     array([ 2.67949192, 11.98138929,  0.20357116, 13.15959713,  8.65880272]))
+    
 
     """
    
@@ -176,6 +249,22 @@ def distances_to_position(x_values, y_values, position):
     -------
     np.ndarray
         One dimensional array with distances to position at every point.
+    
+    Examples
+    --------
+    
+    Calculate distances to a position.
+    
+    >>> # Create x coordinates and y coordinates, create position of interest
+    >>> import ivneuro as ivn 
+    >>> import numpy as np
+    >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+    >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+    >>> center = (10, 20) # Position of interest
+    >>> # Calculate distances
+    >>> distances = ivn.distances_to_position (x, y, center)
+    >>> print(distances[:5])
+    [10.         10.06015795 10.23756293 10.523536   10.90516361]
 
     """
     

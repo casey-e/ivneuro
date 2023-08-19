@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.delta_coherence &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.delta_coherence</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.delta_coherence</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A module with delta_coherence function.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">.delta_coherence_core</span> <span class="kn">import</span> <span class="n">multi_coherence</span>
+
+
+
+
+<div class="viewcode-block" id="delta_coherence"><a class="viewcode-back" href="../../autoapi/ivneuro/index.html#ivneuro.delta_coherence.delta_coherence">[docs]</a><span class="k">def</span> <span class="nf">delta_coherence</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">highest_freq</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">sample_subsamples</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">noverlap</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">nfft</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the coherence between 2 signals at a experimental interval of time of interest (exp_interval), at a baseline interval of time (baseline), and the difference betrween the spectral at the experimental interval and the baseline.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    This function is based on the coherence function of scipy.signal, wich uses Welch&#39;s method. </span>
+<span class="sd">    exp_interval and baseline must be lists of slices of the same lenght, when when the lists have more than one element each, the results are the averages across intervals (either coherence at exp_interval, coherence at baseline, or their difference).   </span>
+<span class="sd">    To calculate the difference of coherence between experimental interval and baseline, the function subtracts the coherence at baseline from the coherence at exp_interval, for each frequency and trial (pair of elements in interval and baseline).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    contvar : pandas.DataFrame</span>
+<span class="sd">        Dataframe with continuous variables in each column, and timestamps as index.</span>
+<span class="sd">    exp_interval: list</span>
+<span class="sd">        List of slices corresponding to experimental intervals to calculate coherence.</span>
+<span class="sd">    baseline : list</span>
+<span class="sd">        List of slices corresponding to baseline intervals to calculate coherence.</span>
+<span class="sd">    lowest_freq : int or float, optional</span>
+<span class="sd">        The lowest frequency to include in the coherence spectral. The default is 0.</span>
+<span class="sd">    highest_freq : int or float, optional</span>
+<span class="sd">        The highest freq to include in the coherence spectral. The default is 500.</span>
+<span class="sd">    sample_subsamples : dict or None, optional</span>
+<span class="sd">        When a dict, key must be sample names and values must be lists of subsample names, e.g.: {&#39;sample_A&#39;:[&#39;subsample_A1&#39;,&#39;subsample_A2&#39;...&#39;subsample_An&#39;], &#39;sample_B&#39;:[&#39;subsample_B1&#39;,&#39;subsample_B2&#39;...&#39;subsample_Bn&#39;]...}.</span>
+<span class="sd">        Coherences and coeherence differences will be averaged across pairs of subsamples corresponding to the same samples pair.</span>
+<span class="sd">        It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode). </span>
+<span class="sd">        If None, each column of contvar is treated as an independent sample, and therefore the results contain coherences for every pair of contvar columns. The default is None.</span>
+<span class="sd">    sampling_rate : int or float or None, optional</span>
+<span class="sd">        Sampling rate of the continuous variables, wich is used in signal.coherence() function of the scipy package. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar&#39;s index. The default is None.</span>
+<span class="sd">    nperseg : int, optional</span>
+<span class="sd">        The nperseg parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 500.</span>
+<span class="sd">    noverlap : int, optional</span>
+<span class="sd">        The noverlap parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 400.</span>
+<span class="sd">    nfft : int, optional</span>
+<span class="sd">        The nfft parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 2000.</span>
+<span class="sd"> </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    coherence_exp_interval: pandas.DataFrame</span>
+<span class="sd">        Coherence for each pair of variables (or pair of samples if sample_subsamples != None), at the experimental interval. Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.</span>
+<span class="sd">    power_baseline: pandas.DataFrame</span>
+<span class="sd">        Coherence for each pair of variables (or pair of samples if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.</span>
+<span class="sd">    delta_coherence: pandas.DataFrame</span>
+<span class="sd">        Difference of coherence between experimental interval and baseline interval, for each pair of variables (or pair of samples if sample_subsamples != None). Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># If there are not subsamples, just run multi_coherence</span>
+    <span class="k">if</span> <span class="n">sample_subsamples</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">multi_coherence</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">)</span>
+    
+    <span class="c1"># If there are subsamples, reorder and rename variables, then run delta_coherence and finally calculate averages across replicates of the same pair of variables</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Reorder variables as in sample_subsamples dictionary to prevent to have replicates flipped (for example A1B1, A2B1, A1B2, B2A1)</span>
+        <span class="n">col_list</span><span class="o">=</span> <span class="p">[</span><span class="n">var_name</span> <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">sample_subsamples</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span> <span class="k">if</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">contvar</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span> <span class="c1"># List of variable names, ordered as in sample_subsamples dictionary</span>
+        <span class="n">new_data</span><span class="o">=</span><span class="n">contvar</span><span class="p">[</span><span class="n">col_list</span><span class="p">]</span>
+        
+        <span class="c1"># Replace replicate by independent observation in column names</span>
+        <span class="n">replacing</span><span class="o">=</span><span class="p">{</span><span class="n">name</span><span class="p">:</span><span class="n">new_name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_data</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">old_names</span> <span class="ow">in</span> <span class="n">sample_subsamples</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">old_names</span><span class="p">}</span>
+        <span class="n">new_data</span><span class="o">=</span><span class="n">new_data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">replacing</span><span class="p">)</span> <span class="c1"># Now there are columns with the same name, which allow to later group them and calculate the mean</span>
+        
+        <span class="n">result</span><span class="o">=</span><span class="n">multi_coherence</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

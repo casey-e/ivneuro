@@ -1,0 +1,32 @@
+:py:mod:`ivneuro.spectograms_core`
+==================================
+
+.. py:module:: ivneuro.spectograms_core
+
+.. autoapi-nested-parse::
+
+   A module with private helper functions for peri_event_spectogram function located in spectograms
+   module.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.spectograms_core.spectogram
+   ivneuro.spectograms_core.single_pes
+
+
+
+.. py:function:: spectogram(var, sampling_rate, lower_freq=0, higher_freq=500, scaling='spectrum', nperseg=500, noverlap=400, nfft=2000)
+
+
+.. py:function:: single_pes(contvar, evt, lower_lim, higher_lim, lower_freq, higher_freq, sample_subsamples, sampling_rate, scaling, nperseg, noverlap, nfft, sr, lost_ts, rounding)
+
+

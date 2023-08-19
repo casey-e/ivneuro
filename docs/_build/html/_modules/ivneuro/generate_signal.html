@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.generate_signal &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.generate_signal</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.generate_signal</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Function to generate a signal, used for examples of other functions of the package.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">generate_pink_noise</span><span class="p">,</span> <span class="n">generate_oscillatory_signal</span><span class="p">,</span> <span class="n">add_signal_to_noise</span>
+
+<div class="viewcode-block" id="generate_signal"><a class="viewcode-back" href="../../autoapi/ivneuro/index.html#ivneuro.generate_signal.generate_signal">[docs]</a><span class="k">def</span> <span class="nf">generate_signal</span> <span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">burst_timestamps</span><span class="p">,</span> <span class="n">burst_frequency</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">burst_amplitude</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">sampling_frequency</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">40</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a signal with pink noise and increases in power (bursts) at a specified frequency.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    duration : int or float</span>
+<span class="sd">        Duration of the signal in seconds.</span>
+<span class="sd">    burst_timestamps : list of floats</span>
+<span class="sd">        Timestamps at wich the increases in power must occur.</span>
+<span class="sd">    burst_frequency : int or float</span>
+<span class="sd">        Frequency at wich the signal displays increases in power.</span>
+<span class="sd">    burst_duration : int or float, optional</span>
+<span class="sd">        Duration (in seconds) of high power burst. The default is 2.</span>
+<span class="sd">    burst_amplitude : int or float, optional</span>
+<span class="sd">        Amplitud of the signal used to create the increases in power. The default is 0.1.</span>
+<span class="sd">    sampling_frequency : int, optional</span>
+<span class="sd">        Sampling frequency. The default is 1000.</span>
+<span class="sd">    seed = int, optional</span>
+<span class="sd">    Value for np.random.seed to generate pink noise. The default is 40.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    signal : pandas DataFrame</span>
+<span class="sd">        Timestamps as index and signal values as values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#Generate pink noise</span>
+    <span class="n">pink_noise</span><span class="o">=</span><span class="n">generate_pink_noise</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">sampling_frequency</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+    <span class="n">pink_noise</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pink_noise</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    
+    <span class="c1"># Generate burst signal</span>
+    <span class="n">burst_signal</span> <span class="o">=</span> <span class="n">generate_oscillatory_signal</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">burst_frequency</span><span class="p">,</span> <span class="n">duration</span> <span class="o">=</span> <span class="n">burst_duration</span><span class="p">,</span> <span class="n">amplitude</span> <span class="o">=</span> <span class="n">burst_amplitude</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="n">sampling_frequency</span><span class="p">)</span>
+    <span class="n">burst_signal</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">burst_signal</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    
+    <span class="c1">#Add burst signal to pink_noise at the burst timestamps</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">add_signal_to_noise</span> <span class="p">(</span><span class="n">pink_noise</span><span class="p">,</span> <span class="n">burst_signal</span><span class="p">,</span> <span class="n">burst_timestamps</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">signal</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

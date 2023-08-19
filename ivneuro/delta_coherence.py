@@ -55,6 +55,53 @@ def delta_coherence(contvar, exp_interval, baseline, lowest_freq = 0, highest_fr
         Coherence for each pair of variables (or pair of samples if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.
     delta_coherence: pandas.DataFrame
         Difference of coherence between experimental interval and baseline interval, for each pair of variables (or pair of samples if sample_subsamples != None). Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.
+    
+    
+    Examples
+    --------
+    
+    Create event, intervals and signals.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> event = [*range(30,300, 30)] # Events
+    >>> # Make intervals
+    >>> exp_interval = ivn.make_intervals(event, 0, 2) # Experimental interval
+    >>> baseline = ivn.make_intervals(event, -6, -4) #Baseline interval
+    >>> # Create signals
+    >>> signal1 = ivn.generate_signal(300, event, 30, burst_amplitude=0.06, seed=15)
+    >>> signal2 = ivn.generate_signal(300, event, 30.2, burst_amplitude=0.13, seed = 30)
+    >>> signal3 = ivn.generate_signal(300, event, 80, burst_amplitude=0.05, seed = 50)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+    
+    Calculate coherence and delta coherence between intervals with delta_coherence function.
+        
+    >>> exp_coh, baseline_coh, delta_coh = ivn.delta_coherence(signals, exp_interval, baseline)
+    >>> delta_coh.head()
+          Signal 30Hz             Signal 30.2Hz
+        Signal 30.2Hz Signal 80Hz   Signal 80Hz
+    0.0     -0.079927   -0.024874      0.068144
+    0.5     -0.045909   -0.058171      0.043984
+    1.0     -0.019668   -0.081587      0.025753
+    1.5     -0.015086   -0.076264      0.023711
+    2.0     -0.016446   -0.059058      0.025952
+    
+    
+    Set signal1 and signal2 as replicates of sample1, and signal3 as sample2.
+    
+    >>> # Make dictionary to group replicates of each sample
+    >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 30.2Hz'], 'sample2':['Signal 80Hz']}
+    >>> # Calculate coherence and delta coherence
+    >>> exp_coh, baseline_coh, delta_coh = ivn.delta_coherence(signals, exp_interval, baseline, sample_subsamples = sample_subsamples)
+    >>> delta_coh.head()
+          sample1          
+          sample1   sample2
+    0.0 -0.079927  0.021635
+    0.5 -0.045909 -0.007093
+    1.0 -0.019668 -0.027917
+    1.5 -0.015086 -0.026276
+    2.0 -0.016446 -0.016553
+
 
     """
     

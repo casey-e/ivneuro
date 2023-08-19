@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.continuous &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ivneuro.delta_coherence" href="../delta_coherence/index.html" />
+    <link rel="prev" title="ivneuro.nex.pull_nex_data" href="../nex/pull_nex_data/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../events/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generate_signal/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.generate_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.tracking</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/ivneuro/continuous/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.continuous">
+<span id="ivneuro-continuous"></span><h1><a class="reference internal" href="#module-ivneuro.continuous" title="ivneuro.continuous"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a><a class="headerlink" href="#module-ivneuro.continuous" title="Permalink to this heading"></a></h1>
+<p>User-facing functions for analysis of continuous variables, and PeriEventHistogram class.</p>
+<p>Peri-event histograms analysis can be higly demanding, depending on the size and amount of continuous
+variables and the amount of reference events and number of trials of each of event. PeriEventHistogram
+class aims to facilitate processing, interpretation and visualization of peri-event histograms without
+running the analysis again. It is a pandas DataFrame Subclass and is returned by default by
+ivneuro.continuous.peh function.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.continuous.PeriEventHistogram" title="ivneuro.continuous.PeriEventHistogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriEventHistogram</span></code></a></p></td>
+<td><p>Create a PeriEventHistogram object.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.continuous.calculate_sampling_period" title="ivneuro.continuous.calculate_sampling_period"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_sampling_period</span></code></a>(timestamps)</p></td>
+<td><p>Calculate the sampling period from an array of timestamps</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.continuous.calculate_sampling_rate" title="ivneuro.continuous.calculate_sampling_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_sampling_rate</span></code></a>(timestamps)</p></td>
+<td><p>Calculate sampling rate from an array of timestamps</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.continuous.peh_list" title="ivneuro.continuous.peh_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peh_list</span></code></a>(contvar, evt, lower_lim, higher_lim)</p></td>
+<td><p>Make list of peri-event histograms</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.continuous.single_peh" title="ivneuro.continuous.single_peh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_peh</span></code></a>(contvar, evt, lower_lim, higher_lim)</p></td>
+<td><p>Make peri-event histograms for a single event (with multiple trials)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.continuous.peh" title="ivneuro.continuous.peh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peh</span></code></a>(contvar, evt, lower_lim, higher_lim[, ...])</p></td>
+<td><p>Make peri-event histograms</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.continuous.calculate_sampling_period">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">calculate_sampling_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#calculate_sampling_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.calculate_sampling_period" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the sampling period from an array of timestamps</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestamps</strong> (<em>numpy.ndarray</em>) – One dimensional array with timestamps.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sampling period.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Calculate sample period of a timeserie.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create timeserie</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timestamps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span> <span class="c1"># Timeserie of period 0.001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use the function to calculate sample period.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">calculate_sampling_period</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span>
+<span class="go">0.001000000000000334</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.continuous.calculate_sampling_rate">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">calculate_sampling_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#calculate_sampling_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.calculate_sampling_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate sampling rate from an array of timestamps</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestamps</strong> (<em>numpy.ndarray</em>) – One dimensional array with timestamps.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sampling_rate</strong> – Sampling rate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Calculate sample rate of a timeserie.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create timeserie</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timestamps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span> <span class="c1"># Timeserie of period 0.001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use the function to calculate sample rate.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">calculate_sampling_rate</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span>
+<span class="go">1000.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.continuous.peh_list">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">peh_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contvar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_lim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#peh_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.peh_list" title="Permalink to this definition"></a></dt>
+<dd><p>Make list of peri-event histograms</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contvar</strong> (<em>pandas.DataFrame</em>) – Dataframe with continuous variables in each column, and timestamps as index.</p></li>
+<li><p><strong>evt</strong> (<em>one dimensional numpy.ndarray</em><em> or </em><em>list</em>) – Timestamps of reference event.</p></li>
+<li><p><strong>lower_lim</strong> (<em>numeric</em>) – Lower time limit of the peri-event histogram.</p></li>
+<li><p><strong>higher_lim</strong> (<em>numeric</em>) – Higher time limit of the peri-event histogram.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>peh</strong> – Lst of Dataframes of peri-event histograms, each with original continuous variables as columns, and multi-index with trial number and peri-event time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create event and signals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create event: burst</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burst</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">21</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use peh_list to create a list of peri-event histograms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist_list</span><span class="o">=</span><span class="n">ivn</span><span class="o">.</span><span class="n">continuous</span><span class="o">.</span><span class="n">peh_list</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="n">lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">higher_lim</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Print first element</span>
+<span class="go">          Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz</span>
+<span class="go">1 -5.000    0.308629      0.802330     -0.772324</span>
+<span class="go">  -4.999    0.383986      0.841905     -0.842523</span>
+<span class="go">  -4.998    0.337540      0.966326     -0.901157</span>
+<span class="go">  -4.997    0.301379      0.992252     -0.832871</span>
+<span class="go">  -4.996    0.396404      1.047770     -0.900500</span>
+<span class="go">             ...           ...           ...</span>
+<span class="go">   4.996    0.211593     -2.017009     -0.826280</span>
+<span class="go">   4.997    0.324347     -2.130981     -0.891831</span>
+<span class="go">   4.998    0.229633     -2.077634     -0.974507</span>
+<span class="go">   4.999    0.216934     -2.014184     -0.940523</span>
+<span class="go">   5.000    0.157096     -2.007946     -1.020650</span>
+<span class="go">[10001 rows x 3 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.continuous.single_peh">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">single_peh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contvar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_lim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#single_peh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.single_peh" title="Permalink to this definition"></a></dt>
+<dd><p>Make peri-event histograms for a single event (with multiple trials)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contvar</strong> (<em>pandas.DataFrame</em>) – Dataframe with continuous variables in each column, and timestamps as index.</p></li>
+<li><p><strong>evt</strong> (<em>one dimensional numpy array</em><em> or </em><em>list</em>) – Timestamps of reference event.</p></li>
+<li><p><strong>lower_lim</strong> (<em>numeric</em>) – Lower time limit of the peri-event histogram.</p></li>
+<li><p><strong>higher_lim</strong> (<em>numeric</em>) – Higher time limit of the peri-event histogram.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>peh</strong> – Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with trial number and peri-event time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.continuous.peh">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">peh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contvar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_DataFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#peh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.peh" title="Permalink to this definition"></a></dt>
+<dd><p>Make peri-event histograms</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contvar</strong> (<em>pandas.DataFrame</em>) – Dataframe with continuous variables in each column, and timestamps as index.</p></li>
+<li><p><strong>evt</strong> (<em>one-dimensional numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>dict</em>) – Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+Dict values can be either one dimensional numpy arrays or lists of floats.</p></li>
+<li><p><strong>lower_lim</strong> (<em>int</em><em> or </em><em>float</em>) – Lower time limit of the peri-event histogram.</p></li>
+<li><p><strong>higher_lim</strong> (<em>int</em><em> or </em><em>float</em>) – Higher time limit of the peri-event histogram.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>peh</strong> – Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with event names, trial number and peri-event time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create event and signals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create events: burst and control</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burst</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">control</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;burst&#39;</span><span class="p">:</span><span class="n">burst</span><span class="p">,</span><span class="s1">&#39;control&#39;</span><span class="p">:</span><span class="n">control</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">21</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">burst_duration</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Peri-event histograms for a single variable and a single event (with multiple trials).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peh</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="n">lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">higher_lim</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># histograms from 5 seconds before to 5 seconds after each trial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="go">ivneuro.continuous.PeriEventHistogram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span>
+<span class="go">                                Signal 2Hz</span>
+<span class="go">Event_name Event_number Time</span>
+<span class="go">Event      1            -5.000    0.308629</span>
+<span class="go">                        -4.999    0.383986</span>
+<span class="go">                        -4.998    0.337540</span>
+<span class="go">                        -4.997    0.301379</span>
+<span class="go">                        -4.996    0.396404</span>
+<span class="go">                                   ...</span>
+<span class="go">           9             4.996    1.773434</span>
+<span class="go">                         4.997    1.768014</span>
+<span class="go">                         4.998    1.742938</span>
+<span class="go">                         4.999    1.684667</span>
+<span class="go">                         5.000    1.573737</span>
+<span class="go">[90009 rows x 1 columns]</span>
+</pre></div>
+</div>
+<p>Return a pandas.DataFrame instead of a ivneuro.continuous.PeriEventHistogram.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peh</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="n">lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">higher_lim</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">return_DataFrame</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># histograms from 5 seconds before to 5 seconds after each trial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="go">pandas.core.frame.DataFrame</span>
+</pre></div>
+</div>
+<p>Peri-event histogram for multiple variables and multiple events (with multiple trials each).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peh</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">higher_lim</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># histograms from 3 seconds before to 3 seconds after each trial</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">variable_names</span>
+<span class="go">[&#39;Signal 2Hz&#39;, &#39;Signal 0.5Hz&#39;, &#39;Signal 0.2Hz&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">event_names</span>
+<span class="go">[&#39;control&#39;, &#39;burst&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">calculate_means</span><span class="p">()</span>
+<span class="go">                   Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz</span>
+<span class="go">Event_name Time</span>
+<span class="go">burst      -3.000   -0.323144      0.421450      0.436888</span>
+<span class="go">           -2.999   -0.234888      0.370375      0.440265</span>
+<span class="go">           -2.998   -0.232368      0.398991      0.406327</span>
+<span class="go">           -2.997   -0.233245      0.368178      0.381116</span>
+<span class="go">           -2.996   -0.223524      0.319660      0.367928</span>
+<span class="go">                      ...           ...           ...</span>
+<span class="go">control     2.996    0.245362      0.387958      0.362177</span>
+<span class="go">            2.997    0.270217      0.431107      0.326198</span>
+<span class="go">            2.998    0.263590      0.420351      0.303861</span>
+<span class="go">            2.999    0.335115      0.444825      0.323329</span>
+<span class="go">            3.000    0.361686      0.388019      0.330680</span>
+<span class="go">[12002 rows x 3 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.continuous.</span></span><span class="sig-name descname"><span class="pre">PeriEventHistogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+<p>Create a PeriEventHistogram object.</p>
+<p>PeriEventHistogram class inherits from pandas.DataFrame and adds functionalities for easily extract information from the data and plot it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>pandas.DataFrame</em>) – Multi-index pandas.DataFrame as returned by peh() function, with event names, event trial number and peri-event time as index, continuous variables as columns and values as data.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.variable_names">
+<span class="sig-name descname"><span class="pre">variable_names</span></span><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.variable_names" title="Permalink to this definition"></a></dt>
+<dd><p>Names of each continuous variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.event_names">
+<span class="sig-name descname"><span class="pre">event_names</span></span><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.event_names" title="Permalink to this definition"></a></dt>
+<dd><p>Names of each reference event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.timestamps">
+<span class="sig-name descname"><span class="pre">timestamps</span></span><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.timestamps" title="Permalink to this definition"></a></dt>
+<dd><p>Timestamps of the peri-event histogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">slice_time(new_limits):</span></span></dt>
+<dd><p>Slice timestamps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_limits</strong> (<em>tuple</em>) – New lowest and highest limits of time.</p></li>
+<li><p><strong>Returns</strong> (<a class="reference internal" href="#ivneuro.continuous.PeriEventHistogram" title="ivneuro.continuous.PeriEventHistogram"><em>PeriEventHistogram</em></a>) – New object with sliced timestamps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>slice_events(event_list):</p>
+<blockquote>
+<div><p>Slice events.</p>
+<dl class="simple">
+<dt>event_list: list</dt><dd><p>Event names to slice from the data.</p>
+</dd>
+<dt>Returns: PeriEventHistogram</dt><dd><p>New object with sliced events.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>calculate_means():</p>
+<blockquote>
+<div><p>Calculate means across trials of the same event for each variable, event name and timestamp.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns: pandas.DataFrame</dt><dd><p>Mean across trials of the same event of the peri-event histograms. Multi-index pandas.DataFrame with event names and peri-event time as index,
+continuous variable names as columns and mean variable values as data.</p>
+</dd>
+</dl>
+<p>plot(aspect=1, cont_names = None, evt_names = None, sharey=’all’):</p>
+<blockquote>
+<div><p>Plot peri-event histograms, with each variable in a column and each event name in a row.</p>
+<dl class="simple">
+<dt>aspect<span class="classifier">float, optional</span></dt><dd><p>The y/x ratio of the axes aspect. The default is 1.</p>
+</dd>
+<dt>cont_names: list or None, optional</dt><dd><p>Subset of continuous variables names to plot. If None, all variables are ploted. Default is None.</p>
+</dd>
+<dt>evt_names: list or None, optional</dt><dd><p>Subset of events to plot. If None, all events are ploted. Default is None.</p>
+</dd>
+<dt>sharey: bool or {‘none’, ‘all’, ‘row’, ‘col’}, optional</dt><dd><p>Parameter of matplotlib.pyplot.subplots() to control sharing of properties among y axis. Refer to matplotlib.pyplot.subplots in matplotlib manual for more information.
+True or ‘all’: x- or y-axis will be shared among all subplots.
+False or ‘none’: each subplot x- or y-axis will be independent.
+‘row’: each subplot row will share an x- or y-axis.
+‘col’: each subplot column will share an x- or y-axis.
+The default is ‘all’.</p>
+</dd>
+</dl>
+<p>None.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram._set_variable_names">
+<span class="sig-name descname"><span class="pre">_set_variable_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram._set_variable_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram._set_variable_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram._set_event_names">
+<span class="sig-name descname"><span class="pre">_set_event_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram._set_event_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram._set_event_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram._set_timestamps">
+<span class="sig-name descname"><span class="pre">_set_timestamps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram._set_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram._set_timestamps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.slice_time">
+<span class="sig-name descname"><span class="pre">slice_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_limits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram.slice_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.slice_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.slice_events">
+<span class="sig-name descname"><span class="pre">slice_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram.slice_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.slice_events" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.calculate_means">
+<span class="sig-name descname"><span class="pre">calculate_means</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram.calculate_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.calculate_means" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.continuous.PeriEventHistogram.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cont_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sharey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/continuous.html#PeriEventHistogram.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.continuous.PeriEventHistogram.plot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../nex/pull_nex_data/index.html" class="btn btn-neutral float-left" title="ivneuro.nex.pull_nex_data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../delta_coherence/index.html" class="btn btn-neutral float-right" title="ivneuro.delta_coherence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

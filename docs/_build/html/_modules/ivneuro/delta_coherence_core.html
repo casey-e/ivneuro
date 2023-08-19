@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.delta_coherence_core &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.delta_coherence_core</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.delta_coherence_core</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A  module with private helper functions for delta_coherence function locate in delta_coherence module.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">coherence</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">.continuous</span> <span class="kn">import</span> <span class="n">calculate_sampling_rate</span>
+
+<div class="viewcode-block" id="calculate_delta_coherence"><a class="viewcode-back" href="../../autoapi/ivneuro/delta_coherence_core/index.html#ivneuro.delta_coherence_core.calculate_delta_coherence">[docs]</a><span class="k">def</span> <span class="nf">calculate_delta_coherence</span><span class="p">(</span><span class="n">var_1_exp_interval</span><span class="p">,</span> <span class="n">var2_exp_interval</span><span class="p">,</span> <span class="n">var_1_baseline</span><span class="p">,</span> <span class="n">var2_baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">):</span>
+    
+    
+    <span class="n">coherence_a</span> <span class="o">=</span> <span class="p">[</span><span class="n">coherence</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">)</span> <span class="k">for</span> <span class="n">var1</span><span class="p">,</span> <span class="n">var2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">var_1_exp_interval</span><span class="p">,</span> <span class="n">var2_exp_interval</span><span class="p">)]</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">coherence_a</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mask</span><span class="o">=</span> <span class="p">(</span><span class="n">freq</span> <span class="o">&gt;=</span> <span class="n">lowest_freq</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">freq</span> <span class="o">&lt;=</span> <span class="n">highest_freq</span><span class="p">)</span> <span class="c1"># Mask to selcet frequencies</span>
+    <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">coherence_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">coherence_a</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">coherence_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">coherence</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">var1</span><span class="p">,</span> <span class="n">var2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">var_1_baseline</span><span class="p">,</span> <span class="n">var2_baseline</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">coherence_a</span><span class="o">-</span><span class="n">coherence_b</span>
+    <span class="n">diff</span><span class="o">=</span><span class="n">diff</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">coherence_a</span> <span class="o">=</span> <span class="n">coherence_a</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">coherence_b</span> <span class="o">=</span> <span class="n">coherence_b</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+    
+    <span class="k">return</span> <span class="n">freq</span><span class="p">,</span> <span class="n">coherence_a</span><span class="p">,</span> <span class="n">coherence_b</span><span class="p">,</span> <span class="n">diff</span></div>
+
+
+<div class="viewcode-block" id="single_coherence"><a class="viewcode-back" href="../../autoapi/ivneuro/delta_coherence_core/index.html#ivneuro.delta_coherence_core.single_coherence">[docs]</a><span class="k">def</span> <span class="nf">single_coherence</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">):</span>
+    
+    <span class="n">df_list</span><span class="o">=</span><span class="p">[</span><span class="n">contvar</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exp_interval</span><span class="p">]</span>
+    <span class="n">var_1_exp_interval</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">df_list</span><span class="p">]</span>
+    <span class="n">var2_exp_interval</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">df_list</span><span class="p">]</span>
+    
+    <span class="n">df_list</span><span class="o">=</span><span class="p">[</span><span class="n">contvar</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">baseline</span><span class="p">]</span>
+    <span class="n">var_1_baseline</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">df_list</span><span class="p">]</span>
+    <span class="n">var2_baseline</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">df_list</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">calculate_delta_coherence</span><span class="p">(</span><span class="n">var_1_exp_interval</span><span class="p">,</span> <span class="n">var2_exp_interval</span><span class="p">,</span> <span class="n">var_1_baseline</span><span class="p">,</span> <span class="n">var2_baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="multi_coherence"><a class="viewcode-back" href="../../autoapi/ivneuro/delta_coherence_core/index.html#ivneuro.delta_coherence_core.multi_coherence">[docs]</a><span class="k">def</span> <span class="nf">multi_coherence</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">):</span>
+    
+    <span class="c1"># If sampling rate is None, calculate it using the timestamps of the index</span>
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">calculate_sampling_rate</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    
+    <span class="n">var_combinations</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">combinations</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="c1"># All posible pairs of variables</span>
+    <span class="c1"># col_names=[&#39;{}-{}&#39;.format(i[0],i[1]) for i in var_combinations]</span>
+    <span class="n">cols1</span><span class="p">,</span> <span class="n">cols2</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">],</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">]</span> <span class="c1"># Lists of the first and the second variable of each pair</span>
+    
+    <span class="c1"># Make all posible combinations of pairs of variables and variable names</span>
+    <span class="n">var_combinations</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">combinations</span><span class="p">([</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">columns</span><span class="p">))],</span> <span class="mi">2</span><span class="p">)]</span> <span class="c1"># All posible pairs of variables, as column index</span>
+    <span class="n">varnames_combinations</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">combinations</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="c1"># All posible pairs of variables names</span>
+    <span class="n">cols1</span><span class="p">,</span> <span class="n">cols2</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">varnames_combinations</span><span class="p">],</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">varnames_combinations</span><span class="p">]</span> <span class="c1"># Lists of the first and the second variable name of each pair</span>
+    
+    <span class="c1"># Calculate coherences for each interval list and variable</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">single_coherence</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="o">*</span><span class="n">val_pair</span><span class="p">]],</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">lowest_freq</span><span class="p">,</span> <span class="n">highest_freq</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="p">)</span> <span class="k">for</span> <span class="n">val_pair</span> <span class="ow">in</span> <span class="n">var_combinations</span><span class="p">]</span> <span class="c1">#results is a list of tuples with 4 elements</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Get the frequencies from the first element of results    </span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="c1"># Get the coherences for inteval, baseline and difference between intervals and and baseline, and make a numpy.arrays for each</span>
+    
+    <span class="c1"># Make dataframes</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">cols1</span><span class="p">,</span> <span class="n">cols2</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

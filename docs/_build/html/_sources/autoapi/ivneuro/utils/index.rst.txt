@@ -1,0 +1,51 @@
+:py:mod:`ivneuro.utils`
+=======================
+
+.. py:module:: ivneuro.utils
+
+.. autoapi-nested-parse::
+
+   A module with private helper functions.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.utils.significant_decimal_positions
+   ivneuro.utils.generate_pink_noise
+   ivneuro.utils.generate_oscillatory_signal
+   ivneuro.utils.add_signal_to_noise
+
+
+
+.. py:function:: significant_decimal_positions(value)
+
+   Calculate the significant number of decimal positions to use to round a value.
+
+   Certains calculations, like vectorized operations that switch between decimal and binary systems, generate values with large amount of
+   decimal positions that can interfiere with posterior operations (like aligments). This function keeps only the relevant amount of decimal
+   positions.
+
+   :param value: Value to calculate the number of significant decimal positions.
+   :type value: float
+
+   :returns: Number of significant decimal positions, to be used as imput of numpy.round() .
+   :rtype: int
+
+
+.. py:function:: generate_pink_noise(duration, sampling_frequency, seed)
+
+
+.. py:function:: generate_oscillatory_signal(frequency, duration, amplitude, sample_rate=1000)
+
+
+.. py:function:: add_signal_to_noise(noise, signal, timestamps)
+
+

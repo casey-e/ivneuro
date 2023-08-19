@@ -1,0 +1,476 @@
+:py:mod:`ivneuro.nex.nexfile`
+=============================
+
+.. py:module:: ivneuro.nex.nexfile
+
+.. autoapi-nested-parse::
+
+   To read .nex or .nex5 files, use the following code:
+       import nexfile
+       reader = nexfile.Reader()
+       fileData = reader.ReadNexFile('C:\Data\file.nex')
+       fileData1 = reader.ReadNexFile('C:\Data\file.nex5')
+       print(fileData['Variables'][0])
+
+   If your files are larger than a few MB, use numpy version of the reader:
+       import nexfile
+       reader = nexfile.Reader(useNumpy=True)
+       fileData = reader.ReadNexFile('C:\Data\LargeFile.nex')
+
+   See comments below for description of the content of fileData.
+
+   To write .nex file, use this code:
+       timestampFrequency = 50000
+       writer = nexfile.NexWriter(timestampFrequency)
+   then, add variable data using Add... methods in NexWriter class
+   (see method doc strings below for more info):
+       writer.AddContVarWithSingleFragment('cont1', 0, 10000, [5, 6, 7, 8])
+       writer.AddContVarWithSingleFragment('cont2', 0, 10000, [9, 10, 11, 12])
+   then, use WriteNexFile method:
+       writer.WriteNexFile('C:\Data\python.nex')
+
+   If your files are larger than a few MB, use numpy version of the NexWriter:
+       import nexfile
+       import numpy as np
+       timestampFrequency = 50000
+       writer = nexfile.NexWriter(timestampFrequency, useNumpy=True)
+       writer.AddNeuron('neuron1', np.array([1, 2, 3, 4]))
+       writer.AddContVarWithSingleFragment('cont1', 2, 10000, np.array([5, 6, 7, 8]))
+       writer.WriteNex5File('C:\Data\pythonWithFloatContValues.nex5', saveContValuesAsFloats=1)
+
+   fileData:
+       fileData["FileHeader"] -- file header:
+           fileData["FileHeader"]["Comment"] -- comment
+           fileData["FileHeader"]["Beg"] -- file data start in ticks
+           fileData["FileHeader"]["End"] -- file data end in ticks
+           fileData["FileHeader"]["NexFileVersion"] -- file version
+           fileData["FileHeader"]["MagicNumber"] -- magic number
+           fileData["FileHeader"]["Frequency"] -- timestamp frequency
+           fileData["FileHeader"]["MetaOffset"] -- location of metadata (position in file)
+           fileData["FileHeader"]["NumVars"] -- number of variables
+
+       fileData["MetaData"] -- file metadata: various extra information fields that do not fit
+           into file or variable headers
+
+       fileData["Variables"] -- a list of data variables
+           For each variable var in fileData["Variables"]:
+               var["Timestamps"] -- array of timestamps in seconds (neurons, events, waveforms)
+               var["Intervals"] -- array of intervals in seconds (interval variables)
+               var["WaveformValues"] -- array of waveform values in milliVolts (waveform variables)
+               for continuous variables:
+                   var["FragmentCounts"] -- array of fragment counts (how many samples in each fragment)
+                   var["FragmentIndexes"] -- array of fragment indexes (index of the first data point in each fragment)
+                   var["ContinuousValues"] -- array of continuous values in milliVolts
+                   var["FragmentTimestamps"] -- array of fragment timestamps (timestamp of the first data point in each fragment)
+               var["Header"] -- variable header:
+                   var["Header"]["Type"] -- variable type: 0 - neuron, 1 - event, 2- interval, 3 - waveform, 4 - pop. vector, 5 - continuously recorded, 6 - marker
+                   var["Header"]["Name"] -- variable name
+                   var["Header"]["Version"] -- variable version in file
+                   var["Header"]["DataOffset"] -- where the data array for this variable is located in the file
+                   var["Header"]["Count"] --  neuron variable: number of timestamps
+                                event variable: number of timestamps
+                                interval variable: number of intervals
+                                waveform variable: number of waveforms
+                                continuous variable: number of fragments
+                                population vector: number of weights
+                   var["Header"]["TsDataType"] -- if 0, timestamps are stored as 32-bit integers;
+                               if 1, timestamps are stored as 64-bit integers;  supported by NeuroExplorer version 5.100 or greater
+                   var["Header"]["ContDataType"] -- waveforms and continuous variables only,
+                               if 0, waveform and continuous values are stored as 16-bit integers;
+                               if 1, waveform and continuous values are stored as 32-bit floating point values in units specified in Units field
+                   var["Header"]["SamplingRate"] -- waveforms and continuous variables only, waveform or continuous variable sampling frequency in Hertz
+                   var["Header"]["ADtoMV"] -- waveforms and continuous variables only, coefficient
+                               to convert from A/D values stored in file to units.
+                               A/D values in fileData are already scaled to units
+                               see formula below UnitsOffset below; ignored if ContinuousDataType == 1
+                   var["Header"]["MVOffset"] -- waveforms and continuous variables only,
+                               this offset is used to convert A/D values stored in file to units:
+                               value_in_units = raw * ADtoUnitsCoefficient + UnitsOffset; ignored if ContinuousDataType == 1
+                                A/D values in fileData are already scaled to units.
+                   var["Header"]["NPointsWave"] -- waveform variable: number of data points in each wave
+                                              continuous variable: overall number of data points in the variable
+                   var["Header"]["PreThrTime"] -- waveform variables only, pre-threshold time in seconds
+                               if waveform timestamp in seconds is t,
+                               then the timestamp of the first point of waveform is t - PrethresholdTimeInSeconds
+                   var["Header"]["MarkerDataType"] -- marker events only,
+                               if 0, marker values are stored as strings;
+                               if 1, marker values are stored as 32-bit unsigned integers
+                   var["Header"]["MarkerLength"] -- marker events only, how many characters are in each marker value; ignored if MarkerDataType is 1
+                   var["Header"]["ContFragIndexType"] -- continuous variables only,
+                               if 0, indexes of first data point in fragments are stored as unsigned 32-bit integers;
+                               if 1, indexes of first data point in fragments are stored as unsigned 64-bit integers; not supported in NeuroExplorer as of October 2017 (version 5.107)
+                   var["Header"]["Units"] -- waveforms and continuous variables only, units that should be used for the variable values
+                               not supported as of October 2017 (version 5.107)
+                   var["Header"]["NMarkers"] -- marker events only, how many values are associated with each marker
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.nex.nexfile.NexFileVarType
+   ivneuro.nex.nexfile.DataFormat
+   ivneuro.nex.nexfile.Reader
+   ivneuro.nex.nexfile.NexWriter
+
+
+
+
+.. py:class:: NexFileVarType
+
+   Constants for .nex and .nex5 variable types
+
+   .. py:attribute:: NEURON
+      :value: 0
+
+      
+
+   .. py:attribute:: EVENT
+      :value: 1
+
+      
+
+   .. py:attribute:: INTERVAL
+      :value: 2
+
+      
+
+   .. py:attribute:: WAVEFORM
+      :value: 3
+
+      
+
+   .. py:attribute:: POPULATION_VECTOR
+      :value: 4
+
+      
+
+   .. py:attribute:: CONTINUOUS
+      :value: 5
+
+      
+
+   .. py:attribute:: MARKER
+      :value: 6
+
+      
+
+
+.. py:class:: DataFormat
+
+   .. py:attribute:: INT16
+      :value: 0
+
+      
+
+   .. py:attribute:: UINT16
+      :value: 1
+
+      
+
+   .. py:attribute:: INT32
+      :value: 2
+
+      
+
+   .. py:attribute:: UINT32
+      :value: 3
+
+      
+
+   .. py:attribute:: INT64
+      :value: 4
+
+      
+
+   .. py:attribute:: UINT64
+      :value: 5
+
+      
+
+   .. py:attribute:: FLOAT32
+      :value: 6
+
+      
+
+   .. py:attribute:: FLOAT64
+      :value: 7
+
+      
+
+   .. py:method:: NumBytesPerItem(dataType)
+      :staticmethod:
+
+
+   .. py:method:: StructTypeFromDataType(dataType)
+      :staticmethod:
+
+
+
+.. py:class:: Reader(useNumpy=False)
+
+   Bases: :py:obj:`object`
+
+   Nex file reader class
+
+   .. py:method:: ReadNex5File(filePath)
+
+      Reads data from .nex5 file.
+      :param filePath: full path of file
+      :return: file data
+
+
+   .. py:method:: ReadNexFile(filePath)
+
+      Reads data from .nex file.
+      :param filePath:
+      :return: file data
+
+
+   .. py:method:: _ReadData()
+
+
+   .. py:method:: _ReadNex5FileHeader()
+
+
+   .. py:method:: _ReadFileHeader()
+
+
+   .. py:method:: _ReadVarHeader()
+
+
+   .. py:method:: _ReadNex5VarHeader()
+
+
+   .. py:method:: _ReadTimestamps(var)
+
+
+   .. py:method:: _ReadAndScaleValuesUsingNumpy(valueType, count, coeff=1.0, divide=False)
+
+
+   .. py:method:: _ReadAndScaleValues(valueType, count, coeff=1.0, divide=False)
+
+
+   .. py:method:: _ReadIntervals(var)
+
+
+   .. py:method:: _ReadWaveforms(var)
+
+
+   .. py:method:: _Chunks(theList, n)
+
+      Yield successive n-sized chunks from l.
+
+
+   .. py:method:: _ReadPopVectors(var)
+
+
+   .. py:method:: _ReadContinuous(var)
+
+
+   .. py:method:: _ReadMarker(var)
+
+
+
+.. py:class:: NexWriter(timestampFrequency, useNumpy=False)
+
+   Bases: :py:obj:`object`
+
+   Nex file writer class.
+   Sample code:
+
+   import nexfile
+   w = nexfile.NexWriter(100000)
+   w.fileData['FileHeader']['Comment'] = 'this is a comment'
+   w.AddNeuron('neuron1', [1, 2, 3, 4])
+   w.AddContVarWithSingleFragment('cont1', 2, 10000, [5, 6, 7, 8])
+   w.WriteNexFile('C:\Data\testFileWrittenInPython.nex')
+   w.WriteNex5File('C:\Data\testFileWrittenInPython.nex5', 1)
+
+
+   .. py:method:: AddNeuron(name, timestamps, wire=0, unit=0, xpos=0, ypos=0)
+
+      Adds neuron file variable
+      :param name: neuron name
+      :param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+      :param wire: wire (electrode) number
+      :param unit: unit number
+      :param xpos: x position in [0, 100] range (used in 3d displays)
+      :param ypos: y position in [0, 100] range (used in 3d displays)
+      :return: none
+
+
+   .. py:method:: AddEvent(name, timestamps)
+
+      Adds event file variable
+      :param name: event name
+      :param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+      :return: none
+
+
+   .. py:method:: AddIntervalVariable(name, intStarts, intEnds)
+
+      Adds interval variable to file data
+      :param name: variable name
+      :param intStarts: list interval starts in seconds or numpy array if numpy option is specified in constructor
+      :param intEnds: list interval ends in seconds or numpy array if numpy option is specified in constructor
+      :return: none
+
+
+   .. py:method:: AddContVarWithSingleFragment(name, timestampOfFirstDataPoint, SamplingRate, values)
+
+      Adds continuous variable with a single fragment
+      :param name: variable name
+      :param timestampOfFirstDataPoint: time of first data point in seconds
+      :param SamplingRate: sampling rate in Hz
+      :param values: list of variable values in mV or numpy array of values if numpy option is specified in constructor
+      :return: none
+
+
+   .. py:method:: AddContVarWithMultipleFragments(name, timestamps, SamplingRate, fragmentValues)
+
+      Adds continuous variable with multiple fragments
+      :param name: variable name
+      :param timestamps: list fragment start times in seconds or numpy array of fragment start times
+                   if numpy option is specified in constructor
+      :param SamplingRate: sampling rate in Hz
+      :param fragmentValues: list of lists, each sublist is array data values in mV (or list of numpy arrays)
+      :return:
+
+
+   .. py:method:: AddMarker(name, timestamps, fieldNames, markerFields)
+
+      Adds marker variable.
+      :param name: variable name
+      :param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+      :param fieldNames: list of field names
+      :param markerFields: a list of lists (one list of numbers or strings per marker field)
+      :return:
+
+
+   .. py:method:: AddWave(name, timestamps, SamplingRate, WaveformValues, NPointsWave=0, PrethresholdTimeInSeconds=0, wire=0, unit=0)
+
+      Adds waveform variable.
+      :param name: variable name
+      :param timestamps: list of timestamps in seconds or numpy array if numpy option is specified in constructor
+      :param SamplingRate: sampling rate of w/f values in Hz
+      :param WaveformValues: a list of lists, each sublist contains values of a single waveform in mV;
+             if numpy option is specified in constructor, numpy matrix
+      :param NPointsWave: number of data points in each wave
+      :param PrethresholdTimeInSeconds: pre-threshold time in seconds
+      :param wire: wire (electrode) number
+      :param unit: unit number
+      :return:
+
+
+   .. py:method:: WriteNexFile(filePath)
+
+      Writes file data as .nex file.
+      :param filePath: full path of file
+      :return: none
+
+
+   .. py:method:: WriteNex5File(filePath, saveContValuesAsFloats=0)
+
+      Writes file data as .nex5 file.
+      :param filePath: full path of file
+      :param saveContValuesAsFloats: if zero, continuous values are saved as 16-bit integers; if 1, saved as floats
+      :return:
+
+
+   .. py:method:: _VerifyIsNumpyArray(name, a)
+
+
+   .. py:method:: _ConvertStringToBytesIfNeeded(stringOrBytes)
+
+
+   .. py:method:: _WriteField(theFormat, theField)
+
+
+   .. py:method:: _WriteList(theList, valueType)
+
+
+   .. py:method:: _AddNex5VarHeaderFields(var)
+
+      Adds .nex5 variable header fields.
+      :param var: file data variable
+      :return: none
+
+
+   .. py:method:: _BytesInTimestamp(var)
+
+      Calculates number of bytes in timestamp.
+      :param var: file data variable
+      :return: number of bytes in timestamp
+
+
+   .. py:method:: _BytesInContValue(var)
+
+      :param var:  file data variable
+      :return: number of bytes in continuous value
+
+
+   .. py:method:: _VarNumDataBytes(var)
+
+      :param var: file data variable
+      :return: number of bytes in variable data
+
+
+   .. py:method:: _VarCount(var)
+
+      Calculates count field for file variables
+      :param var:
+      :return:
+
+
+   .. py:method:: _MaxOfNumpyArrayOrZero(x)
+
+
+   .. py:method:: _VarMaxTimestampNumpy(var)
+
+
+   .. py:method:: _MaxValueOrZero(theList)
+
+
+   .. py:method:: _VarMaxTimestamp(var)
+
+
+   .. py:method:: _VarWriteTimestampsNumpy(var, timestamps)
+
+
+   .. py:method:: _VarWriteTimestamps(var, timestamps)
+
+
+   .. py:method:: _VarWriteWaveformsNumpy(var)
+
+
+   .. py:method:: _VarWriteContinuousValuesNumpy(var)
+
+
+   .. py:method:: _WriteWaveformVarData(var)
+
+
+   .. py:method:: _WriteContinuousVarData(var)
+
+
+   .. py:method:: _VarWriteData(var)
+
+
+   .. py:method:: _CalcMarkerLength(var)
+
+
+   .. py:method:: _MaximumTimestamp()
+
+
+   .. py:method:: _SignalAbsMaxNumPy(signal)
+
+
+   .. py:method:: _CalculateScaling(var)
+
+
+

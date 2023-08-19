@@ -1,0 +1,36 @@
+:py:mod:`ivneuro.delta_power_spectral_core`
+===========================================
+
+.. py:module:: ivneuro.delta_power_spectral_core
+
+.. autoapi-nested-parse::
+
+   A module with private helper functions for delta_power_spectral function located in delta_power_spectral
+   module.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.delta_power_spectral_core.calculate_delta_power
+   ivneuro.delta_power_spectral_core.single_delta_power
+   ivneuro.delta_power_spectral_core.multi_delta_power
+
+
+
+.. py:function:: calculate_delta_power(var_exp_interval, var_baseline, lowest_freq, highest_freq, sampling_rate, nfft, scaling)
+
+
+.. py:function:: single_delta_power(contvar, exp_interval, baseline, lowest_freq, highest_freq, sampling_rate, nfft, scaling)
+
+
+.. py:function:: multi_delta_power(contvar, exp_interval, baseline, lowest_freq, highest_freq, sampling_rate, nfft, scaling)
+
+

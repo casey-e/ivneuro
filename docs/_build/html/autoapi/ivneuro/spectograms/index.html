@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.spectograms &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ivneuro.spectograms_core" href="../spectograms_core/index.html" />
+    <link rel="prev" title="ivneuro.generate_signal" href="../generate_signal/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../continuous/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../events/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generate_signal/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.generate_signal</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.tracking</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/ivneuro/spectograms/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.spectograms">
+<span id="ivneuro-spectograms"></span><h1><a class="reference internal" href="#module-ivneuro.spectograms" title="ivneuro.spectograms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a><a class="headerlink" href="#module-ivneuro.spectograms" title="Permalink to this heading"></a></h1>
+<p>User-facing functions to calculate, normalyze and plot peri-event spectograms analyses.
+This module also contains PeriEventSpectogram class. Peri-event spectograms analysis can be higly
+demanding, depending on the size and amount of continuous variables, the frequencies analysed, the
+amount of reference events and number of trials of each of event. PeriEventSpectogram class aims to
+facilitate processing, interpretation and visualization of peri-event spectograms without running the
+analysis again and is returned by default by ivneuro.spectral.peri_event_spectogram function.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.spectograms.PeriEventSpectogram" title="ivneuro.spectograms.PeriEventSpectogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriEventSpectogram</span></code></a></p></td>
+<td><p>Create a PeriEventHistogram object.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.spectograms.peri_event_spectogram" title="ivneuro.spectograms.peri_event_spectogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peri_event_spectogram</span></code></a>(contvar, evt, lower_lim, higher_lim)</p></td>
+<td><p>Calculate peri-event spectograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.spectograms.normalize_pes" title="ivneuro.spectograms.normalize_pes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_pes</span></code></a>(pes[, baseline, method])</p></td>
+<td><p>Normalize peri-event-histogram using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.spectograms.plot_pes" title="ivneuro.spectograms.plot_pes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_pes</span></code></a>(pes[, zero_centered, aspect])</p></td>
+<td><p>Plot peri-event spectograms, with each variable in a column and each event name in a row.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.spectograms.peri_event_spectogram">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.spectograms.</span></span><span class="sig-name descname"><span class="pre">peri_event_spectogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contvar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_subsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_DataFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spectrum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noverlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#peri_event_spectogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.peri_event_spectogram" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate peri-event spectograms.</p>
+<p>The algorithm is based on the spectogram() function of the signal processing module of the scipyi package (scipy.signal.spectogram()), and is optimized to calculate peri-event spectograms from multiple continuous variables and/or multiple events,
+with multiple trials of each event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contvar</strong> (<em>pandas.DataFrame</em>) – Dataframe with continuous variables in each column, and timestamps as index.</p></li>
+<li><p><strong>evt</strong> (<em>one-dimensional numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>dict</em>) – Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+Dict values can be either one dimensional numpy arrays or lists of floats.</p></li>
+<li><p><strong>lower_lim</strong> (<em>int</em><em> or </em><em>float</em>) – Lower time limit of the peri-event histogram.</p></li>
+<li><p><strong>higher_lim</strong> (<em>int</em><em> or </em><em>float</em>) – Higher time limit of the peri-event histogram.</p></li>
+<li><p><strong>lower_freq</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The lowest frequency to include in the spectogram. The default is 0.</p></li>
+<li><p><strong>higher_freq</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The highest freq to include in the spectogram. The default is 500.</p></li>
+<li><p><strong>sample_subsamples</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – When a dict, key must be sample names and values must be lists of subsample names, e.g.: {‘sample_A’:[‘subsample_A1’,’subsample_A2’…’subsample_An’], ‘sample_B’:[‘subsample_B1’,’subsample_B2’…’subsample_Bn’]…}.
+Peri-event spectograms will be averaged across subsamples of the same sample, per each time and trial of each event, and the Variable name will be the sample name, intead of the column name of contvar.
+It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+If None, each column of contvar is treated as an independent sample, and therefore the result contains peri-event spectograms of every contvar column. The default is None.</p></li>
+<li><p><strong>return_DataFrame</strong> (<em>Boolean</em><em>, </em><em>optional</em>) – If True, a pandas.DataFrame is returnes. If false, a PeriEventHistogram object is returned. The default is False.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Sampling rate of the continuous value. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar’s index. The default is None.</p></li>
+<li><p><strong>scaling</strong> (<em>str</em><em>, </em><em>optional</em>) – The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is ‘spectrum’.</p></li>
+<li><p><strong>nperseg</strong> (<em>int</em><em>, </em><em>optional</em>) – The nperseg parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 500.</p></li>
+<li><p><strong>noverlap</strong> (<em>int</em><em>, </em><em>optional</em>) – The noverlap parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 400.</p></li>
+<li><p><strong>nfft</strong> (<em>int</em><em>, </em><em>optional</em>) – The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If evt type is neither np.ndarray, list, dict.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pes</strong> – If return_DataFrame == True, multi-index pandas.DataFrame with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+If return_DataFrame == False, PeriEventSpectogram object with the already described pandas.DataFrame as data, and normalization = ‘None’.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame or <a class="reference internal" href="#ivneuro.spectograms.PeriEventSpectogram" title="ivneuro.spectograms.PeriEventSpectogram">PeriEventSpectogram</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create events and signals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create events: burst and control</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burst</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">control</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;burst&#39;</span><span class="p">:</span><span class="n">burst</span><span class="p">,</span><span class="s1">&#39;control&#39;</span><span class="p">:</span><span class="n">control</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.13</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Peri-event spectograms for a single variable and a single event (with multiple trials).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate peri-event spectogram from 10 sec before to 10 seconds after each event</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">pes</span><span class="p">)</span>
+<span class="go">ivneuro.spectograms.PeriEventSpectogram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span><span class="o">.</span><span class="n">data</span>
+<span class="go">                                                0.0    ...         500.0</span>
+<span class="go">Variable_name Event_name Event_number Time             ...</span>
+<span class="go">Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08</span>
+<span class="go">                                      -9.9   0.000142  ...  9.831598e-08</span>
+<span class="go">                                      -9.8   0.020257  ...  2.587770e-06</span>
+<span class="go">                                      -9.7   0.005431  ...  5.538603e-06</span>
+<span class="go">                                      -9.6   0.002156  ...  5.956565e-06</span>
+<span class="go">                                                  ...  ...           ...</span>
+<span class="go">                         9             9.6   0.002953  ...  4.089984e-06</span>
+<span class="go">                                       9.7   0.009216  ...  1.163104e-05</span>
+<span class="go">                                       9.8   0.001603  ...  5.611661e-06</span>
+<span class="go">                                       9.9   0.000025  ...  9.778874e-07</span>
+<span class="go">                                       10.0  0.002685  ...  1.019278e-06</span>
+<span class="go">[1809 rows x 1001 columns]</span>
+</pre></div>
+</div>
+<p>Return a pandas.DataFrame instead of a ivneuro.spectograms.PeriEventSpectogram.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">return_DataFrame</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">pes</span><span class="p">)</span>
+<span class="go">pandas.core.frame.DataFrame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span>
+<span class="go">                                                0.0    ...         500.0</span>
+<span class="go">Variable_name Event_name Event_number Time             ...</span>
+<span class="go">Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08</span>
+<span class="go">                                      -9.9   0.000142  ...  9.831598e-08</span>
+<span class="go">                                      -9.8   0.020257  ...  2.587770e-06</span>
+<span class="go">                                      -9.7   0.005431  ...  5.538603e-06</span>
+<span class="go">                                      -9.6   0.002156  ...  5.956565e-06</span>
+<span class="go">                                                  ...  ...           ...</span>
+<span class="go">                         9             9.6   0.002953  ...  4.089984e-06</span>
+<span class="go">                                       9.7   0.009216  ...  1.163104e-05</span>
+<span class="go">                                       9.8   0.001603  ...  5.611661e-06</span>
+<span class="go">                                       9.9   0.000025  ...  9.778874e-07</span>
+<span class="go">                                       10.0  0.002685  ...  1.019278e-06</span>
+<span class="go">[1809 rows x 1001 columns]</span>
+</pre></div>
+</div>
+<p>Peri-event spectogram for 2 events and 3 signals, set frequency limits.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">lower_freq</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">higher_freq</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span><span class="o">.</span><span class="n">event_names</span>
+<span class="go">[&#39;burst&#39;, &#39;control&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span><span class="o">.</span><span class="n">variable_names</span>
+<span class="go">[&#39;Signal 30Hz&#39;, &#39;Signal 32Hz&#39;, &#39;Signal 80Hz&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span><span class="o">.</span><span class="n">frequencies</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pes</span><span class="o">.</span><span class="n">frequencies</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">(30.0, 150.0)</span>
+</pre></div>
+</div>
+<p>Set signal1 and signal2 as replicates of sample1, and signal3 as sample3.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make dictionary to group replicates of each sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_subsamples</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sample1&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Signal 30Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;Signal 32Hz&#39;</span><span class="p">],</span> <span class="s1">&#39;sample2&#39;</span><span class="p">:[</span><span class="s1">&#39;Signal 80Hz&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate peri-event spectogram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivneuro</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">higher_freq</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sample_subsamples</span> <span class="o">=</span> <span class="n">sample_subsamples</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Print variables</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span><span class="o">.</span><span class="n">variable_names</span>
+<span class="go">[&#39;sample1&#39;, &#39;sample2&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.spectograms.normalize_pes">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.spectograms.</span></span><span class="sig-name descname"><span class="pre">normalize_pes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Condition_average'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#normalize_pes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.normalize_pes" title="Permalink to this definition"></a></dt>
+<dd><p>Normalize peri-event-histogram using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.</p>
+<p>While using decibels or logarithmic scale instead of power (V**2) can helph to displaying spectograms, usualy this is not enough to visualyze variations in both low and high frequencies.
+Normalizing the data to a baseline is a simple and straingforward way to visualyze variation in all frequencies at the same scale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pes</strong> (<em>pandas.DataFrame</em>) – Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</p></li>
+<li><p><strong>baseline</strong> (<em>tuple</em><em>, </em><em>optional</em>) – lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Method used to nromalize.
+“Condition_average”: Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+“Condition_specific”: Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+“Trial_specific”: Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+The default is ‘Condition_average’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If baseline is neither a tuple or None.</p></li>
+<li><p><strong>NameError</strong> – If method is neither “Condition_average”, “Condition_specific” or “Trial_specific”.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>normalized_df</strong> – DataFrame with normalized data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create events and signals, and make peri-event spectograms DataFrame.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create events: burst and control</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burst</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">control</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;burst&#39;</span><span class="p">:</span><span class="n">burst</span><span class="p">,</span><span class="s1">&#39;control&#39;</span><span class="p">:</span><span class="n">control</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.13</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">return_DataFrame</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use function to normalize.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">normalize_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">)</span>
+<span class="go">                                                0.0    ...     500.0</span>
+<span class="go">Variable_name Event_name Event_number Time             ...</span>
+<span class="go">Signal 30Hz   burst      1            -10.0  0.253770  ... -0.979913</span>
+<span class="go">                                      -9.9  -0.954578  ... -0.972753</span>
+<span class="go">                                      -9.8   5.476162  ... -0.282843</span>
+<span class="go">                                      -9.7   0.736362  ...  0.534932</span>
+<span class="go">                                      -9.6  -0.310721  ...  0.650763</span>
+<span class="go">                                                  ...  ...       ...</span>
+<span class="go">Signal 80Hz   control    9             9.6  -0.258766  ...  0.130080</span>
+<span class="go">                                       9.7  -0.689950  ... -0.864958</span>
+<span class="go">                                       9.8  -0.795989  ... -0.800983</span>
+<span class="go">                                       9.9  -0.800038  ...  0.999065</span>
+<span class="go">                                       10.0 -0.859353  ...  4.566640</span>
+<span class="go">[10854 rows x 1001 columns]</span>
+</pre></div>
+</div>
+<p>Normalize to a baseline.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">normalize_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">baseline</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">))</span>
+<span class="go">                                                0.0    ...     500.0</span>
+<span class="go">Variable_name Event_name Event_number Time             ...</span>
+<span class="go">Signal 30Hz   burst      1            -10.0  0.284930  ... -0.980264</span>
+<span class="go">                                      -9.9  -0.953449  ... -0.973230</span>
+<span class="go">                                      -9.8   5.637114  ... -0.295378</span>
+<span class="go">                                      -9.7   0.779516  ...  0.508103</span>
+<span class="go">                                      -9.6  -0.293591  ...  0.621910</span>
+<span class="go">                                                  ...  ...       ...</span>
+<span class="go">Signal 80Hz   control    9             9.6  -0.240397  ...  0.110194</span>
+<span class="go">                                       9.7  -0.682266  ... -0.867334</span>
+<span class="go">                                       9.8  -0.790933  ... -0.804485</span>
+<span class="go">                                       9.9  -0.795083  ...  0.963888</span>
+<span class="go">                                       10.0 -0.855867  ...  4.468686</span>
+<span class="go">[10854 rows x 1001 columns]</span>
+</pre></div>
+</div>
+<p>Normalize using “Trial_specific” method.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">normalize_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Trial_specific&quot;</span><span class="p">)</span>
+<span class="go">                                                0.0    ...     500.0</span>
+<span class="go">Variable_name Event_name Event_number Time             ...</span>
+<span class="go">Signal 30Hz   burst      1            -10.0  0.322110  ... -0.976902</span>
+<span class="go">                                      -9.9  -0.952102  ... -0.968668</span>
+<span class="go">                                      -9.8   5.829160  ... -0.175315</span>
+<span class="go">                                      -9.7   0.831006  ...  0.765074</span>
+<span class="go">                                      -9.6  -0.273151  ...  0.898273</span>
+<span class="go">                                                  ...  ...       ...</span>
+<span class="go">Signal 80Hz   control    9             9.6  -0.211468  ...  0.246262</span>
+<span class="go">                                       9.7  -0.670165  ... -0.851075</span>
+<span class="go">                                       9.8  -0.782971  ... -0.780522</span>
+<span class="go">                                       9.9  -0.787279  ...  1.204586</span>
+<span class="go">                                       10.0 -0.850378  ...  5.138939</span>
+<span class="go">[10854 rows x 1001 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.spectograms.plot_pes">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.spectograms.</span></span><span class="sig-name descname"><span class="pre">plot_pes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_centered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#plot_pes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.plot_pes" title="Permalink to this definition"></a></dt>
+<dd><p>Plot peri-event spectograms, with each variable in a column and each event name in a row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pes</strong> (<em>pandas.DataFrame</em>) – Multi-index pandas.DataFrame as returned by peri_event_spectogram() nor normalize_pes() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</p></li>
+<li><p><strong>zero_centered</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, data is centered to zero. The default is True.</p></li>
+<li><p><strong>aspect</strong> (<em>float</em><em>, </em><em>optional</em>) – The y/x ratio of the axes aspect. The default is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create events and signals, and make peri-event spectograms DataFrame.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create events: burst and control</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burst</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">control</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;burst&#39;</span><span class="p">:</span><span class="n">burst</span><span class="p">,</span><span class="s1">&#39;control&#39;</span><span class="p">:</span><span class="n">control</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.13</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">burst</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pes</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">peri_event_spectogram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">higher_freq</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">return_DataFrame</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use function to plot peri-event spectogram.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">plot_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Non zero centered.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ivn</span><span class="o">.</span><span class="n">plot_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">zero_centered</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.spectograms.</span></span><span class="sig-name descname"><span class="pre">PeriEventSpectogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram" title="Permalink to this definition"></a></dt>
+<dd><p>Create a PeriEventHistogram object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pandas.DataFrame</em>) – Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</p></li>
+<li><p><strong>norm</strong> (<em>str</em>) – Normalization state of the data, it can be “None”, “Condition_average”, “Condition_specific” or “Trial_specific”.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.data" title="Permalink to this definition"></a></dt>
+<dd><p>Multi-index pandas.DataFrame with peri-event spectogram data, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.variable_names">
+<span class="sig-name descname"><span class="pre">variable_names</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.variable_names" title="Permalink to this definition"></a></dt>
+<dd><p>Names of each original continuous variable used to make the spectograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.event_names">
+<span class="sig-name descname"><span class="pre">event_names</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.event_names" title="Permalink to this definition"></a></dt>
+<dd><p>Names of each reference event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.timestamps">
+<span class="sig-name descname"><span class="pre">timestamps</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.timestamps" title="Permalink to this definition"></a></dt>
+<dd><p>Timestamps of the peri-event spectogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.frequencies">
+<span class="sig-name descname"><span class="pre">frequencies</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.frequencies" title="Permalink to this definition"></a></dt>
+<dd><p>Frequencies included in the spectogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.normalization">
+<span class="sig-name descname"><span class="pre">normalization</span></span><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.normalization" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>normalization state of the data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">normalize():</span></span></dt>
+<dd><p>Normalize data using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>baseline</strong> (<em>tuple</em><em>, </em><em>optional</em>) – lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – Method used to nromalize.
+“Condition_average”: Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+“Condition_specific”: Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+“Trial_specific”: Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+The default is ‘Condition_average’.</p></li>
+<li><p><strong>inplace</strong> (<em>bolean</em><em>, </em><em>optional</em>) – If True, modifies the current object. If False, returns a new object with normalized data. The default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If baseline is neither a tuple or None.</p></li>
+<li><p><strong>NameError</strong> – If method is neither “Condition_average”, “Condition_specific” or “Trial_specific”.</p></li>
+<li><p><strong>ValueError</strong> – <p>If normalization attribute is not “None”, which indicates that data is already normalized.</p>
+<dl class="simple">
+<dt>Returns: PeriEventSpectogram</dt><dd><p>If inplace is False, returns a PeriEventSpectogram object with normalized data, and normalization attribute as the method argument passed.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>slice_time(new_limits, inplace=False):</p>
+<blockquote>
+<div><p>Slice timestamps.</p>
+<dl class="simple">
+<dt>new_limits: tuple</dt><dd><p>New lowest and highest limits of time.</p>
+</dd>
+<dt>inplace: bolean, optional</dt><dd><p>If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</p>
+</dd>
+<dt>Returns: PeriEventSpectogram</dt><dd><p>New object with sliced timestamps</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>slice_frequencies(new_limits, inplace=False):</p>
+<blockquote>
+<div><p>Slice frequencies.</p>
+<dl class="simple">
+<dt>new_limits: tuple</dt><dd><p>Lowest and highest limits of the frequency.</p>
+</dd>
+<dt>inplace: bolean, optional</dt><dd><p>If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</p>
+</dd>
+<dt>Returns: PeriEventSpectogram</dt><dd><p>New object with sliced frequecies.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>slice_events(event_list, inplace=False):</p>
+<blockquote>
+<div><p>Slice events.</p>
+<dl class="simple">
+<dt>event_list: list</dt><dd><p>Event names to slice from the data.</p>
+</dd>
+<dt>inplace: bolean, optional</dt><dd><p>If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</p>
+</dd>
+<dt>Returns: PeriEventSpectogram</dt><dd><p>New object with sliced events.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>calculate_means():</p>
+<blockquote>
+<div><p>Calculate means across trials of the same event for each variable, event name and timestamp.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns: pandas.DataFrame</dt><dd><p>Mean across trials of the same event of the peri-event spectogram. Multi-index pandas.DataFrame with original continuous variable names,
+event names and peri-event time as index, frequencies as columns and mean power values as data.</p>
+</dd>
+</dl>
+<p>plot(zero_centered=None, aspect=1, variables = None, evt_names = None):</p>
+<blockquote>
+<div><p>Plot peri-event spectograms, with each variable in a column and each event name in a row.</p>
+<dl class="simple">
+<dt>zero_centered<span class="classifier">boolean or None, optional</span></dt><dd><p>If True, colorscale is centered to zero. If None, colorscale is centered to zero if data is normalized (normalization attribute is either “Condition_average”, “Condition_specific” or “Trial_specific”),
+but it is not centered to zero if data is not normalized (normalization attribute is “None”). The default is None.</p>
+</dd>
+<dt>aspect<span class="classifier">float, optional</span></dt><dd><p>The y/x ratio of the axes aspect. The default is 1.</p>
+</dd>
+<dt>variables: list or None, optional</dt><dd><p>Subset of variables names to plot. If None, all variables are ploted. Default is None.</p>
+</dd>
+<dt>evt_names: list or None, optional</dt><dd><p>Subset of events to plot. If None, all events are ploted. Default is None.</p>
+</dd>
+</dl>
+<p>None.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram._set_variable_names">
+<span class="sig-name descname"><span class="pre">_set_variable_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram._set_variable_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram._set_variable_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram._set_event_names">
+<span class="sig-name descname"><span class="pre">_set_event_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram._set_event_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram._set_event_names" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram._set_timestamps">
+<span class="sig-name descname"><span class="pre">_set_timestamps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram._set_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram._set_timestamps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram._set_frequencies">
+<span class="sig-name descname"><span class="pre">_set_frequencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram._set_frequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram._set_frequencies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Condition_average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.normalize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.slice_time">
+<span class="sig-name descname"><span class="pre">slice_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.slice_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.slice_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.slice_frequencies">
+<span class="sig-name descname"><span class="pre">slice_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.slice_frequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.slice_frequencies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.slice_events">
+<span class="sig-name descname"><span class="pre">slice_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.slice_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.slice_events" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.calculate_means">
+<span class="sig-name descname"><span class="pre">calculate_means</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.calculate_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.calculate_means" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.spectograms.PeriEventSpectogram.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zero_centered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/spectograms.html#PeriEventSpectogram.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.spectograms.PeriEventSpectogram.plot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../generate_signal/index.html" class="btn btn-neutral float-left" title="ivneuro.generate_signal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../spectograms_core/index.html" class="btn btn-neutral float-right" title="ivneuro.spectograms_core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

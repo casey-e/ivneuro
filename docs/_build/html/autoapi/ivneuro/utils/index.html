@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.utils &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="ivneuro.tracking" href="../tracking/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../continuous/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../events/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generate_signal/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.generate_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.tracking</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/ivneuro/utils/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.utils">
+<span id="ivneuro-utils"></span><h1><a class="reference internal" href="#module-ivneuro.utils" title="ivneuro.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a><a class="headerlink" href="#module-ivneuro.utils" title="Permalink to this heading"></a></h1>
+<p>A module with private helper functions.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.utils.significant_decimal_positions" title="ivneuro.utils.significant_decimal_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">significant_decimal_positions</span></code></a>(value)</p></td>
+<td><p>Calculate the significant number of decimal positions to use to round a value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.utils.generate_pink_noise" title="ivneuro.utils.generate_pink_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_pink_noise</span></code></a>(duration, sampling_frequency, seed)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.utils.generate_oscillatory_signal" title="ivneuro.utils.generate_oscillatory_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_oscillatory_signal</span></code></a>(frequency, duration, amplitude)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.utils.add_signal_to_noise" title="ivneuro.utils.add_signal_to_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_signal_to_noise</span></code></a>(noise, signal, timestamps)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.utils.significant_decimal_positions">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.utils.</span></span><span class="sig-name descname"><span class="pre">significant_decimal_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/utils.html#significant_decimal_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.utils.significant_decimal_positions" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the significant number of decimal positions to use to round a value.</p>
+<p>Certains calculations, like vectorized operations that switch between decimal and binary systems, generate values with large amount of
+decimal positions that can interfiere with posterior operations (like aligments). This function keeps only the relevant amount of decimal
+positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – Value to calculate the number of significant decimal positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of significant decimal positions, to be used as imput of numpy.round() .</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.utils.generate_pink_noise">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.utils.</span></span><span class="sig-name descname"><span class="pre">generate_pink_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/utils.html#generate_pink_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.utils.generate_pink_noise" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.utils.generate_oscillatory_signal">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.utils.</span></span><span class="sig-name descname"><span class="pre">generate_oscillatory_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/utils.html#generate_oscillatory_signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.utils.generate_oscillatory_signal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.utils.add_signal_to_noise">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.utils.</span></span><span class="sig-name descname"><span class="pre">add_signal_to_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/utils.html#add_signal_to_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.utils.add_signal_to_noise" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tracking/index.html" class="btn btn-neutral float-left" title="ivneuro.tracking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

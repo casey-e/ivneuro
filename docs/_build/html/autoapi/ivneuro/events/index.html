@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.events &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ivneuro.generate_signal" href="../generate_signal/index.html" />
+    <link rel="prev" title="ivneuro.delta_power_spectral_core" href="../delta_power_spectral_core/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../continuous/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral_core</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generate_signal/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.generate_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.tracking</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/ivneuro/events/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.events">
+<span id="ivneuro-events"></span><h1><a class="reference internal" href="#module-ivneuro.events" title="ivneuro.events"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a><a class="headerlink" href="#module-ivneuro.events" title="Permalink to this heading"></a></h1>
+<p>User-facing functions for processing events.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.events.make_intervals" title="ivneuro.events.make_intervals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_intervals</span></code></a>(timestamps, start, end)</p></td>
+<td><p>Make intervals based on timestamps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.events.classify_events_base_on_time" title="ivneuro.events.classify_events_base_on_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classify_events_base_on_time</span></code></a>(event1, event2, treshold)</p></td>
+<td><p>Classify an event in two categories based on how close in time it occurs from an event of reference.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.events.make_intervals">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.events.</span></span><span class="sig-name descname"><span class="pre">make_intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/events.html#make_intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.events.make_intervals" title="Permalink to this definition"></a></dt>
+<dd><p>Make intervals based on timestamps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamps</strong> (<em>np.ndarray</em><em> or </em><em>list</em>) – Timestamps to use as reference to make intervals.</p></li>
+<li><p><strong>start</strong> (<em>int</em><em> or </em><em>float</em>) – Start of interval, relative to timestamps.</p></li>
+<li><p><strong>end</strong> (<em>int</em><em> or </em><em>float</em>) – End of interval, relative to timestamps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Slices with the start time and end time of each interval.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create intervals using make_intervals function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">event</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span> <span class="c1"># Timestamps</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make intervals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">intervals</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">make_intervals</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">intervals</span><span class="p">)</span>
+<span class="go">[slice(10, 13, None), slice(20, 23, None), slice(30, 33, None)]</span>
+</pre></div>
+</div>
+<p>Use intervals to slice a pandas.DataFrame</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataframe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Slice datafrane</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">intervals</span><span class="p">]</span>
+<span class="go">[      values</span>
+<span class="go"> 10  0.320519</span>
+<span class="go"> 11  0.366415</span>
+<span class="go"> 12  0.709652</span>
+<span class="go"> 13  0.900142,</span>
+<span class="go">       values</span>
+<span class="go"> 20  0.842780</span>
+<span class="go"> 21  0.306013</span>
+<span class="go"> 22  0.631170</span>
+<span class="go"> 23  0.680239,</span>
+<span class="go">       values</span>
+<span class="go"> 30  0.486032</span>
+<span class="go"> 31  0.807219</span>
+<span class="go"> 32  0.844220</span>
+<span class="go"> 33  0.534681]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.events.classify_events_base_on_time">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.events.</span></span><span class="sig-name descname"><span class="pre">classify_events_base_on_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/events.html#classify_events_base_on_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.events.classify_events_base_on_time" title="Permalink to this definition"></a></dt>
+<dd><p>Classify an event in two categories based on how close in time it occurs from an event of reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event1</strong> (<em>numpy.array</em><em> of </em><em>shape</em><em> (</em><em>1 x n</em><em>)</em>) – Event to classify.</p></li>
+<li><p><strong>event2</strong> (<em>numpy.array</em><em> of </em><em>shape</em><em> (</em><em>1 x m</em><em>)</em>) – Event of reference.</p></li>
+<li><p><strong>treshold</strong> (<em>TYPE</em>) – Threshold amount of time used to classify events.</p></li>
+<li><p><strong>mode</strong> (<em>str</em><em>, </em><em>optional</em>) – Define the mode of evaluation of proximity. “left”, only looks event1 that occur before event2; “right”,
+only looks event1 that ocurr after event2; “two-sides”, look temporal proximity before and after. The default is ‘left’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>near</strong> (<em>np.array of shape (1 x o)</em>) – Subset of event1 classified as temporally close to event2.</p></li>
+<li><p><strong>far</strong> (<em>np.array of shape (1 x p).</em>) – Subset of event1 classified as temporally far from event2.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Classify events with classify_events_base_on_time function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Import packages and create events</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">event1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mf">10.5</span><span class="p">,</span> <span class="mf">15.3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">event2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Classify events</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">near</span><span class="p">,</span> <span class="n">far</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">classify_events_base_on_time</span><span class="p">(</span><span class="n">event1</span><span class="p">,</span> <span class="n">event2</span><span class="p">,</span> <span class="n">treshold</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">near</span><span class="p">)</span>
+<span class="go">[7.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">far</span><span class="p">)</span>
+<span class="go">[ 3.  10.5 15.3]</span>
+</pre></div>
+</div>
+<p>Set mode to ‘right’.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">near</span><span class="p">,</span> <span class="n">far</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">classify_events_base_on_time</span><span class="p">(</span><span class="n">event1</span><span class="p">,</span> <span class="n">event2</span><span class="p">,</span> <span class="n">treshold</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">near</span><span class="p">)</span>
+<span class="go">[15.3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">far</span><span class="p">)</span>
+<span class="go">[ 3.   7.  10.5]</span>
+</pre></div>
+</div>
+<p>Set mode to ‘both’.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">near</span><span class="p">,</span> <span class="n">far</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">classify_events_base_on_time</span><span class="p">(</span><span class="n">event1</span><span class="p">,</span> <span class="n">event2</span><span class="p">,</span> <span class="n">treshold</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;two-sides&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">near</span><span class="p">)</span>
+<span class="go">[ 7.  15.3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">far</span><span class="p">)</span>
+<span class="go">[ 3.  10.5]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../delta_power_spectral_core/index.html" class="btn btn-neutral float-left" title="ivneuro.delta_power_spectral_core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../generate_signal/index.html" class="btn btn-neutral float-right" title="ivneuro.generate_signal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

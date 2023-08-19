@@ -1,0 +1,321 @@
+:py:mod:`ivneuro.tracking`
+==========================
+
+.. py:module:: ivneuro.tracking
+
+.. autoapi-nested-parse::
+
+   A module with functions for processing positions data based on xy coordinates.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.tracking.EventPosition
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.tracking.scale_centroids
+   ivneuro.tracking.calculate_speed
+   ivneuro.tracking.position_of_event
+   ivneuro.tracking.distances_to_position
+
+
+
+.. py:function:: scale_centroids(centroids, x_dim, y_dim)
+
+   Scale centroids to match the real values in appropiate scale.
+
+   This function assumes that positions at lower and higher limits of each dimension have been recorded.
+
+   :param centroids: Values of X_centroid and Y_centroid to be scaled.
+   :type centroids: numpy.ndarray of shape (2 x n_timestamps)
+   :param x_dim: Value from end to end of X coordinate.
+   :type x_dim: float
+   :param y_dim: Value from end to end of Y coordinate.
+   :type y_dim: float
+
+   :rtype: numpy.ndarray with scaled values.
+
+   .. rubric:: Examples
+
+   Use scale_centroids function.
+
+   >>> # Create and array with x and y coordinates: centroids
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> centroids = np.concatenate((x.reshape(100,1), y.reshape(100,1)), axis=1).T # Coordinates for an oval trajectory
+   >>> # Scale using scale_centroids function
+   >>> scaled_centroids = ivn.scale_centroids(centroids, 15, 30)
+   Difference between observed and provided x/y ratios: -0.012587232612482069 %
+   >>> print(scaled_centroids[:,:5]) # Print first 5 values of x and y
+   array([[15.        , 14.98489627, 14.9396459 , 14.8644311 , 14.75955473],
+          [15.        , 15.95147856, 16.89912585, 17.83912603, 18.76769406]])
+
+   If ratios between observed and provided x and y values are too different, scale_centroids will through a warning message.
+
+   >>> # Scale with inverted x and y measures
+   >>> scaled_centroids = ivn.scale_centroids(centroids, 30, 15)
+   Warning: the observed and provided x/y ratios have a difference of above 10%, consider switching the order of X and Y dimensions or cleaning centroids data and scale again
+   Difference between observed and provided x/y ratios: -75.00314680815312 %
+
+
+.. py:function:: calculate_speed(X_values, Y_values, timestamps, smooth=0)
+
+   Calculate scalar speed.
+
+   Speed is calculated through the following steps:
+   1. Calculate dtime, dX=PosX[T-deltaT]-posX[T] and dY=PosY[T-deltaT]-posY[T].
+   2. Smooth dX and dY using a Gaussian filter. Note: by applying the Gaussian filter to dX and dY instead of the speed
+   avoids short movements or random noie of the camera  to propagate to the speed calculus, leaving only changes in position caused
+   by displacement.
+   3. Calculate scalar speed: sqrt(dX**2+dY**2) / dT.
+
+   :param X_values: Positions in X coordinate. Must have the same lenght than Y_values and timestamps
+   :type X_values: NUMPY ARRAY
+   :param Y_values: Positions in Y coordinate. Must have the same lenght than X_values and timestamps
+   :type Y_values: NUMPY ARRAY
+   :param timestamps: Timestamps for every position. Must have the same lenght than X_values and Y_values
+   :type timestamps: NUMPY ARRAY
+   :param smooth: Defines the window of time a 2 x smooth and the width of the  Gaussian kernel as 1 x smooth,
+                  for the Gaussian filter. The default is 0, in which case the Gaussian filter is not appplied.
+   :type smooth: Float, optional
+
+   :returns: **speed** -- Values of scalar speed
+   :rtype: numpy.ndarray
+
+   .. rubric:: Examples
+
+   Create x coordinates, y coordinates and  timestamps. Calculate speed and print it.
+
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> ts = np.linspace(0,20,100).round(1)
+   # Calculate speed with calculate_speed function and print the first 5 values
+   >>> speed=ivn.calculate_speed(x, y, ts)
+   >>> print(speed[:5])
+   [6.3431908  6.32404896 6.28590074 6.22901826 6.15381269]
+
+
+.. py:function:: position_of_event(x_values, y_values, timestamps, events, estimator=np.median)
+
+   Estimate the most likely position at with an event occurs, or get all the positions where that event occurs.
+
+   :param x_values: All positions in x axis. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values: All positions in y axis. Must be of the same lenght than x_values and timestamps
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param timestamps: All timestamps. Must be of the same lenght than x_values and y_values.
+   :type timestamps: np.ndarray of shape (1 X n_timestamps)
+   :param events: Timestamps of the event.
+   :type events: one dimensional numpy.array or list of floats
+   :param estimator: Function to be used to estimate the most likely position of the event. The default is np.median.
+   :type estimator: function, optional
+
+   :raises TypeError: If x_values, y_values or timestamps is not np.ndarray.
+   :raises ValueError: If x_values lenght, y_values lenght and timestamps lenght are not the same.
+
+   :returns: Most likely position (x, y) if estimator is not None, or all the positions of the event (np.array([x])), np.array([y]) if estimator is None.
+   :rtype: Tuple
+
+   .. rubric:: Examples
+
+   Estimate the position of an event with the median.
+
+   >>> # Create x coordinates, y coordinates, centroids timestamps and event.
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> ts = np.linspace(0,20,100).round(1)
+   >>> np.random.seed(24)
+   >>> event = np.random.choice(ts[(ts>10) & (ts<15)], size=5, replace = False) # Create an event by making a random choice from timestamps
+   >>> # Estimate the position with position_of_event, return the median
+   >>> ivn.position_of_event(x, y, ts, event)
+   (1.7632341857016716, 8.658802722744587)
+
+   Return the mean of the positions
+
+   >>> ivn.position_of_event(x, y, ts, event, estimator = np.mean)
+   (3.356415004157808, 7.336570446958302)
+
+   Return all the positions for x and y
+
+   >>> ivn.position_of_event(x, y, ts, event, estimator = None)
+   (array([5.        , 0.83891543, 8.57685162, 0.60307379, 1.76323419]),
+    array([ 2.67949192, 11.98138929,  0.20357116, 13.15959713,  8.65880272]))
+
+
+.. py:function:: distances_to_position(x_values, y_values, position)
+
+   Given a set of x and y positions, calculate the distance to a specific position at each row.
+
+   :param x_values: X_centroid positions at each timestamp. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values:
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param position: Position (x, y) to calculate distance.
+   :type position: tuple
+
+   :returns: One dimensional array with distances to position at every point.
+   :rtype: np.ndarray
+
+   .. rubric:: Examples
+
+   Calculate distances to a position.
+
+   >>> # Create x coordinates and y coordinates, create position of interest
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> center = (10, 20) # Position of interest
+   >>> # Calculate distances
+   >>> distances = ivn.distances_to_position (x, y, center)
+   >>> print(distances[:5])
+   [10.         10.06015795 10.23756293 10.523536   10.90516361]
+
+
+.. py:class:: EventPosition(x_values, y_values, timestamps, events, estimator=np.median)
+
+   Obtain the position of an event.
+
+
+   :param x_values: All positions in x axis. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values: All positions in y axis. Must be of the same lenght than x_values and timestamps
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param timestamps: All timestamps. Must be of the same lenght than x_values and y_values.
+   :type timestamps: np.ndarray of shape (1 X n_timestamps)
+   :param events: Timestamps of the event.
+   :type events: one dimensional numpy.array or list of floats
+   :param estimator: Function to be used to estimate the most likely position of the event. The default is np.median.
+   :type estimator: function, optional
+
+   :raises TypeError: If x_values, y_values or timestamps is not np.ndarray.
+   :raises ValueError: If x_values lenght, y_values lenght and timestamps lenght are not the same.
+   :raises ValueError: If estimator == None.
+
+   .. attribute:: x_values
+
+      All positions in x axis.
+
+      :type: np.ndarray
+
+   .. attribute:: y_values
+
+      All positions in y axis.
+
+      :type: np.ndarray
+
+   .. attribute:: timestamps
+
+      All timestamps
+
+      :type: np.ndarray
+
+   .. attribute:: events
+
+      Timestamps of the event.
+
+      :type: np.ndarray
+
+   .. attribute:: estimator
+
+      The function used to estimate the most likelly position.
+
+      :type: function
+
+   .. attribute:: estimated_position
+
+      Most likely position (x, y).
+
+      :type: tuple
+
+   .. attribute:: position_std
+
+      Standar deviation for the positions of th event (std(x), std(y))
+
+      :type: tuple
+
+   .. method:: distances_to_event()
+
+      Calculate the distance to the event estimated position at each timestamp
+
+      Returns: np.ndarray
+          One dimensional array with distances.
+
+
+   .. method:: set_distances_to_event()
+
+      Set distances_to_event attribute using distances_to_event function
+
+      Returns:
+          None
+
+
+   .. method:: all_event_positions():
+
+      Get all the positions at wich the event occurrs.
+
+      Returns: tuple
+          All the positions of the event (np.array([x])), np.array([y]).
+
+   get_event_position_std():
+       Calculate the standar deviation for the event position at x and y axis.
+
+       Returns: tuple
+           Standar deviation in x and y (std(x), std(y))
+
+   plot():
+       plot the all the trajectory, positions where the event occurred and the event estimated position
+
+       Returns:
+           None
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: _position_of_event()
+
+
+   .. py:method:: distances_to_event()
+
+
+   .. py:method:: set_distances_to_event()
+
+
+   .. py:method:: all_event_positions()
+
+
+   .. py:method:: get_event_position_std()
+
+
+   .. py:method:: plot()
+
+
+

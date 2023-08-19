@@ -1,0 +1,35 @@
+:py:mod:`ivneuro.delta_coherence_core`
+======================================
+
+.. py:module:: ivneuro.delta_coherence_core
+
+.. autoapi-nested-parse::
+
+   A  module with private helper functions for delta_coherence function locate in delta_coherence module.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.delta_coherence_core.calculate_delta_coherence
+   ivneuro.delta_coherence_core.single_coherence
+   ivneuro.delta_coherence_core.multi_coherence
+
+
+
+.. py:function:: calculate_delta_coherence(var_1_exp_interval, var2_exp_interval, var_1_baseline, var2_baseline, lowest_freq, highest_freq, sampling_rate, nperseg, noverlap, nfft)
+
+
+.. py:function:: single_coherence(contvar, exp_interval, baseline, lowest_freq, highest_freq, sampling_rate, nperseg, noverlap, nfft)
+
+
+.. py:function:: multi_coherence(contvar, exp_interval, baseline, lowest_freq, highest_freq, sampling_rate, nperseg, noverlap, nfft)
+
+

@@ -1,0 +1,489 @@
+:py:mod:`ivneuro.spectograms`
+=============================
+
+.. py:module:: ivneuro.spectograms
+
+.. autoapi-nested-parse::
+
+   User-facing functions to calculate, normalyze and plot peri-event spectograms analyses.
+   This module also contains PeriEventSpectogram class. Peri-event spectograms analysis can be higly
+   demanding, depending on the size and amount of continuous variables, the frequencies analysed, the
+   amount of reference events and number of trials of each of event. PeriEventSpectogram class aims to
+   facilitate processing, interpretation and visualization of peri-event spectograms without running the
+   analysis again and is returned by default by ivneuro.spectral.peri_event_spectogram function.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.spectograms.PeriEventSpectogram
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.spectograms.peri_event_spectogram
+   ivneuro.spectograms.normalize_pes
+   ivneuro.spectograms.plot_pes
+
+
+
+.. py:function:: peri_event_spectogram(contvar, evt, lower_lim, higher_lim, lower_freq=0, higher_freq=500, sample_subsamples=None, return_DataFrame=False, sampling_rate=None, scaling='spectrum', nperseg=500, noverlap=400, nfft=2000)
+
+   Calculate peri-event spectograms.
+
+   The algorithm is based on the spectogram() function of the signal processing module of the scipyi package (scipy.signal.spectogram()), and is optimized to calculate peri-event spectograms from multiple continuous variables and/or multiple events,
+   with multiple trials of each event.
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+               Dict values can be either one dimensional numpy arrays or lists of floats.
+   :type evt: one-dimensional numpy.ndarray, list or dict
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: int or float
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: int or float
+   :param lower_freq: The lowest frequency to include in the spectogram. The default is 0.
+   :type lower_freq: int or float, optional
+   :param higher_freq: The highest freq to include in the spectogram. The default is 500.
+   :type higher_freq: int or float, optional
+   :param sample_subsamples: When a dict, key must be sample names and values must be lists of subsample names, e.g.: {'sample_A':['subsample_A1','subsample_A2'...'subsample_An'], 'sample_B':['subsample_B1','subsample_B2'...'subsample_Bn']...}.
+                             Peri-event spectograms will be averaged across subsamples of the same sample, per each time and trial of each event, and the Variable name will be the sample name, intead of the column name of contvar.
+                             It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+                             If None, each column of contvar is treated as an independent sample, and therefore the result contains peri-event spectograms of every contvar column. The default is None.
+   :type sample_subsamples: dict or None, optional
+   :param return_DataFrame: If True, a pandas.DataFrame is returnes. If false, a PeriEventHistogram object is returned. The default is False.
+   :type return_DataFrame: Boolean, optional
+   :param sampling_rate: Sampling rate of the continuous value. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar's index. The default is None.
+   :type sampling_rate: int, float or None, optional
+   :param scaling: The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 'spectrum'.
+   :type scaling: str, optional
+   :param nperseg: The nperseg parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 500.
+   :type nperseg: int, optional
+   :param noverlap: The noverlap parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 400.
+   :type noverlap: int, optional
+   :param nfft: The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.
+   :type nfft: int, optional
+
+   :raises TypeError: If evt type is neither np.ndarray, list, dict.
+
+   :returns: **pes** -- If return_DataFrame == True, multi-index pandas.DataFrame with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+             If return_DataFrame == False, PeriEventSpectogram object with the already described pandas.DataFrame as data, and normalization = 'None'.
+   :rtype: pandas.DataFrame or PeriEventSpectogram
+
+   .. rubric:: Examples
+
+   Create events and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Peri-event spectograms for a single variable and a single event (with multiple trials).
+
+   >>> # Calculate peri-event spectogram from 10 sec before to 10 seconds after each event
+   >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10)
+   >>> type(pes)
+   ivneuro.spectograms.PeriEventSpectogram
+   >>> pes.data
+                                                   0.0    ...         500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                         -9.9   0.000142  ...  9.831598e-08
+                                         -9.8   0.020257  ...  2.587770e-06
+                                         -9.7   0.005431  ...  5.538603e-06
+                                         -9.6   0.002156  ...  5.956565e-06
+                                                     ...  ...           ...
+                            9             9.6   0.002953  ...  4.089984e-06
+                                          9.7   0.009216  ...  1.163104e-05
+                                          9.8   0.001603  ...  5.611661e-06
+                                          9.9   0.000025  ...  9.778874e-07
+                                          10.0  0.002685  ...  1.019278e-06
+   [1809 rows x 1001 columns]
+
+   Return a pandas.DataFrame instead of a ivneuro.spectograms.PeriEventSpectogram.
+
+   >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10, return_DataFrame = True)
+   >>> type(pes)
+   pandas.core.frame.DataFrame
+   >>> pes
+                                                   0.0    ...         500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                         -9.9   0.000142  ...  9.831598e-08
+                                         -9.8   0.020257  ...  2.587770e-06
+                                         -9.7   0.005431  ...  5.538603e-06
+                                         -9.6   0.002156  ...  5.956565e-06
+                                                     ...  ...           ...
+                            9             9.6   0.002953  ...  4.089984e-06
+                                          9.7   0.009216  ...  1.163104e-05
+                                          9.8   0.001603  ...  5.611661e-06
+                                          9.9   0.000025  ...  9.778874e-07
+                                          10.0  0.002685  ...  1.019278e-06
+   [1809 rows x 1001 columns]
+
+
+   Peri-event spectogram for 2 events and 3 signals, set frequency limits.
+
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, lower_freq = 30, higher_freq=150)
+   >>> pes.event_names
+   ['burst', 'control']
+   >>> pes.variable_names
+   ['Signal 30Hz', 'Signal 32Hz', 'Signal 80Hz']
+   >>> pes.frequencies[0], pes.frequencies[-1]
+   (30.0, 150.0)
+
+
+   Set signal1 and signal2 as replicates of sample1, and signal3 as sample3.
+
+   >>> # Make dictionary to group replicates of each sample
+   >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 32Hz'], 'sample2':['Signal 80Hz']}
+   >>> # Calculate peri-event spectogram
+   >>> pes = ivneuro.peri_event_spectogram(signals, events, -10, 10, higher_freq=100, sample_subsamples = sample_subsamples)
+   >>> # Print variables
+   >>> pes.variable_names
+   ['sample1', 'sample2']
+
+
+
+
+.. py:function:: normalize_pes(pes, baseline=None, method='Condition_average')
+
+   Normalize peri-event-histogram using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.
+
+   While using decibels or logarithmic scale instead of power (V**2) can helph to displaying spectograms, usualy this is not enough to visualyze variations in both low and high frequencies.
+   Normalizing the data to a baseline is a simple and straingforward way to visualyze variation in all frequencies at the same scale.
+
+   :param pes: Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type pes: pandas.DataFrame
+   :param baseline: lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.
+   :type baseline: tuple, optional
+   :param method: Method used to nromalize.
+                  "Condition_average": Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+                  "Condition_specific": Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+                  "Trial_specific": Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+                  The default is 'Condition_average'.
+   :type method: str, optional
+
+   :raises TypeError: If baseline is neither a tuple or None.
+   :raises NameError: If method is neither "Condition_average", "Condition_specific" or "Trial_specific".
+
+   :returns: **normalized_df** -- DataFrame with normalized data.
+   :rtype: pandas.DataFrame
+
+   .. rubric:: Examples
+
+   Create events and signals, and make peri-event spectograms DataFrame.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, return_DataFrame = True)
+
+   Use function to normalize.
+
+   >>> ivn.normalize_pes(pes)
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.253770  ... -0.979913
+                                         -9.9  -0.954578  ... -0.972753
+                                         -9.8   5.476162  ... -0.282843
+                                         -9.7   0.736362  ...  0.534932
+                                         -9.6  -0.310721  ...  0.650763
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.258766  ...  0.130080
+                                          9.7  -0.689950  ... -0.864958
+                                          9.8  -0.795989  ... -0.800983
+                                          9.9  -0.800038  ...  0.999065
+                                          10.0 -0.859353  ...  4.566640
+   [10854 rows x 1001 columns]
+
+   Normalize to a baseline.
+
+   >>> ivn.normalize_pes(pes, baseline = (-10,-5))
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.284930  ... -0.980264
+                                         -9.9  -0.953449  ... -0.973230
+                                         -9.8   5.637114  ... -0.295378
+                                         -9.7   0.779516  ...  0.508103
+                                         -9.6  -0.293591  ...  0.621910
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.240397  ...  0.110194
+                                          9.7  -0.682266  ... -0.867334
+                                          9.8  -0.790933  ... -0.804485
+                                          9.9  -0.795083  ...  0.963888
+                                          10.0 -0.855867  ...  4.468686
+   [10854 rows x 1001 columns]
+
+
+   Normalize using "Trial_specific" method.
+
+   >>> ivn.normalize_pes(pes, method = "Trial_specific")
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.322110  ... -0.976902
+                                         -9.9  -0.952102  ... -0.968668
+                                         -9.8   5.829160  ... -0.175315
+                                         -9.7   0.831006  ...  0.765074
+                                         -9.6  -0.273151  ...  0.898273
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.211468  ...  0.246262
+                                          9.7  -0.670165  ... -0.851075
+                                          9.8  -0.782971  ... -0.780522
+                                          9.9  -0.787279  ...  1.204586
+                                          10.0 -0.850378  ...  5.138939
+   [10854 rows x 1001 columns]
+
+
+
+
+.. py:function:: plot_pes(pes, zero_centered=True, aspect=1)
+
+   Plot peri-event spectograms, with each variable in a column and each event name in a row.
+
+   :param pes: Multi-index pandas.DataFrame as returned by peri_event_spectogram() nor normalize_pes() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type pes: pandas.DataFrame
+   :param zero_centered: If True, data is centered to zero. The default is True.
+   :type zero_centered: boolean, optional
+   :param aspect: The y/x ratio of the axes aspect. The default is 1.
+   :type aspect: float, optional
+
+   :rtype: None.
+
+   .. rubric:: Examples
+
+   Create events and signals, and make peri-event spectograms DataFrame.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, higher_freq=90, return_DataFrame = True)
+
+   Use function to plot peri-event spectogram.
+
+   >>> ivn.plot_pes(pes)
+
+   Non zero centered.
+
+   >>> ivn.plot_pes(pes, zero_centered= False)
+
+
+.. py:class:: PeriEventSpectogram(data, norm)
+
+   Create a PeriEventHistogram object.
+
+
+   :param data: Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type data: pandas.DataFrame
+   :param norm: Normalization state of the data, it can be "None", "Condition_average", "Condition_specific" or "Trial_specific".
+   :type norm: str
+
+   .. attribute:: data
+
+      Multi-index pandas.DataFrame with peri-event spectogram data, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+
+      :type: pandas.DataFrame
+
+   .. attribute:: variable_names
+
+      Names of each original continuous variable used to make the spectograms.
+
+      :type: list
+
+   .. attribute:: event_names
+
+      Names of each reference event.
+
+      :type: list
+
+   .. attribute:: timestamps
+
+      Timestamps of the peri-event spectogram.
+
+      :type: list
+
+   .. attribute:: frequencies
+
+      Frequencies included in the spectogram.
+
+      :type: list
+
+   .. attribute:: normalization
+
+
+
+      :type: normalization state of the data.
+
+   .. method:: normalize():
+
+      Normalize data using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.
+
+      :param baseline: lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.
+      :type baseline: tuple, optional
+      :param method: Method used to nromalize.
+                     "Condition_average": Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+                     "Condition_specific": Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+                     "Trial_specific": Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+                     The default is 'Condition_average'.
+      :type method: str, optional
+      :param inplace: If True, modifies the current object. If False, returns a new object with normalized data. The default is False.
+      :type inplace: bolean, optional
+
+      :raises TypeError: If baseline is neither a tuple or None.
+      :raises NameError: If method is neither "Condition_average", "Condition_specific" or "Trial_specific".
+      :raises ValueError: If normalization attribute is not "None", which indicates that data is already normalized.
+
+
+       Returns: PeriEventSpectogram
+           If inplace is False, returns a PeriEventSpectogram object with normalized data, and normalization attribute as the method argument passed.
+
+   slice_time(new_limits, inplace=False):
+
+       Slice timestamps.
+
+       Parameters
+       ----------
+       new_limits: tuple
+           New lowest and highest limits of time.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced timestamps
+
+   slice_frequencies(new_limits, inplace=False):
+
+       Slice frequencies.
+
+       Parameters
+       ----------
+       new_limits: tuple
+           Lowest and highest limits of the frequency.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced frequecies.
+
+   slice_events(event_list, inplace=False):
+
+       Slice events.
+
+       Parameters
+       ----------
+       event_list: list
+           Event names to slice from the data.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced events.
+
+   calculate_means():
+
+       Calculate means across trials of the same event for each variable, event name and timestamp.
+
+   Returns: pandas.DataFrame
+       Mean across trials of the same event of the peri-event spectogram. Multi-index pandas.DataFrame with original continuous variable names,
+       event names and peri-event time as index, frequencies as columns and mean power values as data.
+
+   plot(zero_centered=None, aspect=1, variables = None, evt_names = None):
+
+       Plot peri-event spectograms, with each variable in a column and each event name in a row.
+
+       Parameters
+       ----------
+       zero_centered : boolean or None, optional
+           If True, colorscale is centered to zero. If None, colorscale is centered to zero if data is normalized (normalization attribute is either "Condition_average", "Condition_specific" or "Trial_specific"),
+           but it is not centered to zero if data is not normalized (normalization attribute is "None"). The default is None.
+
+       aspect : float, optional
+           The y/x ratio of the axes aspect. The default is 1.
+
+       variables: list or None, optional
+           Subset of variables names to plot. If None, all variables are ploted. Default is None.
+
+       evt_names: list or None, optional
+           Subset of events to plot. If None, all events are ploted. Default is None.
+
+       Returns
+       -------
+       None.
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: _set_variable_names()
+
+
+   .. py:method:: _set_event_names()
+
+
+   .. py:method:: _set_timestamps()
+
+
+   .. py:method:: _set_frequencies()
+
+
+   .. py:method:: normalize(baseline=None, method='Condition_average', inplace=False)
+
+
+   .. py:method:: slice_time(new_limits, inplace=False)
+
+
+   .. py:method:: slice_frequencies(new_limits, inplace=False)
+
+
+   .. py:method:: slice_events(event_list, inplace=False)
+
+
+   .. py:method:: calculate_means()
+
+
+   .. py:method:: plot(zero_centered=None, aspect=1, variables=None, evt_names=None)
+
+
+

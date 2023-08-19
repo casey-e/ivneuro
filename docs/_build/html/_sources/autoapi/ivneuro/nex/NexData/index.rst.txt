@@ -1,0 +1,131 @@
+:py:mod:`ivneuro.nex.NexData`
+=============================
+
+.. py:module:: ivneuro.nex.NexData
+
+.. autoapi-nested-parse::
+
+   A module with NexData class, wich puts together all the functions of pull_data subpackage and creates a
+   NexData object, wich contains the extrated variables as attributes.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.nex.NexData.NexData
+
+
+
+
+.. py:class:: NexData(file, FP_of_interest=[], events_of_interest=[], continuous_of_interest=[], neurons_of_interest=[], markers_of_interest=[], centroids_of_interest=[], clear_Nex_data=True)
+
+   Extract variables from a .Nex5 file.
+
+
+   :param file: Complete path of the .Nex5 file to extract data from.
+   :type file: str
+   :param FP_of_interest: List of names of field potentials to extract. If None, nothing is extracted; if an empty list, all the field potentials are extracted. The default is [].
+   :type FP_of_interest: list, optional
+   :param events_of_interest: List of names of events to extract. If None, nothing is extracted; if an empty list, all the events are extracted. The default is [].
+   :type events_of_interest: list, optional
+   :param continuous_of_interest: List of names of continuous to extract. If None, nothing is extracted; if an empty list, all non-field potential continuous variables are extracted. The default is [].
+   :type continuous_of_interest: list, optional
+   :param neurons_of_interest: List of names of events to extract. If None, nothing is extracted; if an empty list, all the neurons are extracted. The default is [].
+   :type neurons_of_interest: list, optional
+   :param markers_of_interest: List of names of markers to extract. If None, nothing is extracted; if an empty list, all the markers are extracted. The default is [].
+   :type markers_of_interest: list, optional
+   :param centroids_of_interest: List of names of centroids to extract. If None, nothing is extracted; if an empty list, all centroid variables are extracted. The default is [].
+   :type centroids_of_interest: list, optional
+   :param clear_Nex_data: If True, data atribute is set to None. Otherwise, result of reader.ReadNex5File(file) is stored in data atribute. The default is True.
+   :type clear_Nex_data: bool, optional
+
+   .. attribute:: file_path
+
+      File path of the .Nex5 file the data was extracted from.
+
+      :type: str
+
+   .. attribute:: FP
+
+      Field potentials (in mV) in each column and timestaps as index.
+
+      :type: pandas.DataFrame
+
+   .. attribute:: FP_sampling_rate
+
+      Sampling rate of local field potentials.
+
+      :type: float
+
+   .. attribute:: events
+
+      Event names as keys and list of timestamps as values.
+
+      :type: dict
+
+   .. attribute:: continuous
+
+      Each DataFrame of the list contains a column with the continuous values and the timestamps as index,for every continuous variable (excluding field potentials).
+
+      :type: list of pandas.DataFrames
+
+   .. attribute:: neurons
+
+      Neuron names as keys and list of timestamps as values.
+
+      :type: dict
+
+   .. attribute:: markers
+
+      Markers names as keys and list of timestamps as values.
+
+      :type: dict
+
+   .. attribute:: centroids
+
+      Centroids in each column and timestaps as index.
+
+      :type: pandas.DataFrame
+
+   .. method:: clear_fileData()
+
+      Set data atribute to None.
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: _pull_fp(FP_of_interest=[])
+
+
+   .. py:method:: _pull_events(events_of_interest=[])
+
+
+   .. py:method:: _pull_continuous(continuous_of_interest=[])
+
+
+   .. py:method:: _pull_neurons(neurons_of_interest=[])
+
+
+   .. py:method:: _pull_markers(markers_of_interest=[])
+
+
+   .. py:method:: _pull_centroids(centroids_of_interest=[])
+
+
+   .. py:method:: clear_fileData()
+
+
+

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.delta_power_spectral &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ivneuro.delta_power_spectral_core" href="../delta_power_spectral_core/index.html" />
+    <link rel="prev" title="ivneuro.delta_coherence_core" href="../delta_coherence_core/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../continuous/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.continuous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_coherence_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_coherence_core</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../delta_power_spectral_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../events/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.events</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generate_signal/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.generate_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../spectograms_core/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.spectograms_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.tracking</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/ivneuro/delta_power_spectral/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.delta_power_spectral">
+<span id="ivneuro-delta-power-spectral"></span><h1><a class="reference internal" href="../index.html#ivneuro.delta_power_spectral" title="ivneuro.delta_power_spectral"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.delta_power_spectral</span></code></a><a class="headerlink" href="#module-ivneuro.delta_power_spectral" title="Permalink to this heading"></a></h1>
+<p>A module with delta_power_spectral function.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.delta_power_spectral.delta_power_spectral" title="ivneuro.delta_power_spectral.delta_power_spectral"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_power_spectral</span></code></a>(contvar, exp_interval, baseline)</p></td>
+<td><p>Calculate the power spectral at a experimental time of interest (exp_interval), at a baseline interval (baseline), and the frequency-basis normalized difference betrween the experimental interval and the baseline.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.delta_power_spectral.delta_power_spectral">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.delta_power_spectral.</span></span><span class="sig-name descname"><span class="pre">delta_power_spectral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contvar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowest_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highest_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_subsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spectrum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivneuro/delta_power_spectral.html#delta_power_spectral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.delta_power_spectral.delta_power_spectral" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the power spectral at a experimental time of interest (exp_interval), at a baseline interval (baseline), and the frequency-basis normalized difference betrween the experimental interval and the baseline.</p>
+<p>This function is based on the periodogram function of scipy.signal.
+exp_interval and baseline must be lists of slices the same lenght, when when the lists have more than one element each, the results are the averages across intervals (either power spectral at exp_interval, power spectral at baseline, or their normalized difference).
+To normalize, it uses the formula: (Power(exp_interval) - Power(baseline)) / (Power(exp_interval) + Power(baseline)) for each frequency and trial (pair of elements in interval and baseline), where Power(exp_interval) is the power at the experimental interval and Power(baseline) is the power at the baseline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contvar</strong> (<em>pandas.DataFrame</em>) – Dataframe with continuous variables in each column, and timestamps as index.</p></li>
+<li><p><strong>exp_interval</strong> (<em>list</em>) – List of slices corresponding to experimental intervals to calculate power.</p></li>
+<li><p><strong>baseline</strong> (<em>list</em>) – List of slices corresponding to baseline intervals to calculate power.</p></li>
+<li><p><strong>lowest_freq</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The lowest frequency to include in the power spectral. The default is 0.</p></li>
+<li><p><strong>highest_freq</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The highest freq to include in the power spectral. The default is 500.</p></li>
+<li><p><strong>sample_subsamples</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – When a dict, key must be sample names and values must be lists of subsample names, e.g.: {‘sample_A’:[‘subsample_A1’,’subsample_A2’…’subsample_An’], ‘sample_B’:[‘subsample_B1’,’subsample_B2’…’subsample_Bn’]…}.
+Power spectrals and normalized delta power spectral will be averaged across subsamples of the same sample.
+It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+If None, each column of contvar is treated as an independent sample, and therefore the results contain spectrals of every contvar column. The default is None.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em><em> or </em><em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Sampling rate of the continuous variables. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar’s index. The default is None.</p></li>
+<li><p><strong>nfft</strong> (<em>int</em><em>, </em><em>optional</em>) – The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.</p></li>
+<li><p><strong>scaling</strong> (<em>str</em><em>, </em><em>optional</em>) – The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is ‘spectrum’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>power_exp_interval</strong> (<em>pandas.DataFrame</em>) – Power spectral for each variable (or sample if sample_subsamples != None), at the experimental interval. Variable names (or sample names) as columns and frequency as index.</p></li>
+<li><p><strong>power_baseline</strong> (<em>pandas.DataFrame</em>) – Power spectral for each variable (or sample if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as columns and frequency as index.</p></li>
+<li><p><strong>delta_power</strong> (<em>pandas.DataFrame</em>) – Normalized difference of power spectrals between experimental interval and baseline interval, for each variable (or sample if sample_subsamples != None). Variable names (or sample names) as columns and frequency as index.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create event, intervals and signals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ivneuro</span> <span class="k">as</span> <span class="nn">ivn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">event</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span> <span class="c1"># Events</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make intervals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_interval</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">make_intervals</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># Experimental interval</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">baseline</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">make_intervals</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#Baseline interval</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal1</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="mf">30.2</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal3</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">generate_signal</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">burst_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">signal3</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate power spectral and delta power spectral between intervals with delta_power_spectral function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp_ps</span><span class="p">,</span> <span class="n">baseline_ps</span><span class="p">,</span> <span class="n">delta_ps</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">delta_power_spectral</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta_ps</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">     Signal 30Hz  Signal 30.2Hz  Signal 80Hz</span>
+<span class="go">0.0    -0.110932      -0.112460    -0.006010</span>
+<span class="go">0.5    -0.087769       0.009546     0.149461</span>
+<span class="go">1.0     0.180706       0.042875     0.142876</span>
+<span class="go">1.5    -0.167544      -0.215748     0.257452</span>
+<span class="go">2.0     0.108177      -0.357427     0.086913</span>
+</pre></div>
+</div>
+<p>Set signal1 and signal2 as replicates of sample1, and signal3 as sample2.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make dictionary to group replicates of each sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_subsamples</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sample1&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Signal 30Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;Signal 30.2Hz&#39;</span><span class="p">],</span> <span class="s1">&#39;sample2&#39;</span><span class="p">:[</span><span class="s1">&#39;Signal 80Hz&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate coherence and delta coherence</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_ps</span><span class="p">,</span> <span class="n">baseline_ps</span><span class="p">,</span> <span class="n">delta_ps</span> <span class="o">=</span> <span class="n">ivn</span><span class="o">.</span><span class="n">delta_power_spectral</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">exp_interval</span><span class="p">,</span> <span class="n">baseline</span><span class="p">,</span> <span class="n">sample_subsamples</span> <span class="o">=</span> <span class="n">sample_subsamples</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta_ps</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">      sample1   sample2</span>
+<span class="go">0.0 -0.111696 -0.006010</span>
+<span class="go">0.5 -0.039112  0.149461</span>
+<span class="go">1.0  0.111790  0.142876</span>
+<span class="go">1.5 -0.191646  0.257452</span>
+<span class="go">2.0 -0.124625  0.086913</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../delta_coherence_core/index.html" class="btn btn-neutral float-left" title="ivneuro.delta_coherence_core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../delta_power_spectral_core/index.html" class="btn btn-neutral float-right" title="ivneuro.delta_power_spectral_core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

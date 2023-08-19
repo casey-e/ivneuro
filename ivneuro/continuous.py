@@ -31,6 +31,20 @@ def calculate_sampling_period(timestamps):
     -------
     float
         Sampling period.
+    
+    Examples
+    --------
+    
+    Calculate sample period of a timeserie.
+    
+    >>> # Create timeserie
+    >>> import ivneuro as ivn
+    >>> import numpy as np
+    >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+    >>> # Use the function to calculate sample period.
+    >>> ivn.calculate_sampling_period(timestamps)
+    0.001000000000000334
+    
     """
 
     return np.median(np.diff(timestamps))
@@ -49,6 +63,19 @@ def calculate_sampling_rate(timestamps):
     -------
     sampling_rate : float
         Sampling rate.
+    
+    Examples
+    --------
+    
+    Calculate sample rate of a timeserie.
+    
+    >>> # Create timeserie
+    >>> import ivneuro as ivn
+    >>> import numpy as np
+    >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+    >>> # Use the function to calculate sample rate.
+    >>> ivn.calculate_sampling_rate(timestamps)
+    1000.0
 
     """
     
@@ -75,6 +102,37 @@ def peh_list(contvar, evt, lower_lim, higher_lim):
     -------
     peh : list
         Lst of Dataframes of peri-event histograms, each with original continuous variables as columns, and multi-index with trial number and peri-event time.
+    
+    Examples
+    --------
+    
+    Create event and signals.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> # Create event: burst
+    >>> burst = [*range(30,300, 30)]
+    >>> # Generate signals
+    >>> signal1 = ivn.generate_signal(300, burst, 2, burst_duration = 0.5, burst_amplitude=1) 
+    >>> signal2 = ivn.generate_signal(300, burst, 0.5, burst_duration = 2, burst_amplitude=1.5, seed = 21) 
+    >>> signal3 = ivn.generate_signal(300, burst, 0.2, burst_duration = 3, burst_amplitude=1.5, seed = 10)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)  
+    >>> # Use peh_list to create a list of peri-event histograms
+    >>> hist_list=ivn.continuous.peh_list(signals, burst, lower_lim = -5, higher_lim = 5)
+    >>> hist_list[0] # Print first element
+              Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz
+    1 -5.000    0.308629      0.802330     -0.772324
+      -4.999    0.383986      0.841905     -0.842523
+      -4.998    0.337540      0.966326     -0.901157
+      -4.997    0.301379      0.992252     -0.832871
+      -4.996    0.396404      1.047770     -0.900500
+                 ...           ...           ...
+       4.996    0.211593     -2.017009     -0.826280
+       4.997    0.324347     -2.130981     -0.891831
+       4.998    0.229633     -2.077634     -0.974507
+       4.999    0.216934     -2.014184     -0.940523
+       5.000    0.157096     -2.007946     -1.020650
+    [10001 rows x 3 columns]
 
     """
     # Calculate rounding, a variable that will be used to round the peri-event time, used as index in the returned dataframe
@@ -110,6 +168,7 @@ def single_peh(contvar, evt, lower_lim, higher_lim):
     -------
     peh : pandas.DataFrame
         Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with trial number and peri-event time.
+    
 
     """
     result = peh_list(contvar, evt, lower_lim, higher_lim) # list of peri event histogram dataframes with multiindex of event number and peri-event time
@@ -138,6 +197,75 @@ def peh(contvar, evt, lower_lim, higher_lim, return_DataFrame = False):
     -------
     peh : pandas.DataFrame
         Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with event names, trial number and peri-event time.
+    
+    Examples
+    --------
+    
+    Create event and signals.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> # Create events: burst and control
+    >>> burst = [*range(30,300, 30)]
+    >>> control = [*range(45,300, 30)]
+    >>> events = {'burst':burst,'control':control}
+    >>> # Generate signals
+    >>> signal1 = ivn.generate_signal(300, burst, 2, burst_duration = 0.5, burst_amplitude=1) 
+    >>> signal2 = ivn.generate_signal(300, burst, 0.5, burst_duration = 2, burst_amplitude=1.5, seed = 21) 
+    >>> signal3 = ivn.generate_signal(300, burst, 0.2, burst_duration = 3, burst_amplitude=1.5, seed = 10)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+    
+    Peri-event histograms for a single variable and a single event (with multiple trials).
+    
+    >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5) # histograms from 5 seconds before to 5 seconds after each trial
+    >>> type(hist)
+    ivneuro.continuous.PeriEventHistogram
+    >>> hist
+                                    Signal 2Hz
+    Event_name Event_number Time              
+    Event      1            -5.000    0.308629
+                            -4.999    0.383986
+                            -4.998    0.337540
+                            -4.997    0.301379
+                            -4.996    0.396404
+                                       ...
+               9             4.996    1.773434
+                             4.997    1.768014
+                             4.998    1.742938
+                             4.999    1.684667
+                             5.000    1.573737
+    [90009 rows x 1 columns]
+    
+    
+    Return a pandas.DataFrame instead of a ivneuro.continuous.PeriEventHistogram.
+    
+    >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5, return_DataFrame = True) # histograms from 5 seconds before to 5 seconds after each trial
+    >>> type(hist)
+    pandas.core.frame.DataFrame
+    
+    Peri-event histogram for multiple variables and multiple events (with multiple trials each).
+    
+    >>> hist = ivn.peh(signals, events, lower_lim = -3, higher_lim = 3) # histograms from 3 seconds before to 3 seconds after each trial
+    >>> hist.variable_names
+    ['Signal 2Hz', 'Signal 0.5Hz', 'Signal 0.2Hz']
+    >>> hist.event_names
+    ['control', 'burst']
+    >>> hist.calculate_means()
+                       Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz
+    Event_name Time                                          
+    burst      -3.000   -0.323144      0.421450      0.436888
+               -2.999   -0.234888      0.370375      0.440265
+               -2.998   -0.232368      0.398991      0.406327
+               -2.997   -0.233245      0.368178      0.381116
+               -2.996   -0.223524      0.319660      0.367928
+                          ...           ...           ...
+    control     2.996    0.245362      0.387958      0.362177
+                2.997    0.270217      0.431107      0.326198
+                2.998    0.263590      0.420351      0.303861
+                2.999    0.335115      0.444825      0.323329
+                3.000    0.361686      0.388019      0.330680
+    [12002 rows x 3 columns]
+    
 
     """
     

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.nex.NexData &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.nex.NexData</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.nex.NexData</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A module with NexData class, wich puts together all the functions of pull_data subpackage and creates a</span>
+<span class="sd">NexData object, wich contains the extrated variables as attributes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.pull_nex_data</span> <span class="kn">import</span> <span class="n">pull_fp</span><span class="p">,</span> <span class="n">pull_events</span><span class="p">,</span> <span class="n">pull_continuous</span><span class="p">,</span> <span class="n">pull_neurons</span><span class="p">,</span> <span class="n">pull_markers</span><span class="p">,</span> <span class="n">pull_centroids</span><span class="p">,</span> <span class="n">reader</span>
+
+
+<div class="viewcode-block" id="NexData"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData">[docs]</a><span class="k">class</span> <span class="nc">NexData</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract variables from a .Nex5 file.</span>
+<span class="sd">    </span>
+<span class="sd">     </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    file : str</span>
+<span class="sd">        Complete path of the .Nex5 file to extract data from.</span>
+<span class="sd">        </span>
+<span class="sd">    FP_of_interest : list, optional</span>
+<span class="sd">        List of names of field potentials to extract. If None, nothing is extracted; if an empty list, all the field potentials are extracted. The default is [].</span>
+<span class="sd">    </span>
+<span class="sd">    events_of_interest : list, optional</span>
+<span class="sd">        List of names of events to extract. If None, nothing is extracted; if an empty list, all the events are extracted. The default is [].</span>
+
+<span class="sd">    continuous_of_interest : list, optional</span>
+<span class="sd">        List of names of continuous to extract. If None, nothing is extracted; if an empty list, all non-field potential continuous variables are extracted. The default is [].</span>
+
+<span class="sd">    neurons_of_interest : list, optional</span>
+<span class="sd">        List of names of events to extract. If None, nothing is extracted; if an empty list, all the neurons are extracted. The default is [].</span>
+<span class="sd">     </span>
+<span class="sd">    markers_of_interest : list, optional</span>
+<span class="sd">        List of names of markers to extract. If None, nothing is extracted; if an empty list, all the markers are extracted. The default is [].</span>
+<span class="sd">    </span>
+<span class="sd">    centroids_of_interest : list, optional</span>
+<span class="sd">        List of names of centroids to extract. If None, nothing is extracted; if an empty list, all centroid variables are extracted. The default is [].</span>
+<span class="sd">    </span>
+<span class="sd">    clear_Nex_data : bool, optional</span>
+<span class="sd">        If True, data atribute is set to None. Otherwise, result of reader.ReadNex5File(file) is stored in data atribute. The default is True.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_path : str</span>
+<span class="sd">        File path of the .Nex5 file the data was extracted from.</span>
+<span class="sd">    </span>
+<span class="sd">    FP : pandas.DataFrame</span>
+<span class="sd">        Field potentials (in mV) in each column and timestaps as index.</span>
+<span class="sd">    </span>
+<span class="sd">    FP_sampling_rate : float</span>
+<span class="sd">        Sampling rate of local field potentials.</span>
+<span class="sd">    </span>
+<span class="sd">    events : dict</span>
+<span class="sd">        Event names as keys and list of timestamps as values.</span>
+<span class="sd">    </span>
+<span class="sd">    continuous : list of pandas.DataFrames</span>
+<span class="sd">        Each DataFrame of the list contains a column with the continuous values and the timestamps as index,for every continuous variable (excluding field potentials).</span>
+<span class="sd">    </span>
+<span class="sd">    neurons : dict</span>
+<span class="sd">        Neuron names as keys and list of timestamps as values.</span>
+<span class="sd">    </span>
+<span class="sd">    markers : dict</span>
+<span class="sd">        Markers names as keys and list of timestamps as values.</span>
+<span class="sd">    </span>
+<span class="sd">    centroids : pandas.DataFrame</span>
+<span class="sd">        Centroids in each column and timestaps as index.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    clear_fileData()</span>
+<span class="sd">        Set data atribute to None.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">FP_of_interest</span><span class="o">=</span><span class="p">[],</span>  <span class="n">events_of_interest</span><span class="o">=</span><span class="p">[],</span> <span class="n">continuous_of_interest</span><span class="o">=</span><span class="p">[],</span> <span class="n">neurons_of_interest</span><span class="o">=</span><span class="p">[],</span> <span class="n">markers_of_interest</span><span class="o">=</span><span class="p">[],</span> <span class="n">centroids_of_interest</span><span class="o">=</span><span class="p">[],</span> <span class="n">clear_Nex_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_FP_of_interest</span><span class="o">=</span><span class="n">FP_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_events_of_interest</span><span class="o">=</span><span class="n">events_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_continuous_of_interest</span><span class="o">=</span><span class="n">continuous_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_neurons_of_interest</span><span class="o">=</span><span class="n">neurons_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markers_of_interest</span><span class="o">=</span><span class="n">markers_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_centroids_of_interest</span><span class="o">=</span><span class="n">centroids_of_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clear_Nex_data</span><span class="o">=</span><span class="n">clear_Nex_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="n">reader</span><span class="o">.</span><span class="n">ReadNex5File</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FP</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FP_sample_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_fp</span><span class="p">(</span><span class="n">FP_of_interest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_events</span><span class="p">(</span><span class="n">events_of_interest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">continuous</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_continuous</span><span class="p">(</span><span class="n">continuous_of_interest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_neurons</span><span class="p">(</span><span class="n">neurons_of_interest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_markers</span><span class="p">(</span><span class="n">markers_of_interest</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pull_centroids</span><span class="p">(</span><span class="n">centroids_of_interest</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">clear_Nex_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear_fileData</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="NexData.__str__"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData.__str__">[docs]</a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;File path:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Field potentials:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Events:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Continuous:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Neurons:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Markers:</span><span class="se">\n</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Centroids:</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> \
+        <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FP</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>  <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">continuous</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neurons</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">markers</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="NexData.__repr__"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;NexData(&quot;</span><span class="si">{}</span><span class="s1">&quot;,</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_FP_of_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events_of_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_continuous_of_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_neurons_of_interest</span><span class="p">,</span> \
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">_markers_of_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_centroids_of_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clear_Nex_data</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_fp"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_fp">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_fp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FP_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_fp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">FP_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_events"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_events">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_events</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">events_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_continuous"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_continuous">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_continuous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">continuous_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_continuous</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">continuous_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_neurons"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_neurons">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_neurons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neurons_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_neurons</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">neurons_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_markers"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_markers">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_markers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markers_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_markers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">markers_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData._pull_centroids"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData._pull_centroids">[docs]</a>    <span class="k">def</span> <span class="nf">_pull_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">centroids_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="k">return</span> <span class="n">pull_centroids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">centroids_of_interest</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="NexData.clear_fileData"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/index.html#ivneuro.nex.NexData.NexData.clear_fileData">[docs]</a>    <span class="k">def</span> <span class="nf">clear_fileData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

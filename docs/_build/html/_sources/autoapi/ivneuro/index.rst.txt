@@ -1,0 +1,1377 @@
+:py:mod:`ivneuro`
+=================
+
+.. py:module:: ivneuro
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   nex/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   continuous/index.rst
+   delta_coherence/index.rst
+   delta_coherence_core/index.rst
+   delta_power_spectral/index.rst
+   delta_power_spectral_core/index.rst
+   events/index.rst
+   generate_signal/index.rst
+   spectograms/index.rst
+   spectograms_core/index.rst
+   tracking/index.rst
+   utils/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.EventPosition
+   ivneuro.PeriEventHistogram
+   ivneuro.PeriEventSpectogram
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.make_intervals
+   ivneuro.classify_events_base_on_time
+   ivneuro.scale_centroids
+   ivneuro.calculate_speed
+   ivneuro.position_of_event
+   ivneuro.distances_to_position
+   ivneuro.calculate_sampling_period
+   ivneuro.calculate_sampling_rate
+   ivneuro.peh
+   ivneuro.peri_event_spectogram
+   ivneuro.normalize_pes
+   ivneuro.plot_pes
+   ivneuro.delta_power_spectral
+   ivneuro.delta_coherence
+   ivneuro.generate_signal
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.__doc__
+
+
+.. py:data:: __doc__
+   :value: Multiline-String
+
+    .. raw:: html
+
+        <details><summary>Show Value</summary>
+
+    .. code-block:: python
+
+        """
+        
+        ivneuro
+        =======
+        Tools for processing and analyzing neurophysiological signals recorded in-vivo.
+        
+        
+        ivneuro provides tools for analyzing neural signals recorded in-vivo during behavior. It 
+        focus on time series analyses of continuous variables such as Local Field Potentials and 
+        is optimized to process either single signals in a single condition as well as multiple 
+        signals in multiple conditions simultaneously. It also provides a subpackage for extracting 
+        data from Nex files.
+        
+        """
+
+    .. raw:: html
+
+        </details>
+
+   
+
+.. py:function:: make_intervals(timestamps, start, end)
+
+   Make intervals based on timestamps.
+
+   :param timestamps: Timestamps to use as reference to make intervals.
+   :type timestamps: np.ndarray or list
+   :param start: Start of interval, relative to timestamps.
+   :type start: int or float
+   :param end: End of interval, relative to timestamps.
+   :type end: int or float
+
+   :returns: Slices with the start time and end time of each interval.
+   :rtype: list
+
+   .. rubric:: Examples
+
+   Create intervals using make_intervals function.
+
+   >>> import ivneuro as ivn
+   >>> event = [*range(10,40, 10)] # Timestamps
+   >>> # Make intervals
+   >>> intervals = ivn.make_intervals(event, 0, 3)
+   >>> print(intervals)
+   [slice(10, 13, None), slice(20, 23, None), slice(30, 33, None)]
+
+   Use intervals to slice a pandas.DataFrame
+
+   >>> # Create dataframe
+   >>> import numpy as np
+   >>> import pandas as pd
+   >>> np.random.seed(24)
+   >>> df=pd.DataFrame(data=np.random.rand(40), columns=['values'])
+   >>> # Slice datafrane
+   >>> [df.loc[i,] for i in intervals]
+   [      values
+    10  0.320519
+    11  0.366415
+    12  0.709652
+    13  0.900142,
+          values
+    20  0.842780
+    21  0.306013
+    22  0.631170
+    23  0.680239,
+          values
+    30  0.486032
+    31  0.807219
+    32  0.844220
+    33  0.534681]
+
+
+.. py:function:: classify_events_base_on_time(event1, event2, treshold, mode='left')
+
+   Classify an event in two categories based on how close in time it occurs from an event of reference.
+
+   :param event1: Event to classify.
+   :type event1: numpy.array of shape (1 x n)
+   :param event2: Event of reference.
+   :type event2: numpy.array of shape (1 x m)
+   :param treshold: Threshold amount of time used to classify events.
+   :type treshold: TYPE
+   :param mode: Define the mode of evaluation of proximity. "left", only looks event1 that occur before event2; "right",
+                only looks event1 that ocurr after event2; "two-sides", look temporal proximity before and after. The default is 'left'.
+   :type mode: str, optional
+
+   :returns: * **near** (*np.array of shape (1 x o)*) -- Subset of event1 classified as temporally close to event2.
+             * **far** (*np.array of shape (1 x p).*) -- Subset of event1 classified as temporally far from event2.
+
+   .. rubric:: Examples
+
+   Classify events with classify_events_base_on_time function.
+
+   >>> # Import packages and create events
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> event1 = np.array([3, 7, 10.5, 15.3])
+   >>> event2 = np.array([1, 7.5, 15])
+   >>> # Classify events
+   >>> near, far = ivn.classify_events_base_on_time(event1, event2, treshold = 1)
+   >>> print(near)
+   [7.]
+   >>> print(far)
+   [ 3.  10.5 15.3]
+
+   Set mode to 'right'.
+
+   >>> near, far = ivn.classify_events_base_on_time(event1, event2, treshold = 1, mode = 'right')
+   >>> print(near)
+   [15.3]
+   >>> print(far)
+   [ 3.   7.  10.5]
+
+   Set mode to 'both'.
+
+   >>> near, far = ivn.classify_events_base_on_time(event1, event2, treshold = 1, mode = 'two-sides')
+   >>> print(near)
+   [ 7.  15.3]
+   >>> print(far)
+   [ 3.  10.5]
+
+
+.. py:function:: scale_centroids(centroids, x_dim, y_dim)
+
+   Scale centroids to match the real values in appropiate scale.
+
+   This function assumes that positions at lower and higher limits of each dimension have been recorded.
+
+   :param centroids: Values of X_centroid and Y_centroid to be scaled.
+   :type centroids: numpy.ndarray of shape (2 x n_timestamps)
+   :param x_dim: Value from end to end of X coordinate.
+   :type x_dim: float
+   :param y_dim: Value from end to end of Y coordinate.
+   :type y_dim: float
+
+   :rtype: numpy.ndarray with scaled values.
+
+   .. rubric:: Examples
+
+   Use scale_centroids function.
+
+   >>> # Create and array with x and y coordinates: centroids
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> centroids = np.concatenate((x.reshape(100,1), y.reshape(100,1)), axis=1).T # Coordinates for an oval trajectory
+   >>> # Scale using scale_centroids function
+   >>> scaled_centroids = ivn.scale_centroids(centroids, 15, 30)
+   Difference between observed and provided x/y ratios: -0.012587232612482069 %
+   >>> print(scaled_centroids[:,:5]) # Print first 5 values of x and y
+   array([[15.        , 14.98489627, 14.9396459 , 14.8644311 , 14.75955473],
+          [15.        , 15.95147856, 16.89912585, 17.83912603, 18.76769406]])
+
+   If ratios between observed and provided x and y values are too different, scale_centroids will through a warning message.
+
+   >>> # Scale with inverted x and y measures
+   >>> scaled_centroids = ivn.scale_centroids(centroids, 30, 15)
+   Warning: the observed and provided x/y ratios have a difference of above 10%, consider switching the order of X and Y dimensions or cleaning centroids data and scale again
+   Difference between observed and provided x/y ratios: -75.00314680815312 %
+
+
+.. py:function:: calculate_speed(X_values, Y_values, timestamps, smooth=0)
+
+   Calculate scalar speed.
+
+   Speed is calculated through the following steps:
+   1. Calculate dtime, dX=PosX[T-deltaT]-posX[T] and dY=PosY[T-deltaT]-posY[T].
+   2. Smooth dX and dY using a Gaussian filter. Note: by applying the Gaussian filter to dX and dY instead of the speed
+   avoids short movements or random noie of the camera  to propagate to the speed calculus, leaving only changes in position caused
+   by displacement.
+   3. Calculate scalar speed: sqrt(dX**2+dY**2) / dT.
+
+   :param X_values: Positions in X coordinate. Must have the same lenght than Y_values and timestamps
+   :type X_values: NUMPY ARRAY
+   :param Y_values: Positions in Y coordinate. Must have the same lenght than X_values and timestamps
+   :type Y_values: NUMPY ARRAY
+   :param timestamps: Timestamps for every position. Must have the same lenght than X_values and Y_values
+   :type timestamps: NUMPY ARRAY
+   :param smooth: Defines the window of time a 2 x smooth and the width of the  Gaussian kernel as 1 x smooth,
+                  for the Gaussian filter. The default is 0, in which case the Gaussian filter is not appplied.
+   :type smooth: Float, optional
+
+   :returns: **speed** -- Values of scalar speed
+   :rtype: numpy.ndarray
+
+   .. rubric:: Examples
+
+   Create x coordinates, y coordinates and  timestamps. Calculate speed and print it.
+
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> ts = np.linspace(0,20,100).round(1)
+   # Calculate speed with calculate_speed function and print the first 5 values
+   >>> speed=ivn.calculate_speed(x, y, ts)
+   >>> print(speed[:5])
+   [6.3431908  6.32404896 6.28590074 6.22901826 6.15381269]
+
+
+.. py:function:: position_of_event(x_values, y_values, timestamps, events, estimator=np.median)
+
+   Estimate the most likely position at with an event occurs, or get all the positions where that event occurs.
+
+   :param x_values: All positions in x axis. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values: All positions in y axis. Must be of the same lenght than x_values and timestamps
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param timestamps: All timestamps. Must be of the same lenght than x_values and y_values.
+   :type timestamps: np.ndarray of shape (1 X n_timestamps)
+   :param events: Timestamps of the event.
+   :type events: one dimensional numpy.array or list of floats
+   :param estimator: Function to be used to estimate the most likely position of the event. The default is np.median.
+   :type estimator: function, optional
+
+   :raises TypeError: If x_values, y_values or timestamps is not np.ndarray.
+   :raises ValueError: If x_values lenght, y_values lenght and timestamps lenght are not the same.
+
+   :returns: Most likely position (x, y) if estimator is not None, or all the positions of the event (np.array([x])), np.array([y]) if estimator is None.
+   :rtype: Tuple
+
+   .. rubric:: Examples
+
+   Estimate the position of an event with the median.
+
+   >>> # Create x coordinates, y coordinates, centroids timestamps and event.
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> ts = np.linspace(0,20,100).round(1)
+   >>> np.random.seed(24)
+   >>> event = np.random.choice(ts[(ts>10) & (ts<15)], size=5, replace = False) # Create an event by making a random choice from timestamps
+   >>> # Estimate the position with position_of_event, return the median
+   >>> ivn.position_of_event(x, y, ts, event)
+   (1.7632341857016716, 8.658802722744587)
+
+   Return the mean of the positions
+
+   >>> ivn.position_of_event(x, y, ts, event, estimator = np.mean)
+   (3.356415004157808, 7.336570446958302)
+
+   Return all the positions for x and y
+
+   >>> ivn.position_of_event(x, y, ts, event, estimator = None)
+   (array([5.        , 0.83891543, 8.57685162, 0.60307379, 1.76323419]),
+    array([ 2.67949192, 11.98138929,  0.20357116, 13.15959713,  8.65880272]))
+
+
+.. py:function:: distances_to_position(x_values, y_values, position)
+
+   Given a set of x and y positions, calculate the distance to a specific position at each row.
+
+   :param x_values: X_centroid positions at each timestamp. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values:
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param position: Position (x, y) to calculate distance.
+   :type position: tuple
+
+   :returns: One dimensional array with distances to position at every point.
+   :rtype: np.ndarray
+
+   .. rubric:: Examples
+
+   Calculate distances to a position.
+
+   >>> # Create x coordinates and y coordinates, create position of interest
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> x = 10 * np.cos(np.linspace(0, 2*np.pi, 100)) + 10
+   >>> y = 20 * np.sin(np.linspace(0, 2*np.pi, 100)) + 20
+   >>> center = (10, 20) # Position of interest
+   >>> # Calculate distances
+   >>> distances = ivn.distances_to_position (x, y, center)
+   >>> print(distances[:5])
+   [10.         10.06015795 10.23756293 10.523536   10.90516361]
+
+
+.. py:class:: EventPosition(x_values, y_values, timestamps, events, estimator=np.median)
+
+   Obtain the position of an event.
+
+
+   :param x_values: All positions in x axis. Must be of the same lenght than y_values and timestamps
+   :type x_values: np.ndarray of shape (1 X n_timestamps)
+   :param y_values: All positions in y axis. Must be of the same lenght than x_values and timestamps
+   :type y_values: np.ndarray of shape (1 X n_timestamps)
+   :param timestamps: All timestamps. Must be of the same lenght than x_values and y_values.
+   :type timestamps: np.ndarray of shape (1 X n_timestamps)
+   :param events: Timestamps of the event.
+   :type events: one dimensional numpy.array or list of floats
+   :param estimator: Function to be used to estimate the most likely position of the event. The default is np.median.
+   :type estimator: function, optional
+
+   :raises TypeError: If x_values, y_values or timestamps is not np.ndarray.
+   :raises ValueError: If x_values lenght, y_values lenght and timestamps lenght are not the same.
+   :raises ValueError: If estimator == None.
+
+   .. attribute:: x_values
+
+      All positions in x axis.
+
+      :type: np.ndarray
+
+   .. attribute:: y_values
+
+      All positions in y axis.
+
+      :type: np.ndarray
+
+   .. attribute:: timestamps
+
+      All timestamps
+
+      :type: np.ndarray
+
+   .. attribute:: events
+
+      Timestamps of the event.
+
+      :type: np.ndarray
+
+   .. attribute:: estimator
+
+      The function used to estimate the most likelly position.
+
+      :type: function
+
+   .. attribute:: estimated_position
+
+      Most likely position (x, y).
+
+      :type: tuple
+
+   .. attribute:: position_std
+
+      Standar deviation for the positions of th event (std(x), std(y))
+
+      :type: tuple
+
+   .. method:: distances_to_event()
+
+      Calculate the distance to the event estimated position at each timestamp
+
+      Returns: np.ndarray
+          One dimensional array with distances.
+
+
+   .. method:: set_distances_to_event()
+
+      Set distances_to_event attribute using distances_to_event function
+
+      Returns:
+          None
+
+
+   .. method:: all_event_positions():
+
+      Get all the positions at wich the event occurrs.
+
+      Returns: tuple
+          All the positions of the event (np.array([x])), np.array([y]).
+
+   get_event_position_std():
+       Calculate the standar deviation for the event position at x and y axis.
+
+       Returns: tuple
+           Standar deviation in x and y (std(x), std(y))
+
+   plot():
+       plot the all the trajectory, positions where the event occurred and the event estimated position
+
+       Returns:
+           None
+
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: _position_of_event()
+
+
+   .. py:method:: distances_to_event()
+
+
+   .. py:method:: set_distances_to_event()
+
+
+   .. py:method:: all_event_positions()
+
+
+   .. py:method:: get_event_position_std()
+
+
+   .. py:method:: plot()
+
+
+
+.. py:function:: calculate_sampling_period(timestamps)
+
+   Calculate the sampling period from an array of timestamps
+
+   :param timestamps: One dimensional array with timestamps.
+   :type timestamps: numpy.ndarray
+
+   :returns: Sampling period.
+   :rtype: float
+
+   .. rubric:: Examples
+
+   Calculate sample period of a timeserie.
+
+   >>> # Create timeserie
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+   >>> # Use the function to calculate sample period.
+   >>> ivn.calculate_sampling_period(timestamps)
+   0.001000000000000334
+
+
+.. py:function:: calculate_sampling_rate(timestamps)
+
+   Calculate sampling rate from an array of timestamps
+
+   :param timestamps: One dimensional array with timestamps.
+   :type timestamps: numpy.ndarray
+
+   :returns: **sampling_rate** -- Sampling rate.
+   :rtype: float
+
+   .. rubric:: Examples
+
+   Calculate sample rate of a timeserie.
+
+   >>> # Create timeserie
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+   >>> # Use the function to calculate sample rate.
+   >>> ivn.calculate_sampling_rate(timestamps)
+   1000.0
+
+
+.. py:function:: peh(contvar, evt, lower_lim, higher_lim, return_DataFrame=False)
+
+   Make peri-event histograms
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+               Dict values can be either one dimensional numpy arrays or lists of floats.
+   :type evt: one-dimensional numpy.ndarray, list or dict
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: int or float
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: int or float
+
+   :returns: **peh** -- Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with event names, trial number and peri-event time.
+   :rtype: pandas.DataFrame
+
+   .. rubric:: Examples
+
+   Create event and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 2, burst_duration = 0.5, burst_amplitude=1)
+   >>> signal2 = ivn.generate_signal(300, burst, 0.5, burst_duration = 2, burst_amplitude=1.5, seed = 21)
+   >>> signal3 = ivn.generate_signal(300, burst, 0.2, burst_duration = 3, burst_amplitude=1.5, seed = 10)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Peri-event histograms for a single variable and a single event (with multiple trials).
+
+   >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5) # histograms from 5 seconds before to 5 seconds after each trial
+   >>> type(hist)
+   ivneuro.continuous.PeriEventHistogram
+   >>> hist
+                                   Signal 2Hz
+   Event_name Event_number Time
+   Event      1            -5.000    0.308629
+                           -4.999    0.383986
+                           -4.998    0.337540
+                           -4.997    0.301379
+                           -4.996    0.396404
+                                      ...
+              9             4.996    1.773434
+                            4.997    1.768014
+                            4.998    1.742938
+                            4.999    1.684667
+                            5.000    1.573737
+   [90009 rows x 1 columns]
+
+   Return a pandas.DataFrame instead of a ivneuro.continuous.PeriEventHistogram.
+
+   >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5, return_DataFrame = True) # histograms from 5 seconds before to 5 seconds after each trial
+   >>> type(hist)
+   pandas.core.frame.DataFrame
+
+   Peri-event histogram for multiple variables and multiple events (with multiple trials each).
+
+   >>> hist = ivn.peh(signals, events, lower_lim = -3, higher_lim = 3) # histograms from 3 seconds before to 3 seconds after each trial
+   >>> hist.variable_names
+   ['Signal 2Hz', 'Signal 0.5Hz', 'Signal 0.2Hz']
+   >>> hist.event_names
+   ['control', 'burst']
+   >>> hist.calculate_means()
+                      Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz
+   Event_name Time
+   burst      -3.000   -0.323144      0.421450      0.436888
+              -2.999   -0.234888      0.370375      0.440265
+              -2.998   -0.232368      0.398991      0.406327
+              -2.997   -0.233245      0.368178      0.381116
+              -2.996   -0.223524      0.319660      0.367928
+                         ...           ...           ...
+   control     2.996    0.245362      0.387958      0.362177
+               2.997    0.270217      0.431107      0.326198
+               2.998    0.263590      0.420351      0.303861
+               2.999    0.335115      0.444825      0.323329
+               3.000    0.361686      0.388019      0.330680
+   [12002 rows x 3 columns]
+
+
+
+
+.. py:class:: PeriEventHistogram(*args, **kwargs)
+
+   Bases: :py:obj:`pandas.DataFrame`
+
+   Create a PeriEventHistogram object.
+
+   PeriEventHistogram class inherits from pandas.DataFrame and adds functionalities for easily extract information from the data and plot it.
+
+   :param data: Multi-index pandas.DataFrame as returned by peh() function, with event names, event trial number and peri-event time as index, continuous variables as columns and values as data.
+   :type data: pandas.DataFrame
+
+   .. attribute:: variable_names
+
+      Names of each continuous variable.
+
+      :type: list
+
+   .. attribute:: event_names
+
+      Names of each reference event.
+
+      :type: list
+
+   .. attribute:: timestamps
+
+      Timestamps of the peri-event histogram.
+
+      :type: list
+
+   .. method:: slice_time(new_limits):
+
+
+      Slice timestamps.
+
+      :param new_limits: New lowest and highest limits of time.
+      :type new_limits: tuple
+      :param Returns: New object with sliced timestamps
+      :type Returns: PeriEventHistogram
+
+
+   slice_events(event_list):
+
+       Slice events.
+
+       Parameters
+       ----------
+       event_list: list
+           Event names to slice from the data.
+
+       Returns: PeriEventHistogram
+           New object with sliced events.
+
+   calculate_means():
+
+       Calculate means across trials of the same event for each variable, event name and timestamp.
+
+   Returns: pandas.DataFrame
+       Mean across trials of the same event of the peri-event histograms. Multi-index pandas.DataFrame with event names and peri-event time as index,
+       continuous variable names as columns and mean variable values as data.
+
+   plot(aspect=1, cont_names = None, evt_names = None, sharey='all'):
+
+       Plot peri-event histograms, with each variable in a column and each event name in a row.
+
+       Parameters
+       ----------
+       aspect : float, optional
+           The y/x ratio of the axes aspect. The default is 1.
+
+       cont_names: list or None, optional
+           Subset of continuous variables names to plot. If None, all variables are ploted. Default is None.
+
+       evt_names: list or None, optional
+           Subset of events to plot. If None, all events are ploted. Default is None.
+
+       sharey: bool or {'none', 'all', 'row', 'col'}, optional
+           Parameter of matplotlib.pyplot.subplots() to control sharing of properties among y axis. Refer to matplotlib.pyplot.subplots in matplotlib manual for more information.
+           True or 'all': x- or y-axis will be shared among all subplots.
+           False or 'none': each subplot x- or y-axis will be independent.
+           'row': each subplot row will share an x- or y-axis.
+           'col': each subplot column will share an x- or y-axis.
+           The default is 'all'.
+
+       Returns
+       -------
+       None.
+
+
+   .. py:method:: _set_variable_names()
+
+
+   .. py:method:: _set_event_names()
+
+
+   .. py:method:: _set_timestamps()
+
+
+   .. py:method:: slice_time(new_limits)
+
+
+   .. py:method:: slice_events(event_list)
+
+
+   .. py:method:: calculate_means()
+
+
+   .. py:method:: plot(aspect=1, cont_names=None, evt_names=None, sharey='all')
+
+
+
+.. py:function:: peri_event_spectogram(contvar, evt, lower_lim, higher_lim, lower_freq=0, higher_freq=500, sample_subsamples=None, return_DataFrame=False, sampling_rate=None, scaling='spectrum', nperseg=500, noverlap=400, nfft=2000)
+
+   Calculate peri-event spectograms.
+
+   The algorithm is based on the spectogram() function of the signal processing module of the scipyi package (scipy.signal.spectogram()), and is optimized to calculate peri-event spectograms from multiple continuous variables and/or multiple events,
+   with multiple trials of each event.
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+               Dict values can be either one dimensional numpy arrays or lists of floats.
+   :type evt: one-dimensional numpy.ndarray, list or dict
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: int or float
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: int or float
+   :param lower_freq: The lowest frequency to include in the spectogram. The default is 0.
+   :type lower_freq: int or float, optional
+   :param higher_freq: The highest freq to include in the spectogram. The default is 500.
+   :type higher_freq: int or float, optional
+   :param sample_subsamples: When a dict, key must be sample names and values must be lists of subsample names, e.g.: {'sample_A':['subsample_A1','subsample_A2'...'subsample_An'], 'sample_B':['subsample_B1','subsample_B2'...'subsample_Bn']...}.
+                             Peri-event spectograms will be averaged across subsamples of the same sample, per each time and trial of each event, and the Variable name will be the sample name, intead of the column name of contvar.
+                             It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+                             If None, each column of contvar is treated as an independent sample, and therefore the result contains peri-event spectograms of every contvar column. The default is None.
+   :type sample_subsamples: dict or None, optional
+   :param return_DataFrame: If True, a pandas.DataFrame is returnes. If false, a PeriEventHistogram object is returned. The default is False.
+   :type return_DataFrame: Boolean, optional
+   :param sampling_rate: Sampling rate of the continuous value. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar's index. The default is None.
+   :type sampling_rate: int, float or None, optional
+   :param scaling: The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 'spectrum'.
+   :type scaling: str, optional
+   :param nperseg: The nperseg parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 500.
+   :type nperseg: int, optional
+   :param noverlap: The noverlap parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 400.
+   :type noverlap: int, optional
+   :param nfft: The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.
+   :type nfft: int, optional
+
+   :raises TypeError: If evt type is neither np.ndarray, list, dict.
+
+   :returns: **pes** -- If return_DataFrame == True, multi-index pandas.DataFrame with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+             If return_DataFrame == False, PeriEventSpectogram object with the already described pandas.DataFrame as data, and normalization = 'None'.
+   :rtype: pandas.DataFrame or PeriEventSpectogram
+
+   .. rubric:: Examples
+
+   Create events and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Peri-event spectograms for a single variable and a single event (with multiple trials).
+
+   >>> # Calculate peri-event spectogram from 10 sec before to 10 seconds after each event
+   >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10)
+   >>> type(pes)
+   ivneuro.spectograms.PeriEventSpectogram
+   >>> pes.data
+                                                   0.0    ...         500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                         -9.9   0.000142  ...  9.831598e-08
+                                         -9.8   0.020257  ...  2.587770e-06
+                                         -9.7   0.005431  ...  5.538603e-06
+                                         -9.6   0.002156  ...  5.956565e-06
+                                                     ...  ...           ...
+                            9             9.6   0.002953  ...  4.089984e-06
+                                          9.7   0.009216  ...  1.163104e-05
+                                          9.8   0.001603  ...  5.611661e-06
+                                          9.9   0.000025  ...  9.778874e-07
+                                          10.0  0.002685  ...  1.019278e-06
+   [1809 rows x 1001 columns]
+
+   Return a pandas.DataFrame instead of a ivneuro.spectograms.PeriEventSpectogram.
+
+   >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10, return_DataFrame = True)
+   >>> type(pes)
+   pandas.core.frame.DataFrame
+   >>> pes
+                                                   0.0    ...         500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                         -9.9   0.000142  ...  9.831598e-08
+                                         -9.8   0.020257  ...  2.587770e-06
+                                         -9.7   0.005431  ...  5.538603e-06
+                                         -9.6   0.002156  ...  5.956565e-06
+                                                     ...  ...           ...
+                            9             9.6   0.002953  ...  4.089984e-06
+                                          9.7   0.009216  ...  1.163104e-05
+                                          9.8   0.001603  ...  5.611661e-06
+                                          9.9   0.000025  ...  9.778874e-07
+                                          10.0  0.002685  ...  1.019278e-06
+   [1809 rows x 1001 columns]
+
+
+   Peri-event spectogram for 2 events and 3 signals, set frequency limits.
+
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, lower_freq = 30, higher_freq=150)
+   >>> pes.event_names
+   ['burst', 'control']
+   >>> pes.variable_names
+   ['Signal 30Hz', 'Signal 32Hz', 'Signal 80Hz']
+   >>> pes.frequencies[0], pes.frequencies[-1]
+   (30.0, 150.0)
+
+
+   Set signal1 and signal2 as replicates of sample1, and signal3 as sample3.
+
+   >>> # Make dictionary to group replicates of each sample
+   >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 32Hz'], 'sample2':['Signal 80Hz']}
+   >>> # Calculate peri-event spectogram
+   >>> pes = ivneuro.peri_event_spectogram(signals, events, -10, 10, higher_freq=100, sample_subsamples = sample_subsamples)
+   >>> # Print variables
+   >>> pes.variable_names
+   ['sample1', 'sample2']
+
+
+
+
+.. py:function:: normalize_pes(pes, baseline=None, method='Condition_average')
+
+   Normalize peri-event-histogram using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.
+
+   While using decibels or logarithmic scale instead of power (V**2) can helph to displaying spectograms, usualy this is not enough to visualyze variations in both low and high frequencies.
+   Normalizing the data to a baseline is a simple and straingforward way to visualyze variation in all frequencies at the same scale.
+
+   :param pes: Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type pes: pandas.DataFrame
+   :param baseline: lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.
+   :type baseline: tuple, optional
+   :param method: Method used to nromalize.
+                  "Condition_average": Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+                  "Condition_specific": Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+                  "Trial_specific": Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+                  The default is 'Condition_average'.
+   :type method: str, optional
+
+   :raises TypeError: If baseline is neither a tuple or None.
+   :raises NameError: If method is neither "Condition_average", "Condition_specific" or "Trial_specific".
+
+   :returns: **normalized_df** -- DataFrame with normalized data.
+   :rtype: pandas.DataFrame
+
+   .. rubric:: Examples
+
+   Create events and signals, and make peri-event spectograms DataFrame.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, return_DataFrame = True)
+
+   Use function to normalize.
+
+   >>> ivn.normalize_pes(pes)
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.253770  ... -0.979913
+                                         -9.9  -0.954578  ... -0.972753
+                                         -9.8   5.476162  ... -0.282843
+                                         -9.7   0.736362  ...  0.534932
+                                         -9.6  -0.310721  ...  0.650763
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.258766  ...  0.130080
+                                          9.7  -0.689950  ... -0.864958
+                                          9.8  -0.795989  ... -0.800983
+                                          9.9  -0.800038  ...  0.999065
+                                          10.0 -0.859353  ...  4.566640
+   [10854 rows x 1001 columns]
+
+   Normalize to a baseline.
+
+   >>> ivn.normalize_pes(pes, baseline = (-10,-5))
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.284930  ... -0.980264
+                                         -9.9  -0.953449  ... -0.973230
+                                         -9.8   5.637114  ... -0.295378
+                                         -9.7   0.779516  ...  0.508103
+                                         -9.6  -0.293591  ...  0.621910
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.240397  ...  0.110194
+                                          9.7  -0.682266  ... -0.867334
+                                          9.8  -0.790933  ... -0.804485
+                                          9.9  -0.795083  ...  0.963888
+                                          10.0 -0.855867  ...  4.468686
+   [10854 rows x 1001 columns]
+
+
+   Normalize using "Trial_specific" method.
+
+   >>> ivn.normalize_pes(pes, method = "Trial_specific")
+                                                   0.0    ...     500.0
+   Variable_name Event_name Event_number Time             ...
+   Signal 30Hz   burst      1            -10.0  0.322110  ... -0.976902
+                                         -9.9  -0.952102  ... -0.968668
+                                         -9.8   5.829160  ... -0.175315
+                                         -9.7   0.831006  ...  0.765074
+                                         -9.6  -0.273151  ...  0.898273
+                                                     ...  ...       ...
+   Signal 80Hz   control    9             9.6  -0.211468  ...  0.246262
+                                          9.7  -0.670165  ... -0.851075
+                                          9.8  -0.782971  ... -0.780522
+                                          9.9  -0.787279  ...  1.204586
+                                          10.0 -0.850378  ...  5.138939
+   [10854 rows x 1001 columns]
+
+
+
+
+.. py:function:: plot_pes(pes, zero_centered=True, aspect=1)
+
+   Plot peri-event spectograms, with each variable in a column and each event name in a row.
+
+   :param pes: Multi-index pandas.DataFrame as returned by peri_event_spectogram() nor normalize_pes() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type pes: pandas.DataFrame
+   :param zero_centered: If True, data is centered to zero. The default is True.
+   :type zero_centered: boolean, optional
+   :param aspect: The y/x ratio of the axes aspect. The default is 1.
+   :type aspect: float, optional
+
+   :rtype: None.
+
+   .. rubric:: Examples
+
+   Create events and signals, and make peri-event spectograms DataFrame.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+   >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+   >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+   >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, higher_freq=90, return_DataFrame = True)
+
+   Use function to plot peri-event spectogram.
+
+   >>> ivn.plot_pes(pes)
+
+   Non zero centered.
+
+   >>> ivn.plot_pes(pes, zero_centered= False)
+
+
+.. py:class:: PeriEventSpectogram(data, norm)
+
+   Create a PeriEventHistogram object.
+
+
+   :param data: Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+   :type data: pandas.DataFrame
+   :param norm: Normalization state of the data, it can be "None", "Condition_average", "Condition_specific" or "Trial_specific".
+   :type norm: str
+
+   .. attribute:: data
+
+      Multi-index pandas.DataFrame with peri-event spectogram data, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.
+
+      :type: pandas.DataFrame
+
+   .. attribute:: variable_names
+
+      Names of each original continuous variable used to make the spectograms.
+
+      :type: list
+
+   .. attribute:: event_names
+
+      Names of each reference event.
+
+      :type: list
+
+   .. attribute:: timestamps
+
+      Timestamps of the peri-event spectogram.
+
+      :type: list
+
+   .. attribute:: frequencies
+
+      Frequencies included in the spectogram.
+
+      :type: list
+
+   .. attribute:: normalization
+
+
+
+      :type: normalization state of the data.
+
+   .. method:: normalize():
+
+      Normalize data using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.
+
+      :param baseline: lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.
+      :type baseline: tuple, optional
+      :param method: Method used to nromalize.
+                     "Condition_average": Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.
+                     "Condition_specific": Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.
+                     "Trial_specific": Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.
+                     The default is 'Condition_average'.
+      :type method: str, optional
+      :param inplace: If True, modifies the current object. If False, returns a new object with normalized data. The default is False.
+      :type inplace: bolean, optional
+
+      :raises TypeError: If baseline is neither a tuple or None.
+      :raises NameError: If method is neither "Condition_average", "Condition_specific" or "Trial_specific".
+      :raises ValueError: If normalization attribute is not "None", which indicates that data is already normalized.
+
+
+       Returns: PeriEventSpectogram
+           If inplace is False, returns a PeriEventSpectogram object with normalized data, and normalization attribute as the method argument passed.
+
+   slice_time(new_limits, inplace=False):
+
+       Slice timestamps.
+
+       Parameters
+       ----------
+       new_limits: tuple
+           New lowest and highest limits of time.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced timestamps
+
+   slice_frequencies(new_limits, inplace=False):
+
+       Slice frequencies.
+
+       Parameters
+       ----------
+       new_limits: tuple
+           Lowest and highest limits of the frequency.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced frequecies.
+
+   slice_events(event_list, inplace=False):
+
+       Slice events.
+
+       Parameters
+       ----------
+       event_list: list
+           Event names to slice from the data.
+       inplace: bolean, optional
+           If True, modifies the current object. If False, returns a new object with sliced data. The default is False.
+
+       Returns: PeriEventSpectogram
+           New object with sliced events.
+
+   calculate_means():
+
+       Calculate means across trials of the same event for each variable, event name and timestamp.
+
+   Returns: pandas.DataFrame
+       Mean across trials of the same event of the peri-event spectogram. Multi-index pandas.DataFrame with original continuous variable names,
+       event names and peri-event time as index, frequencies as columns and mean power values as data.
+
+   plot(zero_centered=None, aspect=1, variables = None, evt_names = None):
+
+       Plot peri-event spectograms, with each variable in a column and each event name in a row.
+
+       Parameters
+       ----------
+       zero_centered : boolean or None, optional
+           If True, colorscale is centered to zero. If None, colorscale is centered to zero if data is normalized (normalization attribute is either "Condition_average", "Condition_specific" or "Trial_specific"),
+           but it is not centered to zero if data is not normalized (normalization attribute is "None"). The default is None.
+
+       aspect : float, optional
+           The y/x ratio of the axes aspect. The default is 1.
+
+       variables: list or None, optional
+           Subset of variables names to plot. If None, all variables are ploted. Default is None.
+
+       evt_names: list or None, optional
+           Subset of events to plot. If None, all events are ploted. Default is None.
+
+       Returns
+       -------
+       None.
+
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: _set_variable_names()
+
+
+   .. py:method:: _set_event_names()
+
+
+   .. py:method:: _set_timestamps()
+
+
+   .. py:method:: _set_frequencies()
+
+
+   .. py:method:: normalize(baseline=None, method='Condition_average', inplace=False)
+
+
+   .. py:method:: slice_time(new_limits, inplace=False)
+
+
+   .. py:method:: slice_frequencies(new_limits, inplace=False)
+
+
+   .. py:method:: slice_events(event_list, inplace=False)
+
+
+   .. py:method:: calculate_means()
+
+
+   .. py:method:: plot(zero_centered=None, aspect=1, variables=None, evt_names=None)
+
+
+
+.. py:function:: delta_power_spectral(contvar, exp_interval, baseline, lowest_freq=0, highest_freq=500, sample_subsamples=None, sampling_rate=None, nfft=2000, scaling='spectrum')
+
+   Calculate the power spectral at a experimental time of interest (exp_interval), at a baseline interval (baseline), and the frequency-basis normalized difference betrween the experimental interval and the baseline.
+
+
+
+   This function is based on the periodogram function of scipy.signal.
+   exp_interval and baseline must be lists of slices the same lenght, when when the lists have more than one element each, the results are the averages across intervals (either power spectral at exp_interval, power spectral at baseline, or their normalized difference).
+   To normalize, it uses the formula: (Power(exp_interval) - Power(baseline)) / (Power(exp_interval) + Power(baseline)) for each frequency and trial (pair of elements in interval and baseline), where Power(exp_interval) is the power at the experimental interval and Power(baseline) is the power at the baseline.
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param exp_interval: List of slices corresponding to experimental intervals to calculate power.
+   :type exp_interval: list
+   :param baseline: List of slices corresponding to baseline intervals to calculate power.
+   :type baseline: list
+   :param lowest_freq: The lowest frequency to include in the power spectral. The default is 0.
+   :type lowest_freq: int or float, optional
+   :param highest_freq: The highest freq to include in the power spectral. The default is 500.
+   :type highest_freq: int or float, optional
+   :param sample_subsamples: When a dict, key must be sample names and values must be lists of subsample names, e.g.: {'sample_A':['subsample_A1','subsample_A2'...'subsample_An'], 'sample_B':['subsample_B1','subsample_B2'...'subsample_Bn']...}.
+                             Power spectrals and normalized delta power spectral will be averaged across subsamples of the same sample.
+                             It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+                             If None, each column of contvar is treated as an independent sample, and therefore the results contain spectrals of every contvar column. The default is None.
+   :type sample_subsamples: dict or None, optional
+   :param sampling_rate: Sampling rate of the continuous variables. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar's index. The default is None.
+   :type sampling_rate: int or float or None, optional
+   :param nfft: The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.
+   :type nfft: int, optional
+   :param scaling: The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 'spectrum'.
+   :type scaling: str, optional
+
+   :returns: * **power_exp_interval** (*pandas.DataFrame*) -- Power spectral for each variable (or sample if sample_subsamples != None), at the experimental interval. Variable names (or sample names) as columns and frequency as index.
+             * **power_baseline** (*pandas.DataFrame*) -- Power spectral for each variable (or sample if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as columns and frequency as index.
+             * **delta_power** (*pandas.DataFrame*) -- Normalized difference of power spectrals between experimental interval and baseline interval, for each variable (or sample if sample_subsamples != None). Variable names (or sample names) as columns and frequency as index.
+
+   .. rubric:: Examples
+
+   Create event, intervals and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> event = [*range(30,300, 30)] # Events
+   >>> # Make intervals
+   >>> exp_interval = ivn.make_intervals(event, 0, 2) # Experimental interval
+   >>> baseline = ivn.make_intervals(event, -6, -4) #Baseline interval
+   >>> # Create signals
+   >>> signal1 = ivn.generate_signal(300, event, 30, burst_amplitude=0.06, seed=15)
+   >>> signal2 = ivn.generate_signal(300, event, 30.2, burst_amplitude=0.13, seed = 30)
+   >>> signal3 = ivn.generate_signal(300, event, 80, burst_amplitude=0.05, seed = 50)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Calculate power spectral and delta power spectral between intervals with delta_power_spectral function.
+
+   >>> exp_ps, baseline_ps, delta_ps = ivn.delta_power_spectral(signals, exp_interval, baseline)
+   >>> delta_ps.head()
+        Signal 30Hz  Signal 30.2Hz  Signal 80Hz
+   0.0    -0.110932      -0.112460    -0.006010
+   0.5    -0.087769       0.009546     0.149461
+   1.0     0.180706       0.042875     0.142876
+   1.5    -0.167544      -0.215748     0.257452
+   2.0     0.108177      -0.357427     0.086913
+
+   Set signal1 and signal2 as replicates of sample1, and signal3 as sample2.
+
+   >>> # Make dictionary to group replicates of each sample
+   >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 30.2Hz'], 'sample2':['Signal 80Hz']}
+   >>> # Calculate coherence and delta coherence
+   >>> exp_ps, baseline_ps, delta_ps = ivn.delta_power_spectral(signals, exp_interval, baseline, sample_subsamples = sample_subsamples)
+   >>> delta_ps.head()
+         sample1   sample2
+   0.0 -0.111696 -0.006010
+   0.5 -0.039112  0.149461
+   1.0  0.111790  0.142876
+   1.5 -0.191646  0.257452
+   2.0 -0.124625  0.086913
+
+
+
+
+
+.. py:function:: delta_coherence(contvar, exp_interval, baseline, lowest_freq=0, highest_freq=500, sample_subsamples=None, sampling_rate=None, nperseg=500, noverlap=400, nfft=2000)
+
+   Calculate the coherence between 2 signals at a experimental interval of time of interest (exp_interval), at a baseline interval of time (baseline), and the difference betrween the spectral at the experimental interval and the baseline.
+
+
+
+   This function is based on the coherence function of scipy.signal, wich uses Welch's method.
+   exp_interval and baseline must be lists of slices of the same lenght, when when the lists have more than one element each, the results are the averages across intervals (either coherence at exp_interval, coherence at baseline, or their difference).
+   To calculate the difference of coherence between experimental interval and baseline, the function subtracts the coherence at baseline from the coherence at exp_interval, for each frequency and trial (pair of elements in interval and baseline).
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param exp_interval: List of slices corresponding to experimental intervals to calculate coherence.
+   :type exp_interval: list
+   :param baseline: List of slices corresponding to baseline intervals to calculate coherence.
+   :type baseline: list
+   :param lowest_freq: The lowest frequency to include in the coherence spectral. The default is 0.
+   :type lowest_freq: int or float, optional
+   :param highest_freq: The highest freq to include in the coherence spectral. The default is 500.
+   :type highest_freq: int or float, optional
+   :param sample_subsamples: When a dict, key must be sample names and values must be lists of subsample names, e.g.: {'sample_A':['subsample_A1','subsample_A2'...'subsample_An'], 'sample_B':['subsample_B1','subsample_B2'...'subsample_Bn']...}.
+                             Coherences and coeherence differences will be averaged across pairs of subsamples corresponding to the same samples pair.
+                             It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode).
+                             If None, each column of contvar is treated as an independent sample, and therefore the results contain coherences for every pair of contvar columns. The default is None.
+   :type sample_subsamples: dict or None, optional
+   :param sampling_rate: Sampling rate of the continuous variables, wich is used in signal.coherence() function of the scipy package. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar's index. The default is None.
+   :type sampling_rate: int or float or None, optional
+   :param nperseg: The nperseg parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 500.
+   :type nperseg: int, optional
+   :param noverlap: The noverlap parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 400.
+   :type noverlap: int, optional
+   :param nfft: The nfft parameter to enter to signal.coherence() function of the scipy package. Refer to scipy.signal.coherence in scipy manual for more information. The default is 2000.
+   :type nfft: int, optional
+
+   :returns: * **coherence_exp_interval** (*pandas.DataFrame*) -- Coherence for each pair of variables (or pair of samples if sample_subsamples != None), at the experimental interval. Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.
+             * **power_baseline** (*pandas.DataFrame*) -- Coherence for each pair of variables (or pair of samples if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.
+             * **delta_coherence** (*pandas.DataFrame*) -- Difference of coherence between experimental interval and baseline interval, for each pair of variables (or pair of samples if sample_subsamples != None). Variable names (or sample names) as 2-levels columns (one level for each member of the pair) and frequency as index.
+
+   .. rubric:: Examples
+
+   Create event, intervals and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> event = [*range(30,300, 30)] # Events
+   >>> # Make intervals
+   >>> exp_interval = ivn.make_intervals(event, 0, 2) # Experimental interval
+   >>> baseline = ivn.make_intervals(event, -6, -4) #Baseline interval
+   >>> # Create signals
+   >>> signal1 = ivn.generate_signal(300, event, 30, burst_amplitude=0.06, seed=15)
+   >>> signal2 = ivn.generate_signal(300, event, 30.2, burst_amplitude=0.13, seed = 30)
+   >>> signal3 = ivn.generate_signal(300, event, 80, burst_amplitude=0.05, seed = 50)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Calculate coherence and delta coherence between intervals with delta_coherence function.
+
+   >>> exp_coh, baseline_coh, delta_coh = ivn.delta_coherence(signals, exp_interval, baseline)
+   >>> delta_coh.head()
+         Signal 30Hz             Signal 30.2Hz
+       Signal 30.2Hz Signal 80Hz   Signal 80Hz
+   0.0     -0.079927   -0.024874      0.068144
+   0.5     -0.045909   -0.058171      0.043984
+   1.0     -0.019668   -0.081587      0.025753
+   1.5     -0.015086   -0.076264      0.023711
+   2.0     -0.016446   -0.059058      0.025952
+
+   Set signal1 and signal2 as replicates of sample1, and signal3 as sample2.
+
+   >>> # Make dictionary to group replicates of each sample
+   >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 30.2Hz'], 'sample2':['Signal 80Hz']}
+   >>> # Calculate coherence and delta coherence
+   >>> exp_coh, baseline_coh, delta_coh = ivn.delta_coherence(signals, exp_interval, baseline, sample_subsamples = sample_subsamples)
+   >>> delta_coh.head()
+         sample1
+         sample1   sample2
+   0.0 -0.079927  0.021635
+   0.5 -0.045909 -0.007093
+   1.0 -0.019668 -0.027917
+   1.5 -0.015086 -0.026276
+   2.0 -0.016446 -0.016553
+
+
+
+
+.. py:function:: generate_signal(duration, burst_timestamps, burst_frequency, burst_duration=2, burst_amplitude=0.1, sampling_frequency=1000, seed=40)
+
+   Generate a signal with pink noise and increases in power (bursts) at a specified frequency.
+
+   :param duration: Duration of the signal in seconds.
+   :type duration: int or float
+   :param burst_timestamps: Timestamps at wich the increases in power must occur.
+   :type burst_timestamps: list of floats
+   :param burst_frequency: Frequency at wich the signal displays increases in power.
+   :type burst_frequency: int or float
+   :param burst_duration: Duration (in seconds) of high power burst. The default is 2.
+   :type burst_duration: int or float, optional
+   :param burst_amplitude: Amplitud of the signal used to create the increases in power. The default is 0.1.
+   :type burst_amplitude: int or float, optional
+   :param sampling_frequency: Sampling frequency. The default is 1000.
+   :type sampling_frequency: int, optional
+   :param seed = int:
+   :param optional:
+   :param Value for np.random.seed to generate pink noise. The default is 40.:
+
+   :returns: **signal** -- Timestamps as index and signal values as values.
+   :rtype: pandas DataFrame
+
+

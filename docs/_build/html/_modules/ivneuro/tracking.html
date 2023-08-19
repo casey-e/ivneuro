@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.tracking &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.tracking</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.tracking</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A module with functions for processing positions data based on xy coordinates.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+            
+  
+<div class="viewcode-block" id="scale_centroids"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.scale_centroids">[docs]</a><span class="k">def</span> <span class="nf">scale_centroids</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">,</span><span class="n">y_dim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scale centroids to match the real values in appropiate scale. It assumes position at lower and higher limits of each dimension have been recorded.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    centroids : numpy.ndarray of shape (2 x n_timestamps)</span>
+<span class="sd">        Values of X_centroid and Y_centroid to be scaled.</span>
+<span class="sd">    x_dim : float</span>
+<span class="sd">        Value from end to end of X coordinate.</span>
+<span class="sd">    y_dim : float</span>
+<span class="sd">        Value from end to end of Y coordinate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray with scaled values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="n">centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">x_dist</span><span class="o">=</span><span class="n">x_max</span><span class="o">-</span><span class="n">x_min</span>
+    <span class="n">y_dist</span><span class="o">=</span><span class="n">y_max</span><span class="o">-</span><span class="n">y_min</span>
+      
+    <span class="n">scaled_dif</span><span class="o">=</span><span class="p">(</span><span class="n">x_dist</span><span class="o">/</span><span class="n">y_dist</span> <span class="o">-</span> <span class="n">x_dim</span><span class="o">/</span><span class="n">y_dim</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x_dim</span><span class="o">/</span><span class="n">y_dim</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">scaled_dif</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Warning: the observed and provided x/y ratios have a difference of above 10%, consider switching the order of X and Y dimensions or cleaning centroids data and scale again&#39;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Difference between observed and provided x/y ratios:&#39;</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">scaled_dif</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">)</span>
+    
+    <span class="n">x_multiplying_factor</span><span class="o">=</span><span class="n">x_dim</span><span class="o">/</span><span class="n">x_dist</span>
+    <span class="n">y_multiplying_factor</span><span class="o">=</span><span class="n">y_dim</span><span class="o">/</span><span class="n">y_dist</span>
+    <span class="n">min_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_min</span><span class="p">,</span><span class="n">y_min</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">multiplying_factors</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_multiplying_factor</span><span class="p">,</span><span class="n">y_multiplying_factor</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="n">centroids</span><span class="o">-</span><span class="n">min_values</span><span class="p">)</span><span class="o">*</span><span class="n">multiplying_factors</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calculate_speed"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.calculate_speed">[docs]</a><span class="k">def</span> <span class="nf">calculate_speed</span><span class="p">(</span><span class="n">X_values</span><span class="p">,</span> <span class="n">Y_values</span><span class="p">,</span> <span class="n">timestamps</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate scalar speed through the following steps:</span>
+<span class="sd">    1. Calculate dtime, dX=PosX[T-deltaT]-posX[T] and dY=PosY[T-deltaT]-posY[T]</span>
+<span class="sd">    2. Smooth dX and dY using a Gaussian filter. Note: by applying the Gaussian filter to dX and dY instead of the speed</span>
+<span class="sd">    avoids short movements or random noie of the camera  to propagate to the speed calculus, leaving only changes in position caused </span>
+<span class="sd">    by displacement</span>
+<span class="sd">    3. Calculate scalar speed: sqrt(dX**2+dY**2) / dT</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X_values : NUMPY ARRAY</span>
+<span class="sd">        Positions in X coordinate. Must have the same lenght than Y_values and timestamps</span>
+<span class="sd">    Y_values :  NUMPY ARRAY</span>
+<span class="sd">        Positions in Y coordinate. Must have the same lenght than X_values and timestamps</span>
+<span class="sd">    timestamps : NUMPY ARRAY</span>
+<span class="sd">        Timestamps for every position. Must have the same lenght than X_values and Y_values</span>
+<span class="sd">    smooth : Float, optional</span>
+<span class="sd">        Defines the window of time a 2 x smooth and the width of the  Gaussian kernel as 1 x smooth,</span>
+<span class="sd">        for the Gaussian filter. The default is 0, in which case the Gaussian filter is not appplied.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    speed: numpy.ndarray</span>
+<span class="sd">        Values of scalar speed</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#Evaluate if X_values, Y_values and timestamps ahve the same lenght, raise error if not</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_values</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">Y_values</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_values</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">timestamps</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span> <span class="p">(</span><span class="s1">&#39;X_values, Y_values and timestamps must have the same lenght&#39;</span><span class="p">)</span>
+    <span class="c1">#Evaluate if X_values, Y_values and timestamps are of type np.array, raise error if not</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">X_values</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">Y_values</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span> <span class="p">(</span><span class="s1">&#39;X_values, Y_values and timestamps must be of type numpy.ndarray&#39;</span><span class="p">)</span>
+    <span class="c1">#Evaluate if smooth is of type int or float, raise error if not</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">smooth</span><span class="p">)</span><span class="o">!=</span> <span class="nb">float</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">smooth</span><span class="p">)</span><span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;smooth must be integer or float&#39;</span><span class="p">)</span>
+    
+    <span class="c1">#Calculate nstantaneus change in time</span>
+    <span class="n">dT</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">timestamps</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">timestamps</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">dT</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1">#Calculate average dif time, which will be used for the smoothing process</span>
+    <span class="n">avg_dT</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dT</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1">#Calculate the number of rows to use a std in the gaussian filter, by dividing the smooth time provided by the average delta time</span>
+    <span class="n">smooth2</span><span class="o">=</span><span class="n">smooth</span><span class="o">/</span><span class="n">avg_dT</span>
+    <span class="c1">#Calculate the differential X and Y, by substracting each value to the next value (using shift)   </span>
+    <span class="n">dX</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">X_values</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">X_values</span>
+    <span class="n">dX</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="c1">#last value is wrong, because np.roll put the last value at firt position</span>
+    <span class="n">dY</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Y_values</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">Y_values</span>
+    <span class="n">dY</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="c1">#last value is wrong, because np.roll put the last value at firt position</span>
+    <span class="k">if</span> <span class="n">smooth2</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>  <span class="c1"># Only apply smoothing if smooth2 is different from 0  </span>
+        <span class="c1"># if smooth2 is lower than 1, the use smooth2=1; otherwise, round it and transform it to integer</span>
+        <span class="k">if</span> <span class="n">smooth2</span> <span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">smooth2</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">smooth2</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">smooth2</span><span class="p">))</span>
+        <span class="c1">#Apply gaussian filter to dX and dY</span>
+        <span class="n">dX</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dX</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">smooth2</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">win_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="n">smooth2</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">dY</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dY</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">smooth2</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">win_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">std</span><span class="o">=</span><span class="n">smooth2</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">dX</span><span class="o">=</span><span class="n">dX</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">dY</span><span class="o">=</span><span class="n">dY</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1">#Use Pitagoras to calculate the differential position (cat2+cat2=hyp2)</span>
+    <span class="n">dPos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dX</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dY</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="c1">#Calculate speed, dividing dPos by dT</span>
+    <span class="n">speed</span><span class="o">=</span><span class="n">dPos</span><span class="o">/</span><span class="n">dT</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="position_of_event"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.position_of_event">[docs]</a><span class="k">def</span> <span class="nf">position_of_event</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">timestamps</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate the most likelly position at with an event occurs, or get all the positions where that event occurs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">        All positions in x axis. Must be of the same lenght than y_values and timestamps</span>
+<span class="sd">    y_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">       All positions in y axis. Must be of the same lenght than x_values and timestamps</span>
+<span class="sd">    timestamps : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">        All timestamps. Must be of the same lenght than x_values and y_values.</span>
+<span class="sd">    events : one dimensional numpy.array or list of floats</span>
+<span class="sd">        Timestamps of the event.</span>
+<span class="sd">    estimator : function, optional</span>
+<span class="sd">        Function to be used to estimate the most likely position of the event. The default is np.median.</span>
+<span class="sd">    </span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If x_values, y_values or timestamps is not np.ndarray.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If x_values lenght, y_values lenght and timestamps lenght are not the same.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple </span>
+<span class="sd">        Most likely position (x, y) if estimator is not None, or all the positions of the event (np.array([x])), np.array([y]) if estimator is None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+   
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">timestamps</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span> <span class="p">(</span><span class="s1">&#39;x_values, y_values and timestamps must have the same lenght&#39;</span><span class="p">)</span>
+     <span class="c1">#Evaluate if x_values, y_values and timestamps are of type np.array, raise error if not</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span> <span class="p">(</span><span class="s1">&#39;x_values, y_values and timestamps must be of type numpy.ndarray&#39;</span><span class="p">)</span>
+    
+    <span class="n">indexes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">timestamps</span><span class="p">,</span> <span class="n">events</span><span class="p">)</span>
+    <span class="n">positions_x</span><span class="o">=</span><span class="n">x_values</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>
+    <span class="n">positions_y</span><span class="o">=</span><span class="n">y_values</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">estimator</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">positions_x</span><span class="p">,</span> <span class="n">positions_y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">estimator</span><span class="p">(</span><span class="n">positions_x</span><span class="p">),</span> <span class="n">estimator</span><span class="p">(</span><span class="n">positions_y</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="distances_to_position"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.distances_to_position">[docs]</a><span class="k">def</span> <span class="nf">distances_to_position</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a set of x and y positions, calculate the distance to a specific position at each row.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">        X_centroid positions at each timestamp. Must be of the same lenght than y_values and timestamps</span>
+<span class="sd">    y_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">    position : tuple</span>
+<span class="sd">        Position (x, y) to calculate distance.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        One dimensional array with distances to position at every point.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x_values</span><span class="o">-</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">y_values</span><span class="o">-</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="EventPosition"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition">[docs]</a><span class="k">class</span> <span class="nc">EventPosition</span><span class="p">():</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Obtain the position of an event.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">        All positions in x axis. Must be of the same lenght than y_values and timestamps</span>
+<span class="sd">    y_values : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">       All positions in y axis. Must be of the same lenght than x_values and timestamps</span>
+<span class="sd">    timestamps : np.ndarray of shape (1 X n_timestamps)</span>
+<span class="sd">        All timestamps. Must be of the same lenght than x_values and y_values.</span>
+<span class="sd">    events : one dimensional numpy.array or list of floats</span>
+<span class="sd">        Timestamps of the event.</span>
+<span class="sd">    estimator : function, optional</span>
+<span class="sd">        Function to be used to estimate the most likely position of the event. The default is np.median.</span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If x_values, y_values or timestamps is not np.ndarray.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If x_values lenght, y_values lenght and timestamps lenght are not the same.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If estimator == None.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_values : np.ndarray</span>
+<span class="sd">        All positions in x axis.</span>
+<span class="sd">    y_values : np.ndarray</span>
+<span class="sd">        All positions in y axis.</span>
+<span class="sd">    timestamps: np.ndarray</span>
+<span class="sd">        All timestamps</span>
+<span class="sd">    events: np.ndarray</span>
+<span class="sd">        Timestamps of the event.</span>
+<span class="sd">    estimator: function</span>
+<span class="sd">        The function used to estimate the most likelly position.</span>
+<span class="sd">    estimated_position: tuple </span>
+<span class="sd">        Most likely position (x, y).</span>
+<span class="sd">    position_std: tuple</span>
+<span class="sd">        Standar deviation for the positions of th event (std(x), std(y))</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    distances_to_event()</span>
+<span class="sd">        Calculate the distance to the event estimated position at each timestamp</span>
+<span class="sd">    </span>
+<span class="sd">        Returns: np.ndarray</span>
+<span class="sd">            One dimensional array with distances.</span>
+<span class="sd">    </span>
+<span class="sd">    set_distances_to_event()</span>
+<span class="sd">        Set distances_to_event attribute using distances_to_event function</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">    </span>
+<span class="sd">    all_event_positions():</span>
+<span class="sd">        Get all the positions at wich the event occurrs.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: tuple</span>
+<span class="sd">            All the positions of the event (np.array([x])), np.array([y]).</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    get_event_position_std():</span>
+<span class="sd">        Calculate the standar deviation for the event position at x and y axis.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: tuple</span>
+<span class="sd">            Standar deviation in x and y (std(x), std(y))</span>
+<span class="sd">    </span>
+<span class="sd">    plot():</span>
+<span class="sd">        plot the all the trajectory, positions where the event occurred and the event estimated position</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: </span>
+<span class="sd">            None</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">timestamps</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">):</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span> <span class="o">=</span> <span class="n">x_values</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span> <span class="o">=</span> <span class="n">y_values</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span> <span class="o">=</span> <span class="n">timestamps</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position_of_event</span><span class="p">()</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">position_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_event_position_std</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="EventPosition.__str__"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.__str__">[docs]</a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Estimated position: (</span><span class="si">{}</span><span class="s1"> ± </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> ± </span><span class="si">{}</span><span class="s1">), (estimator ± std)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="bp">self</span><span class="o">.</span><span class="n">position_std</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>  <span class="bp">self</span><span class="o">.</span><span class="n">position_std</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+    
+    
+<div class="viewcode-block" id="EventPosition.__repr__"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;EventPosition(x_values=</span><span class="si">{}</span><span class="s1">, y_values = </span><span class="si">{}</span><span class="s1">, timestamps= </span><span class="si">{}</span><span class="s1">, events = </span><span class="si">{}</span><span class="s1">, estimator= </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">estimator</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="EventPosition._position_of_event"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition._position_of_event">[docs]</a>    <span class="k">def</span> <span class="nf">_position_of_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="p">(</span><span class="s1">&#39;Estimator cannot be None&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">position_of_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span><span class="p">)</span></div>
+         
+         
+<div class="viewcode-block" id="EventPosition.distances_to_event"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.distances_to_event">[docs]</a>    <span class="k">def</span> <span class="nf">distances_to_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">distances_to_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span><span class="p">)</span></div>
+         
+<div class="viewcode-block" id="EventPosition.set_distances_to_event"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.set_distances_to_event">[docs]</a>    <span class="k">def</span> <span class="nf">set_distances_to_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances_to_event</span> <span class="o">=</span> <span class="n">distances_to_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="EventPosition.all_event_positions"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.all_event_positions">[docs]</a>    <span class="k">def</span> <span class="nf">all_event_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">position_of_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="EventPosition.get_event_position_std"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.get_event_position_std">[docs]</a>    <span class="k">def</span> <span class="nf">get_event_position_std</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span><span class="o">=</span> <span class="n">position_of_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x_val</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span> <span class="n">y_val</span><span class="o">.</span><span class="n">std</span><span class="p">())</span></div>
+            
+            
+<div class="viewcode-block" id="EventPosition.plot"><a class="viewcode-back" href="../../autoapi/ivneuro/tracking/index.html#ivneuro.EventPosition.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            
+        <span class="c1"># Create positions for all events</span>
+        <span class="n">all_evt_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_event_positions</span><span class="p">()</span>
+            
+        <span class="c1"># Plot</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trajectory&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">all_evt_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">all_evt_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Event positions&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">estimated_position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Event estimated position&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Event positions&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

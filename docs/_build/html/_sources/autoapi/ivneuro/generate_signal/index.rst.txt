@@ -1,0 +1,48 @@
+:py:mod:`ivneuro.generate_signal`
+=================================
+
+.. py:module:: ivneuro.generate_signal
+
+.. autoapi-nested-parse::
+
+   Function to generate a signal, used for examples of other functions of the package.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.generate_signal.generate_signal
+
+
+
+.. py:function:: generate_signal(duration, burst_timestamps, burst_frequency, burst_duration=2, burst_amplitude=0.1, sampling_frequency=1000, seed=40)
+
+   Generate a signal with pink noise and increases in power (bursts) at a specified frequency.
+
+   :param duration: Duration of the signal in seconds.
+   :type duration: int or float
+   :param burst_timestamps: Timestamps at wich the increases in power must occur.
+   :type burst_timestamps: list of floats
+   :param burst_frequency: Frequency at wich the signal displays increases in power.
+   :type burst_frequency: int or float
+   :param burst_duration: Duration (in seconds) of high power burst. The default is 2.
+   :type burst_duration: int or float, optional
+   :param burst_amplitude: Amplitud of the signal used to create the increases in power. The default is 0.1.
+   :type burst_amplitude: int or float, optional
+   :param sampling_frequency: Sampling frequency. The default is 1000.
+   :type sampling_frequency: int, optional
+   :param seed = int:
+   :param optional:
+   :param Value for np.random.seed to generate pink noise. The default is 40.:
+
+   :returns: **signal** -- Timestamps as index and signal values as values.
+   :rtype: pandas DataFrame
+
+

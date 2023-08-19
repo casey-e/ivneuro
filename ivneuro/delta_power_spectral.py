@@ -51,6 +51,51 @@ def delta_power_spectral(contvar, exp_interval, baseline, lowest_freq = 0, highe
         Power spectral for each variable (or sample if sample_subsamples != None), at the baseline interval. Variable names (or sample names) as columns and frequency as index.
     delta_power: pandas.DataFrame
         Normalized difference of power spectrals between experimental interval and baseline interval, for each variable (or sample if sample_subsamples != None). Variable names (or sample names) as columns and frequency as index.
+    
+    Examples
+    --------
+    
+    Create event, intervals and signals.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> event = [*range(30,300, 30)] # Events
+    >>> # Make intervals
+    >>> exp_interval = ivn.make_intervals(event, 0, 2) # Experimental interval
+    >>> baseline = ivn.make_intervals(event, -6, -4) #Baseline interval
+    >>> # Create signals
+    >>> signal1 = ivn.generate_signal(300, event, 30, burst_amplitude=0.06, seed=15)
+    >>> signal2 = ivn.generate_signal(300, event, 30.2, burst_amplitude=0.13, seed = 30)
+    >>> signal3 = ivn.generate_signal(300, event, 80, burst_amplitude=0.05, seed = 50)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+    
+    Calculate power spectral and delta power spectral between intervals with delta_power_spectral function.
+    
+    >>> exp_ps, baseline_ps, delta_ps = ivn.delta_power_spectral(signals, exp_interval, baseline)
+    >>> delta_ps.head()
+         Signal 30Hz  Signal 30.2Hz  Signal 80Hz
+    0.0    -0.110932      -0.112460    -0.006010
+    0.5    -0.087769       0.009546     0.149461
+    1.0     0.180706       0.042875     0.142876
+    1.5    -0.167544      -0.215748     0.257452
+    2.0     0.108177      -0.357427     0.086913
+    
+    
+    Set signal1 and signal2 as replicates of sample1, and signal3 as sample2.
+    
+    >>> # Make dictionary to group replicates of each sample
+    >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 30.2Hz'], 'sample2':['Signal 80Hz']}
+    >>> # Calculate coherence and delta coherence
+    >>> exp_ps, baseline_ps, delta_ps = ivn.delta_power_spectral(signals, exp_interval, baseline, sample_subsamples = sample_subsamples)
+    >>> delta_ps.head()
+          sample1   sample2
+    0.0 -0.111696 -0.006010
+    0.5 -0.039112  0.149461
+    1.0  0.111790  0.142876
+    1.5 -0.191646  0.257452
+    2.0 -0.124625  0.086913
+    
+    
 
     """
     

@@ -78,30 +78,87 @@ def peri_event_spectogram (contvar, evt, lower_lim, higher_lim, lower_freq=0, hi
     Examples
     --------
     
-    >>> import ivneuro
-
-    >>> # Create events: burst contains the timestamps at wich the signal displays high power, control are just control timestamps
+    Create events and signals.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> # Create events: burst and control
     >>> burst = [*range(30,300, 30)]
     >>> control = [*range(45,300, 30)]
     >>> events = {'burst':burst,'control':control}
-
-    >>> # Generate a signal with pink noise and increases of power at 70Hz for 2 seconds at the timestamps corresponding to burst events
-    >>> signal = ivneuro.generate_signal(300, burst, 70)
-
-    >>> # Calculate peri-event spectograms
-    >>> pes = ivneuro.spectral.peri_event_spectogram(signal, events, -10, 10, higher_freq=150)
+    >>> # Generate signals
+    >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+    >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+    >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
     
-    >>> pes.timestamps[0], pes.timestamps[-1]
-    (-10.0, 10.0)
+    Peri-event spectograms for a single variable and a single event (with multiple trials).
     
+    >>> # Calculate peri-event spectogram from 10 sec before to 10 seconds after each event
+    >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10)
+    >>> type(pes)
+    ivneuro.spectograms.PeriEventSpectogram
+    >>> pes.data
+                                                    0.0    ...         500.0
+    Variable_name Event_name Event_number Time             ...              
+    Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                          -9.9   0.000142  ...  9.831598e-08
+                                          -9.8   0.020257  ...  2.587770e-06
+                                          -9.7   0.005431  ...  5.538603e-06
+                                          -9.6   0.002156  ...  5.956565e-06
+                                                      ...  ...           ...
+                             9             9.6   0.002953  ...  4.089984e-06
+                                           9.7   0.009216  ...  1.163104e-05
+                                           9.8   0.001603  ...  5.611661e-06
+                                           9.9   0.000025  ...  9.778874e-07
+                                           10.0  0.002685  ...  1.019278e-06                                    
+    [1809 rows x 1001 columns]
+    
+    
+    Return a pandas.DataFrame instead of a ivneuro.spectograms.PeriEventSpectogram.
+    
+    >>> pes = ivn.peri_event_spectogram(signal1, burst, -10, 10, return_DataFrame = True)
+    >>> type(pes)
+    pandas.core.frame.DataFrame
+    >>> pes
+                                                    0.0    ...         500.0
+    Variable_name Event_name Event_number Time             ...              
+    Signal 30Hz   Event      1            -10.0  0.003922  ...  7.248012e-08
+                                          -9.9   0.000142  ...  9.831598e-08
+                                          -9.8   0.020257  ...  2.587770e-06
+                                          -9.7   0.005431  ...  5.538603e-06
+                                          -9.6   0.002156  ...  5.956565e-06
+                                                      ...  ...           ...
+                             9             9.6   0.002953  ...  4.089984e-06
+                                           9.7   0.009216  ...  1.163104e-05
+                                           9.8   0.001603  ...  5.611661e-06
+                                           9.9   0.000025  ...  9.778874e-07
+                                           10.0  0.002685  ...  1.019278e-06                                      
+    [1809 rows x 1001 columns]
+    
+    
+    Peri-event spectogram for 2 events and 3 signals, set frequency limits.
+    
+    >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, lower_freq = 30, higher_freq=150)
     >>> pes.event_names
     ['burst', 'control']
-
-    >>> pes.data.shape
-    (3618, 301)
+    >>> pes.variable_names
+    ['Signal 30Hz', 'Signal 32Hz', 'Signal 80Hz']
+    >>> pes.frequencies[0], pes.frequencies[-1]
+    (30.0, 150.0)
     
-    >>> pes.calculate_means().shape
-    (402, 301)
+    
+    Set signal1 and signal2 as replicates of sample1, and signal3 as sample3.
+    
+    >>> # Make dictionary to group replicates of each sample
+    >>> sample_subsamples = {'sample1' : ['Signal 30Hz', 'Signal 32Hz'], 'sample2':['Signal 80Hz']}
+    >>> # Calculate peri-event spectogram
+    >>> pes = ivneuro.peri_event_spectogram(signals, events, -10, 10, higher_freq=100, sample_subsamples = sample_subsamples)    
+    >>> # Print variables
+    >>> pes.variable_names
+    ['sample1', 'sample2']
+    
+
     """
     
     
@@ -172,6 +229,82 @@ def normalize_pes(pes, baseline=None, method='Condition_average'):
     -------
     normalized_df : pandas.DataFrame
         DataFrame with normalized data.
+    
+    
+    Examples
+    --------
+    
+    Create events and signals, and make peri-event spectograms DataFrame.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> # Create events: burst and control
+    >>> burst = [*range(30,300, 30)]
+    >>> control = [*range(45,300, 30)]
+    >>> events = {'burst':burst,'control':control}
+    >>> # Generate signals
+    >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+    >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+    >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+    >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, return_DataFrame = True)
+    
+    Use function to normalize.
+    
+    >>> ivn.normalize_pes(pes)
+                                                    0.0    ...     500.0
+    Variable_name Event_name Event_number Time             ...          
+    Signal 30Hz   burst      1            -10.0  0.253770  ... -0.979913
+                                          -9.9  -0.954578  ... -0.972753
+                                          -9.8   5.476162  ... -0.282843
+                                          -9.7   0.736362  ...  0.534932
+                                          -9.6  -0.310721  ...  0.650763
+                                                      ...  ...       ...
+    Signal 80Hz   control    9             9.6  -0.258766  ...  0.130080
+                                           9.7  -0.689950  ... -0.864958
+                                           9.8  -0.795989  ... -0.800983
+                                           9.9  -0.800038  ...  0.999065
+                                           10.0 -0.859353  ...  4.566640
+    [10854 rows x 1001 columns]
+
+
+    Normalize to a baseline.
+    
+    >>> ivn.normalize_pes(pes, baseline = (-10,-5))
+                                                    0.0    ...     500.0
+    Variable_name Event_name Event_number Time             ...          
+    Signal 30Hz   burst      1            -10.0  0.284930  ... -0.980264
+                                          -9.9  -0.953449  ... -0.973230
+                                          -9.8   5.637114  ... -0.295378
+                                          -9.7   0.779516  ...  0.508103
+                                          -9.6  -0.293591  ...  0.621910
+                                                      ...  ...       ...
+    Signal 80Hz   control    9             9.6  -0.240397  ...  0.110194
+                                           9.7  -0.682266  ... -0.867334
+                                           9.8  -0.790933  ... -0.804485
+                                           9.9  -0.795083  ...  0.963888
+                                           10.0 -0.855867  ...  4.468686
+    [10854 rows x 1001 columns]  
+    
+    
+    Normalize using "Trial_specific" method.
+    
+    >>> ivn.normalize_pes(pes, method = "Trial_specific")
+                                                    0.0    ...     500.0
+    Variable_name Event_name Event_number Time             ...          
+    Signal 30Hz   burst      1            -10.0  0.322110  ... -0.976902
+                                          -9.9  -0.952102  ... -0.968668
+                                          -9.8   5.829160  ... -0.175315
+                                          -9.7   0.831006  ...  0.765074
+                                          -9.6  -0.273151  ...  0.898273
+                                                      ...  ...       ...
+    Signal 80Hz   control    9             9.6  -0.211468  ...  0.246262
+                                           9.7  -0.670165  ... -0.851075
+                                           9.8  -0.782971  ... -0.780522
+                                           9.9  -0.787279  ...  1.204586
+                                           10.0 -0.850378  ...  5.138939
+    [10854 rows x 1001 columns]
+    
 
     """
     
@@ -227,6 +360,32 @@ def plot_pes(pes, zero_centered=True, aspect=1):
     Returns
     -------
     None.
+    
+    Examples
+    --------
+    
+    Create events and signals, and make peri-event spectograms DataFrame.
+    
+    >>> import ivneuro as ivn
+    >>> import pandas as pd
+    >>> # Create events: burst and control
+    >>> burst = [*range(30,300, 30)]
+    >>> control = [*range(45,300, 30)]
+    >>> events = {'burst':burst,'control':control}
+    >>> # Generate signals
+    >>> signal1 = ivn.generate_signal(300, burst, 30, burst_amplitude=0.06)
+    >>> signal2 = ivn.generate_signal(300, burst, 32, burst_amplitude=0.13)
+    >>> signal3 = ivn.generate_signal(300, burst, 80, burst_amplitude=0.05)
+    >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+    >>> pes = ivn.peri_event_spectogram(signals, events, -10, 10, higher_freq=90, return_DataFrame = True)
+    
+    Use function to plot peri-event spectogram.
+    
+    >>> ivn.plot_pes(pes)
+    
+    Non zero centered.
+    
+    >>> ivn.plot_pes(pes, zero_centered= False)
 
     """
     

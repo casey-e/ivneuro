@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.nex.pull_nex_data &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.nex.pull_nex_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.nex.pull_nex_data</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A module with functions for extracting data from nex5 files.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">nexfile</span>
+
+<span class="n">reader</span> <span class="o">=</span> <span class="n">nexfile</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="n">useNumpy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="make_timestamps_Nex_cont"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.make_timestamps_Nex_cont">[docs]</a><span class="k">def</span> <span class="nf">make_timestamps_Nex_cont</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+    <span class="n">time_stamps</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;FragmentIndexes&#39;</span><span class="p">])):</span> <span class="c1">#iterate thorugh fragments</span>
+        <span class="n">first_ts</span><span class="o">=</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;FragmentTimestamps&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="c1"># get the value of the first timestamp of the fragment</span>
+        <span class="n">ts</span><span class="o">=</span><span class="p">[(</span><span class="n">first_ts</span><span class="o">+</span><span class="n">x</span><span class="o">*</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;SamplingRate&#39;</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;FragmentCounts&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])]</span>
+        <span class="n">time_stamps</span><span class="o">=</span><span class="n">time_stamps</span><span class="o">+</span><span class="n">ts</span> <span class="c1"># concatenate list of timestamps</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_stamps</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]))</span> <span class="c1"># evaluate that the number of timestaps is the same than the number of continuous values</span>
+    <span class="k">return</span> <span class="n">time_stamps</span></div>
+
+<div class="viewcode-block" id="pull_fp"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_fp">[docs]</a><span class="k">def</span> <span class="nf">pull_fp</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">FP_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    </span>
+<span class="sd">    It assumes that &quot;FP&quot; will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.</span>
+<span class="sd">    Therefore, restults of this function might be incorrect for files whose variable names have been modified.</span>
+<span class="sd">    It also assumes all field potential variables have the same timestamps and sample rate.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">        </span>
+<span class="sd">    FP_of_interest : list, optional</span>
+<span class="sd">        List of names of field potentials to extract. If None, the function returns None; if an empty list, all the field potentials are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    Dataframe with field potentials (in mV) in each column and timestaps as index.</span>
+<span class="sd">    </span>
+<span class="sd">    Sampling rate of local field potentials (float).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">FP_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">FP_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">FP_of_interest</span><span class="p">}</span>
+            <span class="n">first_fp</span><span class="o">=</span><span class="nb">next</span><span class="p">((</span><span class="n">variable</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">FP_of_interest</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]}</span>
+            <span class="n">first_fp</span><span class="o">=</span><span class="nb">next</span><span class="p">((</span><span class="n">variable</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]))</span>
+           
+        <span class="n">time_stamps</span><span class="o">=</span> <span class="n">make_timestamps_Nex_cont</span><span class="p">(</span><span class="n">first_fp</span><span class="p">)</span> <span class="c1"># Make timestamps using the firts field potential</span>
+       
+        <span class="n">sampling_rate</span><span class="o">=</span> <span class="n">first_fp</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;SamplingRate&#39;</span><span class="p">]</span> <span class="c1"># Get sampling rate</span>
+         
+        <span class="n">fp</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">time_stamps</span><span class="p">)</span> <span class="c1"># Make dataframe with signal from every channel (LFP in mV) and timestamps as index</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Round timestamps to 3 decimals</span>
+            
+    <span class="k">return</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sampling_rate</span></div>
+
+
+<div class="viewcode-block" id="pull_events"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_events">[docs]</a><span class="k">def</span> <span class="nf">pull_events</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">events_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Extract events from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    events_of_interest : list, optional</span>
+<span class="sd">        List of names of events to extract. If None, the function returns None; if an empty list, all the events are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dictionary with event names as keys and list of timestamps as values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">events_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">events_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">events_of_interest</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+       <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">events</span></div>
+
+
+<div class="viewcode-block" id="pull_continuous"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_continuous">[docs]</a><span class="k">def</span> <span class="nf">pull_continuous</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">continuous_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract all continuous variables, except for field potential variables, from a Nex5 file data previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    It assumes that &quot;FP&quot; will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.</span>
+<span class="sd">    Therefore, restults of this function might be incorrect for files whose variable names have been modified.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    continuous_of_interest : list, optional</span>
+<span class="sd">        List of names of continuous to extract. If None, the function returns None; if an empty list, all non-field potential continuous variables are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List of pandas DataFrame, each corresponding to a continuous variable values and timestaps as index.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">continuous_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">continuous</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">continuous_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">continuous</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;FragmentTimestamps&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">continuous_of_interest</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">continuous</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;FragmentTimestamps&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">continuous</span></div>
+
+<div class="viewcode-block" id="pull_neurons"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_neurons">[docs]</a><span class="k">def</span> <span class="nf">pull_neurons</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">neurons_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract neurons from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    neurons_of_interest : list, optional</span>
+<span class="sd">        List of names of events to extract. If None, the function returns None; if an empty list, all the neurons are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dictionary with neuron names as keys and list of timestamps as values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">neurons_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">neurons</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">neurons_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">neurons</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">neurons_of_interest</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+       <span class="n">neurons</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">neurons</span></div>
+
+<div class="viewcode-block" id="pull_markers"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_markers">[docs]</a><span class="k">def</span> <span class="nf">pull_markers</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">markers_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract markers from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    markers_of_interest : list, optional</span>
+<span class="sd">        List of names of markers to extract. If None, the function returns None; if an empty list, all the markers are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dictionary with markers names as keys and list of timestamps as values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">markers_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">markers</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">markers_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">markers_of_interest</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+       <span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span> <span class="k">for</span>  <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">markers</span></div>
+
+<div class="viewcode-block" id="pull_centroids"><a class="viewcode-back" href="../../../autoapi/ivneuro/nex/pull_nex_data/index.html#ivneuro.nex.pull_centroids">[docs]</a><span class="k">def</span> <span class="nf">pull_centroids</span><span class="p">(</span><span class="n">fileData</span><span class="p">,</span> <span class="n">centroids_of_interest</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    </span>
+<span class="sd">    It assumes that &quot;centroid&quot; (case insensitive) will be in the name of every centroid variable, which is true for Nex files whose original variables names have not been modified.</span>
+<span class="sd">    It also exclude field potential variables that contain the string &quot;FP&quot; in their names. Therefore, restults of this function might be incorrect for files whose variable names have been modified.</span>
+<span class="sd">    It also assumes that all centroids have the same timestamps.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fileData : dict</span>
+<span class="sd">        Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</span>
+<span class="sd">    centroids_of_interest : list, optional</span>
+<span class="sd">        List of names of centroids to extract. If None, the function returns None; if an empty list, all centroid variables are extracted. The default is [].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dataframe with centroids in each column and timestaps as index.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">centroids_of_interest</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">continuous</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">centroids_of_interest</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;FragmentTimestamps&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;centroid&#39;</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">and</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">continuous_of_interest</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]:</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;ContinuousValues&#39;</span><span class="p">]},</span> <span class="n">index</span><span class="o">=</span><span class="n">variable</span><span class="p">[</span><span class="s1">&#39;FragmentTimestamps&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">fileData</span><span class="p">[</span><span class="s1">&#39;Variables&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="s1">&#39;FP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;centroid&#39;</span> <span class="ow">in</span> <span class="n">variable</span><span class="p">[</span><span class="s1">&#39;Header&#39;</span><span class="p">][</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    
+    <span class="n">centroids</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">centroids</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

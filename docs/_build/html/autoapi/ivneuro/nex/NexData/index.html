@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.nex.NexData &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ivneuro.nex.nexfile" href="../nexfile/index.html" />
+    <link rel="prev" title="ivneuro.nex" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.NexData</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ivneuro/nex/NexData/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.nex.NexData">
+<span id="ivneuro-nex-nexdata"></span><h1><a class="reference internal" href="../index.html#ivneuro.nex.NexData" title="ivneuro.nex.NexData"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.NexData</span></code></a><a class="headerlink" href="#module-ivneuro.nex.NexData" title="Permalink to this heading"></a></h1>
+<p>A module with NexData class, wich puts together all the functions of pull_data subpackage and creates a
+NexData object, wich contains the extrated variables as attributes.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.NexData.NexData" title="ivneuro.nex.NexData.NexData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NexData</span></code></a></p></td>
+<td><p>Extract variables from a .Nex5 file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivneuro.nex.NexData.</span></span><span class="sig-name descname"><span class="pre">NexData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FP_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neurons_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markers_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_Nex_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData" title="Permalink to this definition"></a></dt>
+<dd><p>Extract variables from a .Nex5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – Complete path of the .Nex5 file to extract data from.</p></li>
+<li><p><strong>FP_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of field potentials to extract. If None, nothing is extracted; if an empty list, all the field potentials are extracted. The default is [].</p></li>
+<li><p><strong>events_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of events to extract. If None, nothing is extracted; if an empty list, all the events are extracted. The default is [].</p></li>
+<li><p><strong>continuous_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of continuous to extract. If None, nothing is extracted; if an empty list, all non-field potential continuous variables are extracted. The default is [].</p></li>
+<li><p><strong>neurons_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of events to extract. If None, nothing is extracted; if an empty list, all the neurons are extracted. The default is [].</p></li>
+<li><p><strong>markers_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of markers to extract. If None, nothing is extracted; if an empty list, all the markers are extracted. The default is [].</p></li>
+<li><p><strong>centroids_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of centroids to extract. If None, nothing is extracted; if an empty list, all centroid variables are extracted. The default is [].</p></li>
+<li><p><strong>clear_Nex_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, data atribute is set to None. Otherwise, result of reader.ReadNex5File(file) is stored in data atribute. The default is True.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.file_path">
+<span class="sig-name descname"><span class="pre">file_path</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.file_path" title="Permalink to this definition"></a></dt>
+<dd><p>File path of the .Nex5 file the data was extracted from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.FP">
+<span class="sig-name descname"><span class="pre">FP</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.FP" title="Permalink to this definition"></a></dt>
+<dd><p>Field potentials (in mV) in each column and timestaps as index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.FP_sampling_rate">
+<span class="sig-name descname"><span class="pre">FP_sampling_rate</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.FP_sampling_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Sampling rate of local field potentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.events">
+<span class="sig-name descname"><span class="pre">events</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.events" title="Permalink to this definition"></a></dt>
+<dd><p>Event names as keys and list of timestamps as values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.continuous">
+<span class="sig-name descname"><span class="pre">continuous</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.continuous" title="Permalink to this definition"></a></dt>
+<dd><p>Each DataFrame of the list contains a column with the continuous values and the timestamps as index,for every continuous variable (excluding field potentials).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of pandas.DataFrames</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.neurons">
+<span class="sig-name descname"><span class="pre">neurons</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.neurons" title="Permalink to this definition"></a></dt>
+<dd><p>Neuron names as keys and list of timestamps as values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.markers">
+<span class="sig-name descname"><span class="pre">markers</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.markers" title="Permalink to this definition"></a></dt>
+<dd><p>Markers names as keys and list of timestamps as values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.centroids">
+<span class="sig-name descname"><span class="pre">centroids</span></span><a class="headerlink" href="#ivneuro.nex.NexData.NexData.centroids" title="Permalink to this definition"></a></dt>
+<dd><p>Centroids in each column and timestaps as index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.clear_fileData">
+<span class="sig-name descname"><span class="pre">clear_fileData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData.clear_fileData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData.clear_fileData" title="Permalink to this definition"></a></dt>
+<dd><p>Set data atribute to None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_fp">
+<span class="sig-name descname"><span class="pre">_pull_fp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FP_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_fp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_fp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_events">
+<span class="sig-name descname"><span class="pre">_pull_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_events" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_continuous">
+<span class="sig-name descname"><span class="pre">_pull_continuous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">continuous_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_continuous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_continuous" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_neurons">
+<span class="sig-name descname"><span class="pre">_pull_neurons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neurons_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_neurons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_neurons" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_markers">
+<span class="sig-name descname"><span class="pre">_pull_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markers_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_markers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivneuro.nex.NexData.NexData._pull_centroids">
+<span class="sig-name descname"><span class="pre">_pull_centroids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centroids_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData._pull_centroids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.NexData.NexData._pull_centroids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">clear_fileData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/NexData.html#NexData.clear_fileData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ivneuro.nex" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../nexfile/index.html" class="btn btn-neutral float-right" title="ivneuro.nex.nexfile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+:py:mod:`ivneuro.continuous`
+============================
+
+.. py:module:: ivneuro.continuous
+
+.. autoapi-nested-parse::
+
+   User-facing functions for analysis of continuous variables, and PeriEventHistogram class.
+
+   Peri-event histograms analysis can be higly demanding, depending on the size and amount of continuous
+   variables and the amount of reference events and number of trials of each of event. PeriEventHistogram
+   class aims to facilitate processing, interpretation and visualization of peri-event histograms without
+   running the analysis again. It is a pandas DataFrame Subclass and is returned by default by
+   ivneuro.continuous.peh function.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.continuous.PeriEventHistogram
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.continuous.calculate_sampling_period
+   ivneuro.continuous.calculate_sampling_rate
+   ivneuro.continuous.peh_list
+   ivneuro.continuous.single_peh
+   ivneuro.continuous.peh
+
+
+
+.. py:function:: calculate_sampling_period(timestamps)
+
+   Calculate the sampling period from an array of timestamps
+
+   :param timestamps: One dimensional array with timestamps.
+   :type timestamps: numpy.ndarray
+
+   :returns: Sampling period.
+   :rtype: float
+
+   .. rubric:: Examples
+
+   Calculate sample period of a timeserie.
+
+   >>> # Create timeserie
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+   >>> # Use the function to calculate sample period.
+   >>> ivn.calculate_sampling_period(timestamps)
+   0.001000000000000334
+
+
+.. py:function:: calculate_sampling_rate(timestamps)
+
+   Calculate sampling rate from an array of timestamps
+
+   :param timestamps: One dimensional array with timestamps.
+   :type timestamps: numpy.ndarray
+
+   :returns: **sampling_rate** -- Sampling rate.
+   :rtype: float
+
+   .. rubric:: Examples
+
+   Calculate sample rate of a timeserie.
+
+   >>> # Create timeserie
+   >>> import ivneuro as ivn
+   >>> import numpy as np
+   >>> timestamps = np.arange(0, 100, 0.001) # Timeserie of period 0.001
+   >>> # Use the function to calculate sample rate.
+   >>> ivn.calculate_sampling_rate(timestamps)
+   1000.0
+
+
+.. py:function:: peh_list(contvar, evt, lower_lim, higher_lim)
+
+   Make list of peri-event histograms
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of reference event.
+   :type evt: one dimensional numpy.ndarray or list
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: numeric
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: numeric
+
+   :returns: **peh** -- Lst of Dataframes of peri-event histograms, each with original continuous variables as columns, and multi-index with trial number and peri-event time.
+   :rtype: list
+
+   .. rubric:: Examples
+
+   Create event and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create event: burst
+   >>> burst = [*range(30,300, 30)]
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 2, burst_duration = 0.5, burst_amplitude=1)
+   >>> signal2 = ivn.generate_signal(300, burst, 0.5, burst_duration = 2, burst_amplitude=1.5, seed = 21)
+   >>> signal3 = ivn.generate_signal(300, burst, 0.2, burst_duration = 3, burst_amplitude=1.5, seed = 10)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+   >>> # Use peh_list to create a list of peri-event histograms
+   >>> hist_list=ivn.continuous.peh_list(signals, burst, lower_lim = -5, higher_lim = 5)
+   >>> hist_list[0] # Print first element
+             Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz
+   1 -5.000    0.308629      0.802330     -0.772324
+     -4.999    0.383986      0.841905     -0.842523
+     -4.998    0.337540      0.966326     -0.901157
+     -4.997    0.301379      0.992252     -0.832871
+     -4.996    0.396404      1.047770     -0.900500
+                ...           ...           ...
+      4.996    0.211593     -2.017009     -0.826280
+      4.997    0.324347     -2.130981     -0.891831
+      4.998    0.229633     -2.077634     -0.974507
+      4.999    0.216934     -2.014184     -0.940523
+      5.000    0.157096     -2.007946     -1.020650
+   [10001 rows x 3 columns]
+
+
+.. py:function:: single_peh(contvar, evt, lower_lim, higher_lim)
+
+   Make peri-event histograms for a single event (with multiple trials)
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of reference event.
+   :type evt: one dimensional numpy array or list
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: numeric
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: numeric
+
+   :returns: **peh** -- Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with trial number and peri-event time.
+   :rtype: pandas.DataFrame
+
+
+.. py:function:: peh(contvar, evt, lower_lim, higher_lim, return_DataFrame=False)
+
+   Make peri-event histograms
+
+   :param contvar: Dataframe with continuous variables in each column, and timestamps as index.
+   :type contvar: pandas.DataFrame
+   :param evt: Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event.
+               Dict values can be either one dimensional numpy arrays or lists of floats.
+   :type evt: one-dimensional numpy.ndarray, list or dict
+   :param lower_lim: Lower time limit of the peri-event histogram.
+   :type lower_lim: int or float
+   :param higher_lim: Higher time limit of the peri-event histogram.
+   :type higher_lim: int or float
+
+   :returns: **peh** -- Dataframe of peri-event histograms with original continuous variables as columns, and multi-index with event names, trial number and peri-event time.
+   :rtype: pandas.DataFrame
+
+   .. rubric:: Examples
+
+   Create event and signals.
+
+   >>> import ivneuro as ivn
+   >>> import pandas as pd
+   >>> # Create events: burst and control
+   >>> burst = [*range(30,300, 30)]
+   >>> control = [*range(45,300, 30)]
+   >>> events = {'burst':burst,'control':control}
+   >>> # Generate signals
+   >>> signal1 = ivn.generate_signal(300, burst, 2, burst_duration = 0.5, burst_amplitude=1)
+   >>> signal2 = ivn.generate_signal(300, burst, 0.5, burst_duration = 2, burst_amplitude=1.5, seed = 21)
+   >>> signal3 = ivn.generate_signal(300, burst, 0.2, burst_duration = 3, burst_amplitude=1.5, seed = 10)
+   >>> signals = pd.concat([signal1, signal2, signal3], axis = 1)
+
+   Peri-event histograms for a single variable and a single event (with multiple trials).
+
+   >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5) # histograms from 5 seconds before to 5 seconds after each trial
+   >>> type(hist)
+   ivneuro.continuous.PeriEventHistogram
+   >>> hist
+                                   Signal 2Hz
+   Event_name Event_number Time
+   Event      1            -5.000    0.308629
+                           -4.999    0.383986
+                           -4.998    0.337540
+                           -4.997    0.301379
+                           -4.996    0.396404
+                                      ...
+              9             4.996    1.773434
+                            4.997    1.768014
+                            4.998    1.742938
+                            4.999    1.684667
+                            5.000    1.573737
+   [90009 rows x 1 columns]
+
+   Return a pandas.DataFrame instead of a ivneuro.continuous.PeriEventHistogram.
+
+   >>> hist = ivn.peh(signal1, burst, lower_lim = -5, higher_lim = 5, return_DataFrame = True) # histograms from 5 seconds before to 5 seconds after each trial
+   >>> type(hist)
+   pandas.core.frame.DataFrame
+
+   Peri-event histogram for multiple variables and multiple events (with multiple trials each).
+
+   >>> hist = ivn.peh(signals, events, lower_lim = -3, higher_lim = 3) # histograms from 3 seconds before to 3 seconds after each trial
+   >>> hist.variable_names
+   ['Signal 2Hz', 'Signal 0.5Hz', 'Signal 0.2Hz']
+   >>> hist.event_names
+   ['control', 'burst']
+   >>> hist.calculate_means()
+                      Signal 2Hz  Signal 0.5Hz  Signal 0.2Hz
+   Event_name Time
+   burst      -3.000   -0.323144      0.421450      0.436888
+              -2.999   -0.234888      0.370375      0.440265
+              -2.998   -0.232368      0.398991      0.406327
+              -2.997   -0.233245      0.368178      0.381116
+              -2.996   -0.223524      0.319660      0.367928
+                         ...           ...           ...
+   control     2.996    0.245362      0.387958      0.362177
+               2.997    0.270217      0.431107      0.326198
+               2.998    0.263590      0.420351      0.303861
+               2.999    0.335115      0.444825      0.323329
+               3.000    0.361686      0.388019      0.330680
+   [12002 rows x 3 columns]
+
+
+
+
+.. py:class:: PeriEventHistogram(*args, **kwargs)
+
+   Bases: :py:obj:`pandas.DataFrame`
+
+   Create a PeriEventHistogram object.
+
+   PeriEventHistogram class inherits from pandas.DataFrame and adds functionalities for easily extract information from the data and plot it.
+
+   :param data: Multi-index pandas.DataFrame as returned by peh() function, with event names, event trial number and peri-event time as index, continuous variables as columns and values as data.
+   :type data: pandas.DataFrame
+
+   .. attribute:: variable_names
+
+      Names of each continuous variable.
+
+      :type: list
+
+   .. attribute:: event_names
+
+      Names of each reference event.
+
+      :type: list
+
+   .. attribute:: timestamps
+
+      Timestamps of the peri-event histogram.
+
+      :type: list
+
+   .. method:: slice_time(new_limits):
+
+
+      Slice timestamps.
+
+      :param new_limits: New lowest and highest limits of time.
+      :type new_limits: tuple
+      :param Returns: New object with sliced timestamps
+      :type Returns: PeriEventHistogram
+
+
+   slice_events(event_list):
+
+       Slice events.
+
+       Parameters
+       ----------
+       event_list: list
+           Event names to slice from the data.
+
+       Returns: PeriEventHistogram
+           New object with sliced events.
+
+   calculate_means():
+
+       Calculate means across trials of the same event for each variable, event name and timestamp.
+
+   Returns: pandas.DataFrame
+       Mean across trials of the same event of the peri-event histograms. Multi-index pandas.DataFrame with event names and peri-event time as index,
+       continuous variable names as columns and mean variable values as data.
+
+   plot(aspect=1, cont_names = None, evt_names = None, sharey='all'):
+
+       Plot peri-event histograms, with each variable in a column and each event name in a row.
+
+       Parameters
+       ----------
+       aspect : float, optional
+           The y/x ratio of the axes aspect. The default is 1.
+
+       cont_names: list or None, optional
+           Subset of continuous variables names to plot. If None, all variables are ploted. Default is None.
+
+       evt_names: list or None, optional
+           Subset of events to plot. If None, all events are ploted. Default is None.
+
+       sharey: bool or {'none', 'all', 'row', 'col'}, optional
+           Parameter of matplotlib.pyplot.subplots() to control sharing of properties among y axis. Refer to matplotlib.pyplot.subplots in matplotlib manual for more information.
+           True or 'all': x- or y-axis will be shared among all subplots.
+           False or 'none': each subplot x- or y-axis will be independent.
+           'row': each subplot row will share an x- or y-axis.
+           'col': each subplot column will share an x- or y-axis.
+           The default is 'all'.
+
+       Returns
+       -------
+       None.
+
+
+   .. py:method:: _set_variable_names()
+
+
+   .. py:method:: _set_event_names()
+
+
+   .. py:method:: _set_timestamps()
+
+
+   .. py:method:: slice_time(new_limits)
+
+
+   .. py:method:: slice_events(event_list)
+
+
+   .. py:method:: calculate_means()
+
+
+   .. py:method:: plot(aspect=1, cont_names=None, evt_names=None, sharey='all')
+
+
+

@@ -1,0 +1,131 @@
+:py:mod:`ivneuro.nex.pull_nex_data`
+===================================
+
+.. py:module:: ivneuro.nex.pull_nex_data
+
+.. autoapi-nested-parse::
+
+   A module with functions for extracting data from nex5 files.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.nex.pull_nex_data.make_timestamps_Nex_cont
+   ivneuro.nex.pull_nex_data.pull_fp
+   ivneuro.nex.pull_nex_data.pull_events
+   ivneuro.nex.pull_nex_data.pull_continuous
+   ivneuro.nex.pull_nex_data.pull_neurons
+   ivneuro.nex.pull_nex_data.pull_markers
+   ivneuro.nex.pull_nex_data.pull_centroids
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivneuro.nex.pull_nex_data.reader
+
+
+.. py:data:: reader
+
+   
+
+.. py:function:: make_timestamps_Nex_cont(var)
+
+
+.. py:function:: pull_fp(fileData, FP_of_interest=[])
+
+   Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(<filename>).
+
+   It assumes that "FP" will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.
+   Therefore, restults of this function might be incorrect for files whose variable names have been modified.
+   It also assumes all field potential variables have the same timestamps and sample rate.
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param FP_of_interest: List of names of field potentials to extract. If None, the function returns None; if an empty list, all the field potentials are extracted. The default is [].
+   :type FP_of_interest: list, optional
+   :param Returns:
+   :param Dataframe with field potentials (in mV) in each column and timestaps as index.:
+   :param Sampling rate of local field potentials (float).:
+
+
+.. py:function:: pull_events(fileData, events_of_interest=[])
+
+   Extract events from a Nex5 file data, previously created using reader.ReadNex5File(<filename>).
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param events_of_interest: List of names of events to extract. If None, the function returns None; if an empty list, all the events are extracted. The default is [].
+   :type events_of_interest: list, optional
+
+   :rtype: Dictionary with event names as keys and list of timestamps as values.
+
+
+.. py:function:: pull_continuous(fileData, continuous_of_interest=[])
+
+   Extract all continuous variables, except for field potential variables, from a Nex5 file data previously created using reader.ReadNex5File(<filename>).
+
+
+   It assumes that "FP" will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.
+   Therefore, restults of this function might be incorrect for files whose variable names have been modified.
+
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param continuous_of_interest: List of names of continuous to extract. If None, the function returns None; if an empty list, all non-field potential continuous variables are extracted. The default is [].
+   :type continuous_of_interest: list, optional
+
+   :rtype: List of pandas DataFrame, each corresponding to a continuous variable values and timestaps as index.
+
+
+.. py:function:: pull_neurons(fileData, neurons_of_interest=[])
+
+   Extract neurons from a Nex5 file data, previously created using reader.ReadNex5File(<filename>).
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param neurons_of_interest: List of names of events to extract. If None, the function returns None; if an empty list, all the neurons are extracted. The default is [].
+   :type neurons_of_interest: list, optional
+
+   :rtype: Dictionary with neuron names as keys and list of timestamps as values.
+
+
+.. py:function:: pull_markers(fileData, markers_of_interest=[])
+
+   Extract markers from a Nex5 file data, previously created using reader.ReadNex5File(<filename>).
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param markers_of_interest: List of names of markers to extract. If None, the function returns None; if an empty list, all the markers are extracted. The default is [].
+   :type markers_of_interest: list, optional
+
+   :rtype: Dictionary with markers names as keys and list of timestamps as values.
+
+
+.. py:function:: pull_centroids(fileData, centroids_of_interest=[])
+
+   Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(<filename>).
+
+   It assumes that "centroid" (case insensitive) will be in the name of every centroid variable, which is true for Nex files whose original variables names have not been modified.
+   It also exclude field potential variables that contain the string "FP" in their names. Therefore, restults of this function might be incorrect for files whose variable names have been modified.
+   It also assumes that all centroids have the same timestamps.
+
+   :param fileData: Data extracted from a nex5 file using reader.ReadNex5File(<filename>).
+   :type fileData: dict
+   :param centroids_of_interest: List of names of centroids to extract. If None, the function returns None; if an empty list, all centroid variables are extracted. The default is [].
+   :type centroids_of_interest: list, optional
+
+   :rtype: Dataframe with centroids in each column and timestaps as index.
+
+

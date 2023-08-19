@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.spectograms &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivneuro.spectograms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivneuro.spectograms</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">User-facing functions to calculate, normalyze and plot peri-event spectograms analyses.</span>
+<span class="sd">This module also contains PeriEventSpectogram class. Peri-event spectograms analysis can be higly </span>
+<span class="sd">demanding, depending on the size and amount of continuous variables, the frequencies analysed, the</span>
+<span class="sd">amount of reference events and number of trials of each of event. PeriEventSpectogram class aims to</span>
+<span class="sd">facilitate processing, interpretation and visualization of peri-event spectograms without running the</span>
+<span class="sd">analysis again and is returned by default by ivneuro.spectral.peri_event_spectogram function.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">.spectograms_core</span> <span class="kn">import</span> <span class="n">single_pes</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">significant_decimal_positions</span>
+<span class="kn">from</span> <span class="nn">.continuous</span> <span class="kn">import</span> <span class="n">calculate_sampling_rate</span>
+
+
+
+<div class="viewcode-block" id="peri_event_spectogram"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.peri_event_spectogram">[docs]</a><span class="k">def</span> <span class="nf">peri_event_spectogram</span> <span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">evt</span><span class="p">,</span> <span class="n">lower_lim</span><span class="p">,</span> <span class="n">higher_lim</span><span class="p">,</span> <span class="n">lower_freq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">higher_freq</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">sample_subsamples</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_DataFrame</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;spectrum&#39;</span><span class="p">,</span><span class="n">nperseg</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">noverlap</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">nfft</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Calculate peri-event spectograms.</span>
+<span class="sd">    </span>
+<span class="sd">    The algorithm is based on the spectogram() function of the signal processing module of the scipyi package (scipy.signal.spectogram()), and is optimized to calculate peri-event spectograms from multiple continuous variables and/or multiple events, </span>
+<span class="sd">    with multiple trials of each event. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    contvar : pandas.DataFrame</span>
+<span class="sd">        Dataframe with continuous variables in each column, and timestamps as index.</span>
+<span class="sd">    evt : one-dimensional numpy.ndarray, list or dict</span>
+<span class="sd">        Timestamps of a single reference event if evt is a one-dimesional np.ndarray or a list. If multiple events are analized, evt must be a dict with event names as keys and timestamps as values, for every reference event. </span>
+<span class="sd">        Dict values can be either one dimensional numpy arrays or lists of floats.</span>
+<span class="sd">    lower_lim : int or float</span>
+<span class="sd">        Lower time limit of the peri-event histogram.</span>
+<span class="sd">    higher_lim : int or float</span>
+<span class="sd">        Higher time limit of the peri-event histogram.</span>
+<span class="sd">    lower_freq : int or float, optional</span>
+<span class="sd">        The lowest frequency to include in the spectogram. The default is 0.</span>
+<span class="sd">    higher_freq : int or float, optional</span>
+<span class="sd">        The highest freq to include in the spectogram. The default is 500.</span>
+<span class="sd">    sample_subsamples : dict or None, optional</span>
+<span class="sd">        When a dict, key must be sample names and values must be lists of subsample names, e.g.: {&#39;sample_A&#39;:[&#39;subsample_A1&#39;,&#39;subsample_A2&#39;...&#39;subsample_An&#39;], &#39;sample_B&#39;:[&#39;subsample_B1&#39;,&#39;subsample_B2&#39;...&#39;subsample_Bn&#39;]...}.</span>
+<span class="sd">        Peri-event spectograms will be averaged across subsamples of the same sample, per each time and trial of each event, and the Variable name will be the sample name, intead of the column name of contvar.</span>
+<span class="sd">        It must only be used when contvar contains multiple replicates for each observation (e.g., local field potentials recorded with multiple wires of the same tetrode). </span>
+<span class="sd">        If None, each column of contvar is treated as an independent sample, and therefore the result contains peri-event spectograms of every contvar column. The default is None.</span>
+<span class="sd">    return_DataFrame : Boolean, optional</span>
+<span class="sd">        If True, a pandas.DataFrame is returnes. If false, a PeriEventHistogram object is returned. The default is False.</span>
+<span class="sd">    sampling_rate : int, float or None, optional</span>
+<span class="sd">        Sampling rate of the continuous value. If None, the sampling_rate is calculated using the inverse of the median difference between consecutive timestamps of the contvar&#39;s index. The default is None.</span>
+<span class="sd">    scaling : str, optional</span>
+<span class="sd">        The scaling parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is &#39;spectrum&#39;.</span>
+<span class="sd">    nperseg : int, optional</span>
+<span class="sd">        The nperseg parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 500.</span>
+<span class="sd">    noverlap : int, optional</span>
+<span class="sd">        The noverlap parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 400.</span>
+<span class="sd">    nfft : int, optional</span>
+<span class="sd">        The nfft parameter to enter to signal.spectrogram() function of the scipy package. Refer to scipy.signal.spectogram in scipy manual for more information. The default is 2000.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If evt type is neither np.ndarray, list, dict.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pes : pandas.DataFrame or PeriEventSpectogram</span>
+<span class="sd">        If return_DataFrame == True, multi-index pandas.DataFrame with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</span>
+<span class="sd">        If return_DataFrame == False, PeriEventSpectogram object with the already described pandas.DataFrame as data, and normalization = &#39;None&#39;. </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import ivneuro</span>
+
+<span class="sd">    &gt;&gt;&gt; # Create events: burst contains the timestamps at wich the signal displays high power, control are just control timestamps</span>
+<span class="sd">    &gt;&gt;&gt; burst = [*range(30,300, 30)]</span>
+<span class="sd">    &gt;&gt;&gt; control = [*range(45,300, 30)]</span>
+<span class="sd">    &gt;&gt;&gt; events = {&#39;burst&#39;:burst,&#39;control&#39;:control}</span>
+
+<span class="sd">    &gt;&gt;&gt; # Generate a signal with pink noise and increases of power at 70Hz for 2 seconds at the timestamps corresponding to burst events</span>
+<span class="sd">    &gt;&gt;&gt; signal = ivneuro.generate_signal(300, burst, 70)</span>
+
+<span class="sd">    &gt;&gt;&gt; # Calculate peri-event spectograms</span>
+<span class="sd">    &gt;&gt;&gt; pes = ivneuro.spectral.peri_event_spectogram(signal, events, -10, 10, higher_freq=150)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; pes.timestamps[0], pes.timestamps[-1]</span>
+<span class="sd">    (-10.0, 10.0)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; pes.event_names</span>
+<span class="sd">    [&#39;burst&#39;, &#39;control&#39;]</span>
+
+<span class="sd">    &gt;&gt;&gt; pes.data.shape</span>
+<span class="sd">    (3618, 301)</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; pes.calculate_means().shape</span>
+<span class="sd">    (402, 301)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="c1"># If sampling rate is None, calculate it using the timestamps of the index</span>
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">calculate_sampling_rate</span><span class="p">(</span><span class="n">contvar</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="c1">#Calculate variables that will be necessary to make peri-event spectogram index</span>
+    <span class="n">sr</span> <span class="o">=</span> <span class="p">(</span><span class="n">nperseg</span> <span class="o">-</span> <span class="n">noverlap</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span> <span class="c1"># Spectogram sampling rate</span>
+    <span class="n">lost_ts</span><span class="o">=</span><span class="n">nperseg</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># Timestamps that are lost due to the windowing of spectogram function</span>
+    <span class="n">rounding</span><span class="o">=</span><span class="n">significant_decimal_positions</span><span class="p">(</span><span class="n">sr</span><span class="p">)</span> <span class="c1"># Amount of significant decimal positions to make index for peri-event spectograms</span>
+    
+    <span class="c1"># Define current_single_pes by setting the parameters of single_pes to the its arguments</span>
+    <span class="n">current_single_pes</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">single_pes</span><span class="p">,</span> <span class="n">lower_lim</span><span class="o">=</span><span class="n">lower_lim</span><span class="p">,</span> <span class="n">higher_lim</span><span class="o">=</span><span class="n">higher_lim</span><span class="p">,</span> <span class="n">lower_freq</span><span class="o">=</span><span class="n">lower_freq</span><span class="p">,</span> <span class="n">higher_freq</span><span class="o">=</span><span class="n">higher_freq</span><span class="p">,</span> <span class="n">sample_subsamples</span><span class="o">=</span><span class="n">sample_subsamples</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sr</span><span class="p">,</span> <span class="n">lost_ts</span><span class="o">=</span><span class="n">lost_ts</span><span class="p">,</span> <span class="n">rounding</span><span class="o">=</span><span class="n">rounding</span><span class="p">)</span>
+  
+    <span class="c1"># Run single_pes or multi_pes, depending on if evt is numpy.ndarray/list or dictionary. Then set non-power variables as index</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">evt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">evt</span><span class="p">)</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">pes</span><span class="o">=</span><span class="n">current_single_pes</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">evt</span><span class="p">)</span>
+        <span class="n">pes</span><span class="p">[</span><span class="s1">&#39;Event_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;Event&#39;</span>
+    
+    <span class="k">elif</span> <span class="nb">type</span> <span class="p">(</span><span class="n">evt</span><span class="p">)</span> <span class="o">==</span><span class="nb">dict</span><span class="p">:</span>
+        <span class="c1"># Use lists conmprehension to loop through events applying single_pes and adding the event name  </span>
+        <span class="n">pes</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_single_pes</span><span class="p">(</span><span class="n">contvar</span><span class="p">,</span> <span class="n">event_ts</span><span class="p">)</span> <span class="k">for</span> <span class="n">event_ts</span> <span class="ow">in</span> <span class="n">evt</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">evt_arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">event</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span> <span class="k">for</span> <span class="n">df</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">evt</span><span class="p">)]</span> <span class="c1"># List of numpy.ndarrays with event names</span>
+        <span class="n">pes</span><span class="p">,</span> <span class="n">evt_arrays</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">pes</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">evt_arrays</span><span class="p">)</span>
+        <span class="n">pes</span><span class="p">[</span><span class="s1">&#39;Event_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evt_arrays</span> <span class="c1"># Add event names to peri-event spectogram</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span> <span class="p">(</span><span class="s1">&#39;evt must be either a list of event timestamps or a dictionary with event names as keys and list of event timestamps as values&#39;</span><span class="p">)</span>
+    
+    <span class="n">pes</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;Variable_name&#39;</span><span class="p">,</span><span class="s1">&#39;Event_name&#39;</span><span class="p">,</span><span class="s1">&#39;Event_number&#39;</span><span class="p">,</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pes</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Since the algirithm loops over variables before than over events types, indexes need to be sorted</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_DataFrame</span><span class="p">:</span>
+        <span class="n">pes</span> <span class="o">=</span> <span class="n">PeriEventSpectogram</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pes</span></div>
+
+  
+
+<div class="viewcode-block" id="normalize_pes"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.normalize_pes">[docs]</a><span class="k">def</span> <span class="nf">normalize_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Condition_average&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalize peri-event-histogram using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.</span>
+<span class="sd">    </span>
+<span class="sd">    While using decibels or logarithmic scale instead of power (V**2) can helph to displaying spectograms, usualy this is not enough to visualyze variations in both low and high frequencies.</span>
+<span class="sd">    Normalizing the data to a baseline is a simple and straingforward way to visualyze variation in all frequencies at the same scale.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pes : pandas.DataFrame</span>
+<span class="sd">        Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</span>
+<span class="sd">    baseline : tuple, optional</span>
+<span class="sd">        lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.</span>
+<span class="sd">    method : str, optional</span>
+<span class="sd">        Method used to nromalize.</span>
+<span class="sd">        &quot;Condition_average&quot;: Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.</span>
+<span class="sd">        &quot;Condition_specific&quot;: Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.</span>
+<span class="sd">        &quot;Trial_specific&quot;: Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.</span>
+<span class="sd">        The default is &#39;Condition_average&#39;.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If baseline is neither a tuple or None.</span>
+<span class="sd">    NameError</span>
+<span class="sd">        If method is neither &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    normalized_df : pandas.DataFrame</span>
+<span class="sd">        DataFrame with normalized data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">baseline</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bas</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">baseline</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">bas</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">baseline</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">baseline</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Baseline must be either tuple or None&#39;</span><span class="p">)</span>
+    
+         
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span><span class="s1">&#39;Condition_average&#39;</span><span class="p">:</span> <span class="c1"># In this case avg is calculated as the mean of the baseline across all trials</span>
+        <span class="n">normalized_df</span> <span class="o">=</span> <span class="p">[</span><span class="n">pes</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">FP</span><span class="p">,:]</span> <span class="k">for</span> <span class="n">FP</span> <span class="ow">in</span> <span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">bas</span><span class="p">,:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">normalized_df</span><span class="p">]</span>
+        <span class="n">normalized_df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span><span class="p">,</span> <span class="n">avg_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">normalized_df</span><span class="p">,</span> <span class="n">avg</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note that for single event peri-event histograms, &quot;Condition_average&quot; and &quot;Condition_specific&quot; methods return the same result&#39;</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span><span class="s1">&#39;Condition_specific&#39;</span><span class="p">:</span> <span class="c1"># In this case avg is calculates as the mean of the baseline across trials of each event, this means the baseline is different for each event type</span>
+        <span class="n">normalized_df</span><span class="o">=</span><span class="p">[</span><span class="n">pes</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">FP</span><span class="p">,</span> <span class="n">event</span><span class="p">),:]</span> <span class="k">for</span> <span class="n">FP</span> <span class="ow">in</span> <span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="n">bas</span><span class="p">,:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">normalized_df</span><span class="p">]</span>
+        <span class="n">normalized_df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span><span class="p">,</span> <span class="n">avg_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">normalized_df</span><span class="p">,</span> <span class="n">avg</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note that for single event peri-event histograms, &quot;Condition_average&quot; and &quot;Condition_specific&quot; methods return the same result&#39;</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span><span class="s1">&#39;Trial_specific&#39;</span><span class="p">:</span> <span class="c1"># In this case avg is calculated as the mean of the baseline of each trial, this means that there is a baseline for each trial  </span>
+        <span class="n">normalized_df</span><span class="o">=</span><span class="p">[</span><span class="n">pes</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">FP</span><span class="p">,</span> <span class="n">event</span><span class="p">),:]</span> <span class="k">for</span> <span class="n">FP</span> <span class="ow">in</span> <span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">normalized_df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">trial</span><span class="p">,:]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">normalized_df</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="mi">0</span><span class="p">))]</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">bas</span><span class="p">,:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">normalized_df</span><span class="p">]</span>
+        <span class="n">normalized_df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">avg_i</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span><span class="p">,</span> <span class="n">avg_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">normalized_df</span><span class="p">,</span> <span class="n">avg</span><span class="p">)]</span>
+            
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s1">&#39;&quot;method&quot; name must be either &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;, but &quot;</span><span class="si">{}</span><span class="s1">&quot; was found.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+    
+    <span class="n">normalized_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">normalized_df</span><span class="p">)</span>
+    <span class="n">normalized_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># normalized_df = PeriEventSpectogram(normalized_df, norm=method)</span>
+    <span class="k">return</span> <span class="n">normalized_df</span></div>
+
+<div class="viewcode-block" id="plot_pes"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.plot_pes">[docs]</a><span class="k">def</span> <span class="nf">plot_pes</span><span class="p">(</span><span class="n">pes</span><span class="p">,</span> <span class="n">zero_centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot peri-event spectograms, with each variable in a column and each event name in a row.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pes : pandas.DataFrame</span>
+<span class="sd">        Multi-index pandas.DataFrame as returned by peri_event_spectogram() nor normalize_pes() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</span>
+<span class="sd">    zero_centered : boolean, optional</span>
+<span class="sd">        If True, data is centered to zero. The default is True.</span>
+<span class="sd">    aspect : float, optional</span>
+<span class="sd">        The y/x ratio of the axes aspect. The default is 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">pes</span><span class="o">=</span><span class="n">pes</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="c1"># Calculate means means across trials of the same event, per each signal, event and timestamp</span>
+    
+    <span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    
+    <span class="n">combinations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="n">product</span><span class="p">(</span><span class="n">events</span><span class="p">,</span><span class="n">variables</span><span class="p">)])</span> <span class="c1"># Each combinations of event and signal will be ploted in each axis</span>
+    <span class="c1"># Calculate number of rows and columns</span>
+    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+    <span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+    <span class="c1"># Calculate the figure width and height</span>
+    <span class="n">fig_width</span> <span class="o">=</span> <span class="mf">3.2</span> <span class="o">*</span> <span class="n">ncols</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="c1"># Width of 3.2 inches per subplot plus 1.5 inches of left edge plus 0.2 inches of right edge</span>
+    <span class="n">fig_height</span> <span class="o">=</span> <span class="mf">3.2</span> <span class="o">*</span> <span class="n">ncols</span> <span class="o">*</span> <span class="p">(</span><span class="n">aspect</span> <span class="o">*</span> <span class="n">nrows</span> <span class="o">/</span> <span class="n">ncols</span><span class="p">)</span> <span class="o">+</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="c1"># The Height depends on width, plus 1 inch of bottom edge plus 0.2 inches of right edge</span>
+    
+    <span class="c1"># Plot</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">fig_width</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">))</span> <span class="c1"># Plot each event-continuous variable combination in an axis</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">1.5</span><span class="o">/</span><span class="n">fig_width</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.2</span><span class="o">/</span><span class="n">fig_width</span><span class="p">),</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">fig_height</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span> <span class="mf">0.2</span><span class="o">/</span><span class="n">fig_height</span><span class="p">))</span>
+    <span class="c1">#Function to make graph of peri-event spectogram</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">zero_centered</span><span class="o">=</span><span class="n">zero_centered</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">):</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zero_centered</span><span class="p">:</span>
+            <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)),</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+            <span class="n">im</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">im</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;seismic&#39;</span><span class="p">)</span>
+        
+        
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">5</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">5</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">())</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelrotation</span> <span class="o">=</span> <span class="o">-</span><span class="mi">35</span><span class="p">)</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c1"># Create colorbar</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_box_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">combinations</span><span class="p">)</span><span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">combinations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pes</span><span class="p">)</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">combinations</span><span class="p">):</span> <span class="c1"># Loop over axes and combinations of events and signals and plot</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">pes</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">supxlabel</span><span class="p">(</span><span class="s2">&quot;Peri-event time&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">supylabel</span><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>        </div>
+
+
+    
+<div class="viewcode-block" id="PeriEventSpectogram"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram">[docs]</a><span class="k">class</span> <span class="nc">PeriEventSpectogram</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a PeriEventHistogram object.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : pandas.DataFrame</span>
+<span class="sd">        Multi-index pandas.DataFrame as returned by peri_event_spectogram() function, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</span>
+<span class="sd">    norm : str</span>
+<span class="sd">        Normalization state of the data, it can be &quot;None&quot;, &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: pandas.DataFrame</span>
+<span class="sd">        Multi-index pandas.DataFrame with peri-event spectogram data, with original continuous variable names, event names, event trial number and peri-event time as index, frequencies as columns and power values as data.</span>
+<span class="sd">    variable_names: list</span>
+<span class="sd">        Names of each original continuous variable used to make the spectograms.</span>
+<span class="sd">    event_names: list</span>
+<span class="sd">        Names of each reference event.</span>
+<span class="sd">    timestamps: list</span>
+<span class="sd">        Timestamps of the peri-event spectogram.</span>
+<span class="sd">    frequencies: list</span>
+<span class="sd">        Frequencies included in the spectogram.</span>
+<span class="sd">    normalization: normalization state of the data.</span>
+<span class="sd">    </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    </span>
+<span class="sd">    normalize():</span>
+<span class="sd">        Normalize data using the formula (X - Mean(baseline)) / Mean(baseline) for each frequency, where X is every value and Mean(baseline) is the mean value of a baseline.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        baseline : tuple, optional</span>
+<span class="sd">            lowest and highest time limits of the baseline, or None. If None, baseline = (lowest_lim, highest_lim) of the argument passed to pes. The default is None.</span>
+<span class="sd">        method : str, optional</span>
+<span class="sd">            Method used to nromalize.</span>
+<span class="sd">            &quot;Condition_average&quot;: Mean(baseline) is calculated across all trials of all events and used to normalize the values of the peri-event spectogram.</span>
+<span class="sd">            &quot;Condition_specific&quot;: Mean(baseline) is calculated across all trials of each event, and used to normalize the data that specific event. This can be convenient when baselines differ between events.</span>
+<span class="sd">            &quot;Trial_specific&quot;: Mean(baseline) is calculated for each trial of each event, and used to normalize only that trial.</span>
+<span class="sd">            The default is &#39;Condition_average&#39;.</span>
+<span class="sd">        inplace: bolean, optional</span>
+<span class="sd">            If True, modifies the current object. If False, returns a new object with normalized data. The default is False.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If baseline is neither a tuple or None.</span>
+<span class="sd">        NameError</span>
+<span class="sd">            If method is neither &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If normalization attribute is not &quot;None&quot;, which indicates that data is already normalized.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Returns: PeriEventSpectogram</span>
+<span class="sd">            If inplace is False, returns a PeriEventSpectogram object with normalized data, and normalization attribute as the method argument passed.</span>
+<span class="sd">            </span>
+<span class="sd">    slice_time(new_limits, inplace=False):</span>
+<span class="sd">        </span>
+<span class="sd">        Slice timestamps.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_limits: tuple</span>
+<span class="sd">            New lowest and highest limits of time.</span>
+<span class="sd">        inplace: bolean, optional</span>
+<span class="sd">            If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: PeriEventSpectogram</span>
+<span class="sd">            New object with sliced timestamps</span>
+<span class="sd">    </span>
+<span class="sd">    slice_frequencies(new_limits, inplace=False):</span>
+<span class="sd">        </span>
+<span class="sd">        Slice frequencies.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_limits: tuple</span>
+<span class="sd">            Lowest and highest limits of the frequency.</span>
+<span class="sd">        inplace: bolean, optional</span>
+<span class="sd">            If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: PeriEventSpectogram</span>
+<span class="sd">            New object with sliced frequecies.</span>
+<span class="sd">    </span>
+<span class="sd">    slice_events(event_list, inplace=False):</span>
+<span class="sd">        </span>
+<span class="sd">        Slice events.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event_list: list</span>
+<span class="sd">            Event names to slice from the data.</span>
+<span class="sd">        inplace: bolean, optional</span>
+<span class="sd">            If True, modifies the current object. If False, returns a new object with sliced data. The default is False.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: PeriEventSpectogram</span>
+<span class="sd">            New object with sliced events.</span>
+<span class="sd">    </span>
+<span class="sd">    calculate_means():</span>
+<span class="sd">        </span>
+<span class="sd">        Calculate means across trials of the same event for each variable, event name and timestamp.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns: pandas.DataFrame</span>
+<span class="sd">        Mean across trials of the same event of the peri-event spectogram. Multi-index pandas.DataFrame with original continuous variable names,</span>
+<span class="sd">        event names and peri-event time as index, frequencies as columns and mean power values as data.</span>
+<span class="sd">    </span>
+<span class="sd">    plot(zero_centered=None, aspect=1, variables = None, evt_names = None):</span>
+<span class="sd">        </span>
+<span class="sd">        Plot peri-event spectograms, with each variable in a column and each event name in a row.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zero_centered : boolean or None, optional</span>
+<span class="sd">            If True, colorscale is centered to zero. If None, colorscale is centered to zero if data is normalized (normalization attribute is either &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;),</span>
+<span class="sd">            but it is not centered to zero if data is not normalized (normalization attribute is &quot;None&quot;). The default is None.</span>
+<span class="sd">            </span>
+<span class="sd">        aspect : float, optional</span>
+<span class="sd">            The y/x ratio of the axes aspect. The default is 1.</span>
+<span class="sd">        </span>
+<span class="sd">        variables: list or None, optional</span>
+<span class="sd">            Subset of variables names to plot. If None, all variables are ploted. Default is None.</span>
+<span class="sd">        </span>
+<span class="sd">        evt_names: list or None, optional</span>
+<span class="sd">            Subset of events to plot. If None, all events are ploted. Default is None.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">norm</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">norm</span> <span class="ow">not</span> <span class="ow">in</span>  <span class="p">[</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Condition_average&#39;</span><span class="p">,</span> <span class="s1">&#39;Condition_specific&#39;</span><span class="p">,</span> <span class="s1">&#39;Trial_specific&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;norm must be either &quot;None&quot;, &quot;Condition_average&quot;, &quot;Condition_specific&quot; or &quot;Trial_specific&quot;, but </span><span class="si">{}</span><span class="s1"> was found.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variable_names</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_variable_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_event_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_timestamps</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_frequencies</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">=</span> <span class="n">norm</span>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.__str__"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.__str__">[docs]</a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n\n</span><span class="s1">Data normalization: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.__repr__"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;PeriEventSpectogram(</span><span class="si">{}</span><span class="s1">,&quot;</span><span class="si">{}</span><span class="s1">&quot;)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="PeriEventSpectogram._set_variable_names"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram._set_variable_names">[docs]</a>    <span class="k">def</span> <span class="nf">_set_variable_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram._set_event_names"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram._set_event_names">[docs]</a>    <span class="k">def</span> <span class="nf">_set_event_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram._set_timestamps"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram._set_timestamps">[docs]</a>    <span class="k">def</span> <span class="nf">_set_timestamps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">3</span><span class="p">]))])</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram._set_frequencies"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram._set_frequencies">[docs]</a>    <span class="k">def</span> <span class="nf">_set_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="PeriEventSpectogram.normalize"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Condition_average&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        
+        <span class="c1"># Don&#39;t normalyze if data is already normalized</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Data is already normalized, no procesing was done!&#39;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">normalize_pes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="n">baseline</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PeriEventSpectogram</span><span class="p">(</span><span class="n">normalize_pes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="n">baseline</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="n">method</span><span class="p">)</span></div>
+
+     
+<div class="viewcode-block" id="PeriEventSpectogram.slice_time"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.slice_time">[docs]</a>    <span class="k">def</span> <span class="nf">slice_time</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_limits</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">slice</span><span class="p">(</span><span class="n">new_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">new_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">])),:]</span>
+        <span class="n">new_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">remove_unused_levels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_timestamps</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PeriEventSpectogram</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.slice_frequencies"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.slice_frequencies">[docs]</a>    <span class="k">def</span> <span class="nf">slice_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_limits</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">new_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">new_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_frequencies</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PeriEventSpectogram</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.slice_events"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.slice_events">[docs]</a>    <span class="k">def</span> <span class="nf">slice_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_list</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">new_data</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="n">event_list</span><span class="p">,</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)),:]</span>
+        <span class="n">new_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">remove_unused_levels</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_event_names</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PeriEventSpectogram</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.calculate_means"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.calculate_means">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_means</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="PeriEventSpectogram.plot"><a class="viewcode-back" href="../../autoapi/ivneuro/spectograms/index.html#ivneuro.PeriEventSpectogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zero_centered</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">evt_names</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">zero_centered</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+                <span class="n">zero_centered</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">zero_centered</span> <span class="o">=</span> <span class="kc">True</span>
+        
+        <span class="c1"># Assign class attributes as defaults to method argument</span>
+        <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable_names</span>
+        
+        <span class="k">if</span> <span class="n">evt_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">evt_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span>
+        
+        <span class="n">df</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">variables</span><span class="p">,</span> <span class="n">evt_names</span><span class="p">),</span> <span class="p">:]</span>
+        <span class="n">plot_pes</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">zero_centered</span><span class="o">=</span><span class="n">zero_centered</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

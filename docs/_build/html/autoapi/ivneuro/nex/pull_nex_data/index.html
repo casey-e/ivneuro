@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivneuro.nex.pull_nex_data &mdash; ivneuro  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ivneuro.continuous" href="../../continuous/index.html" />
+    <link rel="prev" title="ivneuro.nex.nexfile" href="../nexfile/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            ivneuro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ivneuro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.pull_nex_data</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ivneuro/nex/pull_nex_data/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ivneuro.nex.pull_nex_data">
+<span id="ivneuro-nex-pull-nex-data"></span><h1><a class="reference internal" href="#module-ivneuro.nex.pull_nex_data" title="ivneuro.nex.pull_nex_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivneuro.nex.pull_nex_data</span></code></a><a class="headerlink" href="#module-ivneuro.nex.pull_nex_data" title="Permalink to this heading"></a></h1>
+<p>A module with functions for extracting data from nex5 files.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.make_timestamps_Nex_cont" title="ivneuro.nex.pull_nex_data.make_timestamps_Nex_cont"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_timestamps_Nex_cont</span></code></a>(var)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_fp" title="ivneuro.nex.pull_nex_data.pull_fp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_fp</span></code></a>(fileData[, FP_of_interest])</p></td>
+<td><p>Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_events" title="ivneuro.nex.pull_nex_data.pull_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_events</span></code></a>(fileData[, events_of_interest])</p></td>
+<td><p>Extract events from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_continuous" title="ivneuro.nex.pull_nex_data.pull_continuous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_continuous</span></code></a>(fileData[, continuous_of_interest])</p></td>
+<td><p>Extract all continuous variables, except for field potential variables, from a Nex5 file data previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_neurons" title="ivneuro.nex.pull_nex_data.pull_neurons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_neurons</span></code></a>(fileData[, neurons_of_interest])</p></td>
+<td><p>Extract neurons from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_markers" title="ivneuro.nex.pull_nex_data.pull_markers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_markers</span></code></a>(fileData[, markers_of_interest])</p></td>
+<td><p>Extract markers from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.pull_centroids" title="ivneuro.nex.pull_nex_data.pull_centroids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_centroids</span></code></a>(fileData[, centroids_of_interest])</p></td>
+<td><p>Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivneuro.nex.pull_nex_data.reader" title="ivneuro.nex.pull_nex_data.reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reader</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.reader">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">reader</span></span><a class="headerlink" href="#ivneuro.nex.pull_nex_data.reader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.make_timestamps_Nex_cont">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">make_timestamps_Nex_cont</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#make_timestamps_Nex_cont"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.make_timestamps_Nex_cont" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_fp">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_fp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FP_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_fp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_fp" title="Permalink to this definition"></a></dt>
+<dd><p>Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<p>It assumes that “FP” will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.
+Therefore, restults of this function might be incorrect for files whose variable names have been modified.
+It also assumes all field potential variables have the same timestamps and sample rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>FP_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of field potentials to extract. If None, the function returns None; if an empty list, all the field potentials are extracted. The default is [].</p></li>
+<li><p><strong>Returns</strong> – </p></li>
+<li><p><strong>index.</strong> (<em>Dataframe with field potentials</em><em> (</em><em>in mV</em><em>) </em><em>in each column and timestaps as</em>) – </p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong><strong>.</strong> (<em>Sampling rate</em><em> of </em><em>local field potentials</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_events">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_events" title="Permalink to this definition"></a></dt>
+<dd><p>Extract events from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>events_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of events to extract. If None, the function returns None; if an empty list, all the events are extracted. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with event names as keys and list of timestamps as values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_continuous">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_continuous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_continuous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_continuous" title="Permalink to this definition"></a></dt>
+<dd><p>Extract all continuous variables, except for field potential variables, from a Nex5 file data previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<p>It assumes that “FP” will be in the name of every field potential variable, which is true for Nex files whose original variables names have not been modified.
+Therefore, restults of this function might be incorrect for files whose variable names have been modified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>continuous_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of continuous to extract. If None, the function returns None; if an empty list, all non-field potential continuous variables are extracted. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of pandas DataFrame, each corresponding to a continuous variable values and timestaps as index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_neurons">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_neurons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neurons_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_neurons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_neurons" title="Permalink to this definition"></a></dt>
+<dd><p>Extract neurons from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>neurons_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of events to extract. If None, the function returns None; if an empty list, all the neurons are extracted. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with neuron names as keys and list of timestamps as values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_markers">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markers_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_markers" title="Permalink to this definition"></a></dt>
+<dd><p>Extract markers from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>markers_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of markers to extract. If None, the function returns None; if an empty list, all the markers are extracted. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with markers names as keys and list of timestamps as values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivneuro.nex.pull_nex_data.pull_centroids">
+<span class="sig-prename descclassname"><span class="pre">ivneuro.nex.pull_nex_data.</span></span><span class="sig-name descname"><span class="pre">pull_centroids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids_of_interest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ivneuro/nex/pull_nex_data.html#pull_centroids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivneuro.nex.pull_nex_data.pull_centroids" title="Permalink to this definition"></a></dt>
+<dd><p>Extract field potential variables from a Nex5 file data, previously created using reader.ReadNex5File(&lt;filename&gt;).</p>
+<p>It assumes that “centroid” (case insensitive) will be in the name of every centroid variable, which is true for Nex files whose original variables names have not been modified.
+It also exclude field potential variables that contain the string “FP” in their names. Therefore, restults of this function might be incorrect for files whose variable names have been modified.
+It also assumes that all centroids have the same timestamps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileData</strong> (<em>dict</em>) – Data extracted from a nex5 file using reader.ReadNex5File(&lt;filename&gt;).</p></li>
+<li><p><strong>centroids_of_interest</strong> (<em>list</em><em>, </em><em>optional</em>) – List of names of centroids to extract. If None, the function returns None; if an empty list, all centroid variables are extracted. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataframe with centroids in each column and timestaps as index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../nexfile/index.html" class="btn btn-neutral float-left" title="ivneuro.nex.nexfile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../continuous/index.html" class="btn btn-neutral float-right" title="ivneuro.continuous" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eric Casey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
