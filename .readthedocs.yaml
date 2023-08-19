@@ -1,14 +1,16 @@
 # Required
 version: 2
 
-# Image to use
 build:
-  image: latest
+  os: "ubuntu-22.04"
+  tools:
+    python: "3.11"
 
-# Configuration
+# Build from the docs/ directory with Sphinx
+sphinx:
+  configuration: docs/conf.py
+
+# Explicitly set the version of Python and its requirements
 python:
-  version: 3.11
   install:
     - requirements: docs/requirements.txt
-    - method: pip
-      path: .
