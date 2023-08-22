@@ -7,4 +7,6 @@
 
 installation.md
 autoapi/index
+history.md
+contributing.md
 ```
