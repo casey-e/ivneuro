@@ -75,6 +75,8 @@ Attributes
 .. autoapisummary::
 
    ivneuro.__doc__
+   ivneuro.__author__
+   ivneuro.__version__
 
 
 .. py:data:: __doc__
@@ -104,6 +106,16 @@ Attributes
     .. raw:: html
 
         </details>
+
+   
+
+.. py:data:: __author__
+   :value: 'Eric Casey'
+
+   
+
+.. py:data:: __version__
+   :value: '0.1.3'
 
    
 

@@ -1,4 +1,4 @@
-```{include} ./home.md
+```{include} ../README.md
 ```
 
 ```{toctree}

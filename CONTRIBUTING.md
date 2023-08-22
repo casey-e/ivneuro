@@ -45,7 +45,7 @@ To open a new issue, follow these steps:
 
 ## Acknowledgments
 
-We genuinely appreciate your willingness to contribute to ivneuro. Your input helps us improve the package and support the neuroscientific community, and credit will always be given.
+We genuinely appreciate your willingness to contribute to ivneuro. Your input helps us improve the package and support the neuroscientific community.
 
 Thank you for considering contributing, and we look forward to collaborating with you!
 

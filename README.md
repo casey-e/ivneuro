@@ -20,13 +20,15 @@ pip install ivneuro
 
 Documentation
 -------------
-Documentation can be found [here](https://ivneuro.readthedocs.io/en/latest/)
+Documentation can be found [here](https://ivneuro.readthedocs.io/en/latest/autoapi/index.html).
 
 <br>
 
 Contributing
 ------------
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are strongly appreciated. To contribute, please review the guidelines at the CONTRIBUTING section.
+
+<br>
 
 Quick examples
 -------------
