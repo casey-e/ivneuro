@@ -14,6 +14,9 @@ data from Nex files.
 
 """
 
+__author__ = "Eric Casey"
+__version__ = "0.1.3"
+
 from .events import make_intervals, classify_events_base_on_time
 from .tracking import scale_centroids, calculate_speed, position_of_event, distances_to_position, EventPosition
 from .continuous import calculate_sampling_period, calculate_sampling_rate, peh, PeriEventHistogram
