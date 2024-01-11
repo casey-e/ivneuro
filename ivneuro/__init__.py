@@ -19,7 +19,7 @@ __version__ = "0.1.3"
 
 from .events import make_intervals, classify_events_base_on_time
 from .tracking import scale_centroids, calculate_speed, position_of_event, distances_to_position, EventPosition
-from .continuous import calculate_sampling_period, calculate_sampling_rate, peh, PeriEventHistogram
+from .continuous import calculate_sampling_period, calculate_sampling_rate, peh, PeriEventHistogram, make_itervals_from_continuous
 from .spectograms import peri_event_spectogram, normalize_pes, plot_pes, PeriEventSpectogram
 from .delta_power_spectral import delta_power_spectral
 from .delta_coherence import delta_coherence
