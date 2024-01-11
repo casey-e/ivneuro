@@ -16,6 +16,7 @@ import pandas as pd
 from itertools import product
 import matplotlib.pyplot as plt
 from .utils import significant_decimal_positions
+from scipy.ndimage import label, find_objects
 
 
 def calculate_sampling_period(timestamps):
@@ -450,3 +451,103 @@ class PeriEventHistogram(pd.DataFrame):
                 plot(ax, cell, df)
         fig.supxlabel("Peri-event time")
         plt.show()
+
+
+
+def make_itervals_from_continuous (contvar, timestamps, higher_than=None, lower_than=None, min_duration=0):
+    """
+    Make intervals of time when a continuous variable have values higher or lower than a treshols, or between 2 values.
+
+    Parameters
+    ----------
+    contvar : one-dimensional numpy.ndarray
+        Continuous variable values.
+    timestamps : one-dimensional numpy.ndarray
+        Continuous variable timestamps.
+    higher_than : int or float, optional
+        Lowher treshold. The default is None.
+    lower_than : int or float, optional
+        Higher treshold. The default is None.
+    min_duration : float, optional
+        Minimum duration the condition must be met for a slice of time to be included in the resulting interval. The default is 0.
+
+    Raises
+    ------
+    TypeError
+        If higher_than or lower_than is not int or float.
+    ValueError
+        If both higher_than and higher_than are not None, and higher_than is not lower_than lower_than.
+
+    Returns
+    -------
+    slices : list if slices
+        List of timestamps slices corresponding to intervals that met the criteria.
+    
+    
+    
+    Examples
+    --------
+    
+    >>> import ivneuro as ivn
+    >>> import numpy as np
+    >>> np.random.seed(46)
+    # Make timestamps
+    >>> timestamps=np.linspace(0,2.5, 26)
+    # Make the continuous values as a quadratic function of timestamps, centered at x=1
+    >>> contvar=(timestamps-1)**2
+
+    Intervals for time windows with contvar >= 0.5
+    
+    >>> make_itervals_from_continuous (contvar, timestamps, higher_than=0.5)
+    [slice(0.0, 0.2, None), slice(1.8, 2.5, None)]
+
+    Intervals for time windows with contvar >= 0.5 lasting at least 0.4 seconds
+    
+    >>> make_itervals_from_continuous (contvar, timestamps, higher_than=0.5, min_duration=0.4)
+    [slice(1.8, 2.5, None)]
+
+    Intervals for time windows with contvar <= 0.5
+    
+    >>> make_itervals_from_continuous (contvar, timestamps, lower_than=0.5)
+    [slice(0.30000000000000004, 1.7000000000000002, None)]
+
+    Intervals for time windows with contvar values between 0.4 and 0.8
+    
+    >>> make_itervals_from_continuous (contvar, timestamps, higher_than=0.4, lower_than=0.8)
+    [slice(0.2, 0.30000000000000004, None), slice(1.7000000000000002, 1.8, None)]
+    
+
+    """
+    
+    # Raise a TypeError if higher_than or lower_than are not float or int
+    if not isinstance(higher_than, (int, float)) and not isinstance(lower_than, (int, float)):
+        raise TypeError('higher_than or lower_than, or both, must be either int or float')
+    # If only higher_than is numeric, use higher_than to transform contvar in binary
+    if not isinstance(lower_than, (int, float)):
+        mask = np.where(contvar >= higher_than, 1, 0)
+    # If only lower_than is numeric, use lower_than to transform contvar in binary
+    elif not isinstance(higher_than, (int, float)):
+        mask = np.where(contvar <= lower_than, 1, 0)
+    
+    # If higher_than and lower_than are numeric, use them to transform contvar in binary
+    else:
+        # Raise a ValueError if higher_than is not higher than lower_than
+        if higher_than >= lower_than:
+            raise ValueError('higher_than must be lower than lower_than')
+        mask = np.where((contvar >= higher_than) & (contvar <= lower_than), 1, 0)
+    
+    sr=ivn.calculate_sampling_rate(timestamps)
+    min_size=int(min_duration*sr) # Calculate the minimum size to filter slices
+    
+    # Generate structuring element
+    s = [1,1,1] 
+    # Label every interval where conditions are met whithout interruptions
+    labelled = label(mask, s)[0] 
+    # Make slices for every period
+    slices=find_objects(labelled)
+    # Filter for slices larger than min_size
+    slices=[i[0] for i in slices if labelled[i].size>min_size] 
+    # Transform index values to timestamps values
+    slices = [slice(j[0], j[-1]) for j in [timestamps[i] for i in slices]] 
+    
+    return slices
