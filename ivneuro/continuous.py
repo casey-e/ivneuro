@@ -141,12 +141,9 @@ def peh_list(contvar, evt, lower_lim, higher_lim):
     sampling_period = calculate_sampling_period(contvar.index) # Use media of delta timestamp to estimate the sample rate
     rounding=significant_decimal_positions(sampling_period) # This formula ensure to get enough decimal positions while discarding decimals values caused by binary to decimal system transformations
        
-    # Use contvar.iloc[np.searchsorted(contvar.index, evt),].index to get the list of indexes of contvar dataframe, and 
-    # contvar.loc[(i+lower_lim):(i+higher_lim)] to slice contvar dataframe around each event timestamp
-    peh=[contvar.loc[(i+lower_lim):(i+higher_lim)] for i in contvar.iloc[np.searchsorted(contvar.index, evt),].index] # list of contvar slices
-    index=[np.round((contvar.loc[(i+lower_lim):(i+higher_lim)].index - i), rounding) for i in contvar.iloc[np.searchsorted(contvar.index, evt, 'right'),].index] # list of index slices
-    
-    peh=[df.set_index([np.array([evt_number]*len(df)),idx]) for df, idx, evt_number in zip(peh, index, [*range(1,len(peh)+1)])] # list of peri event histogram dataframes with multiindex of event number and peri-event time
+
+    peh=[contvar.loc[(i+lower_lim):(i+higher_lim)] for i in evt] # list of contvar slices
+    peh=[df.set_index([np.array([evt_number]*len(df)),np.round(df.index-event, rounding)]) for df, evt_number,event in zip(peh, [*range(1,len(peh)+1)], evt)] # list of peri event histogram dataframes with multiindex of event number and peri-event time
     
     return peh
 
@@ -551,3 +548,4 @@ def make_itervals_from_continuous (contvar, timestamps, higher_than=None, lower_
     slices = [slice(j[0], j[-1]) for j in [timestamps[i] for i in slices]] 
     
     return slices
+
